@@ -10331,7 +10331,7 @@ Navigation
   display: none;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) and (orientation: portrait) {
   .top-nav a:not(:first-child) {
     display: none;
   }
@@ -10369,29 +10369,20 @@ Home
 
 .notice {
   text-align: center;
-  position: absolute;
-  margin-top: 2em;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
+  margin: 0 auto;
   color: var(--main-text-color);
   padding: 0;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) and (orientation: portrait) {
   .banner {
     background-image: url("/assets/images/cba_logo_white.v2.png");
     width: 40%;
     height: 20%;
   }
   .notice {
-    transform: translate(-50%, -10%);
     line-height: 2em;
-  }
-}
-@media screen and (min-width: 600px) and (max-width: 992px) {
-  .notice {
-    margin-top: 4em;
-    line-height: 1em;
   }
 }
 

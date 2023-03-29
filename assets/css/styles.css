@@ -10275,6 +10275,11 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
 }
 
+@font-face {
+  font-family: "Heiti SC";
+  src: url(/assets/webfonts/heiti-sc-light.ttf) format("truetype"), url(/assets/webfonts/heiti-sc-light.woff2) format("woff2");
+  font-weight: normal;
+}
 html {
   --main-background-color: #ffffff;
   --secondary-background-color: #f4e3d7;

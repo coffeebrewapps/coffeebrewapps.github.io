@@ -10436,6 +10436,40 @@ Home
   padding: 0;
 }
 
+.highlights {
+  margin-top: 1rem;
+  border-top: 2px var(--secondary-background-color) solid;
+}
+
+.highlights:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.highlights .highlight {
+  float: left;
+  width: 50%;
+}
+
+.highlights .highlight .content {
+  padding: 1rem;
+}
+
+.highlights .highlight .content .thumbnail img {
+  width: 80%;
+  height: 80%;
+}
+
+.highlights .highlight .content .caption a {
+  color: var(--main-text-color);
+  text-decoration: none;
+}
+
+.highlights .highlight .content .caption a:hover {
+  color: var(--lighten-text-1-color);
+}
+
 @media screen and (max-width: 600px) and (orientation: portrait) {
   .banner {
     background-image: url("/assets/images/cba_logo_white.v2.png");
@@ -10444,6 +10478,9 @@ Home
   }
   .notice {
     line-height: 2rem;
+  }
+  .highlights .highlight {
+    width: 100%;
   }
 }
 /***

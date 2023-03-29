@@ -10280,6 +10280,11 @@ readers do not read off random characters that represent icons */
   src: url(/assets/webfonts/heiti-sc-light.ttf) format("truetype"), url(/assets/webfonts/heiti-sc-light.woff2) format("woff2");
   font-weight: normal;
 }
+@font-face {
+  font-family: "Heiti SC";
+  src: url(/assets/webfonts/heiti-sc-medium.ttf) format("truetype"), url(/assets/webfonts/heiti-sc-medium.woff2) format("woff2");
+  font-weight: bold;
+}
 html {
   --main-background-color: #ffffff;
   --secondary-background-color: #f4e3d7;
@@ -10312,6 +10317,10 @@ body {
 
 h1 {
   line-height: 2rem;
+}
+
+h1, h2, h3 {
+  font-weight: bold;
 }
 
 .site-footer {

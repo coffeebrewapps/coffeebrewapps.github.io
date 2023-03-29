@@ -10299,6 +10299,52 @@ body {
   overflow-y: scroll;
 }
 
+.about {
+  margin: 0 auto;
+  max-width: 728px;
+  word-break: break-word;
+}
+
+.about h1 {
+  line-height: 1em;
+}
+
+.site-footer {
+  margin-top: 4em;
+  border-top: 2px var(--secondary-background-color) solid;
+  padding: 1em 0 1em 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.site-footer .copyright, .socials, .powered-by {
+  margin-bottom: 0.5em;
+}
+
+.site-footer .socials a,
+.site-footer .powered-by a {
+  text-decoration: none;
+  color: var(--secondary-text-color);
+}
+
+.site-footer .socials a:hover,
+.site-footer .powered-by a:hover {
+  color: var(--lighten-text-1-color);
+}
+
+.site-footer .powered-by .link, .divider {
+  display: inline-block;
+}
+
+@media screen and (max-width: 600px) and (orientation: portrait) {
+  .site-footer .powered-by .link {
+    display: block;
+  }
+  .site-footer .powered-by .divider {
+    display: none;
+  }
+}
 /***
 Navigation
 ***/

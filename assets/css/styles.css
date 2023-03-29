@@ -10389,38 +10389,38 @@ Home
 /***
 Projects
 ***/
-.projects:after {
+.gallery:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.projects .project {
+.gallery .item {
   float: left;
   width: 33%;
 }
 
-.projects .project .thumbnail {
+.gallery .item .thumbnail {
   height: 70%;
 }
 
-.projects .project .thumbnail img {
+.gallery .item .thumbnail img {
   width: 100%;
   height: 100%;
 }
 
-.projects .project .caption {
+.gallery .item .caption {
   text-align: center;
   margin-bottom: 5px;
   padding: 0.5em;
 }
 
-.projects .project .caption .title {
+.gallery .item .caption .title {
   font-size: 1.5rem;
   line-height: 1em;
 }
 
-.projects .project .caption .btn a {
+.gallery .item .caption .btn a {
   display: block;
   padding: 1em;
   background-color: var(--secondary-background-color);
@@ -10428,12 +10428,12 @@ Projects
   text-decoration: none;
 }
 
-.projects .project .caption .btn a:hover {
+.gallery .item .caption .btn a:hover {
   color: var(--lighten-text-1-color);
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
-  .projects .project {
+  .gallery .item {
     width: 100%;
     margin-bottom: 1em;
   }
@@ -10522,6 +10522,74 @@ Project Info
   }
   .project-info .body .intro .btn {
     font-size: 0.8em;
+  }
+}
+/***
+Article
+***/
+.article {
+  margin: 0 auto;
+  max-width: 728px;
+  word-break: break-word;
+}
+
+.article .heading h1 {
+  line-height: 1em;
+}
+
+.article .heading .profile:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.article .heading .profile .avatar {
+  float: left;
+  width: 36px;
+  height: 36px;
+  margin: 0.5em;
+}
+
+.article .heading .profile .avatar img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.article .heading .profile .author {
+  padding: 0.5em;
+}
+
+.article .heading .profile .name {
+  padding-bottom: 5px;
+}
+
+.article .heading .profile .date {
+  font-size: 0.8em;
+}
+
+.article .heading .thumbnail {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.article .heading .thumbnail img {
+  width: 50%;
+}
+
+.article .body {
+  line-height: 1.5em;
+}
+
+@media screen and (max-width: 600px) and (orientation: portrait) {
+  .article {
+    max-width: 100vw;
+  }
+  .article .heading .thumbnail {
+    margin: 0 auto;
+    max-width: 80vw;
+  }
+  .article .heading .thumbnail img {
+    width: 100%;
   }
 }
 

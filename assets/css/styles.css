@@ -10309,10 +10309,9 @@ body {
   overflow-y: scroll;
 }
 
-.about {
+.container {
+  max-width: 80vw;
   margin: 0 auto;
-  max-width: 728px;
-  word-break: break-word;
 }
 
 h1 {
@@ -10417,15 +10416,8 @@ Navigation
 /***
 Home
 ***/
-.banner {
-  background-image: url("/assets/images/cba_banner.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 60%;
-  height: 50%;
-  position: relative;
-  margin: 0 auto;
+.banner img {
+  width: 100%;
 }
 
 .notice {
@@ -10437,8 +10429,10 @@ Home
 }
 
 .highlights {
+  margin: 0 auto;
   margin-top: 1rem;
   border-top: 2px var(--secondary-background-color) solid;
+  word-break: break-word;
 }
 
 .highlights:after {
@@ -10471,10 +10465,8 @@ Home
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
-  .banner {
-    background-image: url("/assets/images/cba_logo_white.v2.png");
-    width: 40%;
-    height: 20%;
+  .container {
+    width: 100vw;
   }
   .notice {
     line-height: 2rem;
@@ -10620,12 +10612,6 @@ Project Info
 /***
 Article
 ***/
-.article {
-  margin: 0 auto;
-  max-width: 728px;
-  word-break: break-word;
-}
-
 .article .heading .profile:after {
   content: "";
   display: table;
@@ -10658,9 +10644,6 @@ Article
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
-  .article {
-    max-width: 100vw;
-  }
   .article .heading .thumbnail {
     margin: 0 auto;
     max-width: 80vw;

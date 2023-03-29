@@ -10292,9 +10292,9 @@ body {
   color: var(--main-text-color) !important;
   font-family: "Heiti SC", sans-serif;
   height: 100%;
-  line-height: 1em;
+  line-height: 1.6rem;
   margin: 0;
-  padding: 1em;
+  padding: 1rem;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -10305,21 +10305,21 @@ body {
   word-break: break-word;
 }
 
-.about h1 {
-  line-height: 1em;
+h1 {
+  line-height: 2rem;
 }
 
 .site-footer {
-  margin-top: 4em;
+  margin-top: 4rem;
   border-top: 2px var(--secondary-background-color) solid;
-  padding: 1em 0 1em 0;
+  padding: 1rem 0 1rem 0;
   width: 100%;
   text-align: center;
-  font-size: 0.8em;
+  font-size: 0.8rem;
 }
 
 .site-footer .copyright, .socials, .powered-by {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5rem;
 }
 
 .site-footer .socials a,
@@ -10352,8 +10352,8 @@ Navigation
   background-color: var(--secondary-background-color) !important;
   overflow: hidden;
   margin: 0;
-  margin-bottom: 0.5em;
-  padding: 0.5em;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
 }
 
 .top-nav a {
@@ -10361,7 +10361,7 @@ Navigation
   display: block;
   color: var(--main-text-color);
   text-align: center;
-  padding: 1em;
+  padding: 1rem;
   text-decoration: none;
 }
 
@@ -10391,8 +10391,8 @@ Navigation
   }
   .top-nav.responsive a.icon {
     position: absolute;
-    right: 0.5em;
-    top: 0.5em;
+    right: 0.5rem;
+    top: 0.5rem;
   }
   .top-nav.responsive a {
     float: none;
@@ -10429,7 +10429,7 @@ Home
     height: 20%;
   }
   .notice {
-    line-height: 2em;
+    line-height: 2rem;
   }
 }
 /***
@@ -10458,17 +10458,16 @@ Projects
 .gallery .item .caption {
   text-align: center;
   margin-bottom: 5px;
-  padding: 0.5em;
+  padding: 0.5rem;
 }
 
 .gallery .item .caption .title {
   font-size: 1.5rem;
-  line-height: 1em;
 }
 
 .gallery .item .caption .btn a {
   display: block;
-  padding: 1em;
+  padding: 1rem;
   background-color: var(--secondary-background-color);
   color: var(--main-text-color);
   text-decoration: none;
@@ -10481,14 +10480,14 @@ Projects
 @media screen and (max-width: 600px) and (orientation: portrait) {
   .gallery .item {
     width: 100%;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
   }
 }
 /***
 Project Info
 ***/
 .project-info .body {
-  margin-top: 1em;
+  margin-top: 1rem;
 }
 
 .project-info .body:after {
@@ -10510,11 +10509,11 @@ Project Info
 .project-info .body .intro {
   float: left;
   width: 30%;
-  padding: 0 1em 0 1em;
+  padding: 0 1rem 0 1rem;
 }
 
 .project-info .body .intro .content, .section {
-  margin-top: 1em;
+  margin-top: 1rem;
 }
 
 .project-info .body .intro .section {
@@ -10525,8 +10524,8 @@ Project Info
   display: inline-block;
   background-color: var(--secondary-background-color);
   border-radius: 5px;
-  padding: 0.8em;
-  font-size: 0.8em;
+  padding: 0.5rem;
+  font-size: 0.8rem;
 }
 
 .project-info .body .intro .tag span {
@@ -10536,8 +10535,8 @@ Project Info
 .project-info .body .intro .btn {
   display: inline-block;
   background-color: var(--secondary-background-color);
-  margin-top: 1em;
-  padding: 1em;
+  margin-top: 1rem;
+  padding: 0.8rem;
   border-radius: 5px;
 }
 
@@ -10552,10 +10551,7 @@ Project Info
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
   .project-info {
-    padding-bottom: 2em;
-  }
-  .project-info .heading h2 {
-    line-height: 1em;
+    padding-bottom: 2rem;
   }
   .project-info .body .thumbnail {
     width: 100%;
@@ -10564,10 +10560,10 @@ Project Info
     width: 90%;
   }
   .project-info .body .intro .tag {
-    font-size: 0.6em;
+    font-size: 0.6rem;
   }
   .project-info .body .intro .btn {
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 }
 /***
@@ -10577,10 +10573,6 @@ Article
   margin: 0 auto;
   max-width: 728px;
   word-break: break-word;
-}
-
-.article .heading h1 {
-  line-height: 1em;
 }
 
 .article .heading .profile:after {
@@ -10593,7 +10585,7 @@ Article
   float: left;
   width: 36px;
   height: 36px;
-  margin: 0.5em;
+  margin: 0.5rem;
 }
 
 .article .heading .profile .avatar img {
@@ -10601,16 +10593,8 @@ Article
   border-radius: 50%;
 }
 
-.article .heading .profile .author {
-  padding: 0.5em;
-}
-
-.article .heading .profile .name {
-  padding-bottom: 5px;
-}
-
 .article .heading .profile .date {
-  font-size: 0.8em;
+  font-size: 0.8rem;
 }
 
 .article .heading .thumbnail {
@@ -10620,10 +10604,6 @@ Article
 
 .article .heading .thumbnail img {
   width: 50%;
-}
-
-.article .body {
-  line-height: 1.5em;
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {

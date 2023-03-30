@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Building this site from scratch</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Building this site from scratch</h1>
+
+    <p>Why did I build coffeebrewapps.com from scratch instead of using existing themes.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Mar 30, 2023 | 
+
+<span>5 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/build_site_from_scratch/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="content">
+      <h2>The Back Story <small>(Every good story needs one)</small></h2>
+
+<p>
+When I first thought about building this site, I have already decided to host it on Github Pages and use Jekyll for
+the site generation. The reason is very practical: because I need to spend as little as possible to preserve my fund
+during my sabbatical. So the only thing I spend on this site is buying the domain, as I want it to look more
+“professional”.
+</p>
+
+<p>
+Following that line of thought, I should have also used a professional looking theme built by other talented people.
+There are over 300 themes available on Jekyll Themes, and they definitely look modern and professional. More
+importantly, they are mostly free and open source, which is good for my wallet. I was almost going to install one of
+them for my site, and then I hesitated.
+</p>
+
+<p>
+Let’s backtrack a little here. Professionally, I’ve always been more comfortable with backend development, as I’m more
+of a logical person than a creative person. Backend systems deal a lot with logic and not aesthetics, and I think I’m
+pretty good at it. On the other hand, it takes a bit of creativity to build beautiful and user-friendly UI, and that’s
+where my lack of it has been holding me back from diving deep into frontend development.
+</p>
+
+<p>
+So for my past projects, where a UI was needed, I’ve always used existing frameworks like Vuetify, even the
+framework’s tagline says that “[it’s] a no design skills required UI Library”. Sounds like it’s made for me, doesn’t
+it? If I wasn’t building something that other people would use, I would just use Plain O’ HTML, CSS-less (as in, the
+lack of, not Leaner Style Sheets). Trust me, I did that in my past job, and it turned out that other people indeed had
+to use it, and I became known to be the “creator of that ugly tool”. As you can see, I never truly grabbed the
+opportunity to learn about how frontend development works.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/build_site_from_scratch/less_css.png" /></p>
+  <p><small>No, I’m not talking about this CSS-less.</small></p>
+</div>
+
+<h2>The Turning Point</h2>
+
+<p>
+Now, why did I hesitate when I was going to install a ready-made theme? I was looking through the source, and saw a lot
+of files and folders that don’t seem to have come from the base Jekyll generator. Normally I would ignore that and just
+copy everything and start working on the main objective, which is to write articles and put up my projects portfolio.
+But this time, I wanted to start with as few dependencies as possible, because I will be maintaining the site for quite
+some time, and fewer issues with dependencies down the road will be desirable.
+</p>
+
+<p>
+Furthermore, one of my goals during my sabbatical is to try something new, because I just didn’t have the mindspace to
+do so when I had a 9-5 job (this may be another story I want to tell some day about how it was hard to have side
+projects while having a full-time job, despite the popular belief that you can side-hustle). One of the first things I
+can learn is frontend development, and building this site is the perfect opportunity for me to kickstart the process.
+</p>
+
+<p>
+So, I ditched the plan of using an existing theme, and started building from scratch. Every layout and every CSS class
+was created from the ground up, with a lot of wonderful resources online to guide me along the way (this will
+definitely be a story I will tell some day about what resources I used to help me build this site). I had a vision at
+the beginning of how the site would eventually look like, and through a lot of trials and errors, I put in the code
+to make it a reality. As a bonus, I also created my site logo and banner images from scratch, because I couldn’t afford
+to hire a professional graphics designer for it.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/cba_banner.png" /></p>
+  <p><small>Yes, I created the funny-looking coffee cup in the banner using Inkscape.</small></p>
+</div>
+
+<h2>Happy Ending?</h2>
+
+<p>
+I’m fully aware that the end result of my first attempt is not great, I even dare say that my HTML/CSS conventions and
+UI/UX are mostly non-conforming for the industry, and it will definitely not get me a job as a frontend engineer or
+designer. But I believe that the experience of having learnt and built something in an unfamiliar domain will
+definitely be beneficial some day when I need to work on more challenging projects, I wouldn’t want that opportunity
+slip by just because I haven’t been ready for it.
+</p>
+
+<p>
+More importantly, I think that the process of building something from scratch is very satisfying and fulfilling.
+When I see my site slowly taking shape, even though it doesn’t look 100% like what I have imagined, I’m still proud of
+the result that I’ve put my 100% effort into building. I’m like the new parent who will forever think that my child is
+the cutest and prettiest, even if she is objectively not so.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/build_site_from_scratch/cute_baby.png" /></p>
+  <p><small>Isn’t my baby so cute?</small></p>
+</div>
+
+<h2>Moral Of The Story <small>(Let’s not waste the chance of learning from it)</small></h2>
+
+<p>
+This will not be the end of my frontend development journey, I will continue to improve this site as I learn more about
+the domain. I hope that as much as this has been inspiring for myself, it will also be so for those of you who have
+been hesitating whether to cross-over to the other side (to backend development if you have been a frontend engineer,
+vice versa), or even to try something entirely unrelated to your normal profession.
+</p>
+
+<p>It’s a small step to take, but the journey will be fulfilling if you continue walking (or your could cycle, or drive
+a car). Also, don’t forget to have your cup of coffee while at it, it’s going to be quite a long journey, and you
+wouldn’t want to nod off halfway through it and miss all the beautiful scenery!
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/build_site_from_scratch/road_trip.png" /></p>
+  <p><small>Enjoy the journey!</small></p>
+</div>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/BIeC4YK2MTA" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Construction in East London, UK by Ben Allan
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://lesscss.org" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Screenshot from lesscss.org homepage
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://www.coffeebrewapps.com" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Banner from coffeebrewapps.com homepage
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/Z05GiksmqYU" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Baby Monkey in Kyoto Perfecture, Japan by Jamie Haughton
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/A5rCN8626Ck" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Arches National Park Entrance Station, Moab, US by Dino Reichmuth
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="http://jekyllthemes.org" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Jekyll Themes
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://vuetifyjs.com/en/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Vuetify - "Vuetify is a no design skills required UI Library with beautifully handcrafted Vue Components."
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+  </div>
+</div>
+
+    </div>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

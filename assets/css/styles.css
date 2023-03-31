@@ -10694,5 +10694,23 @@ Article
     padding-inline-start: 0;
   }
 }
+.archives a {
+  color: var(--main-text-color);
+  text-decoration: none;
+}
+
+.archives a:hover {
+  color: var(--lighten-text-1-color);
+}
+
+.archives ul {
+  list-style-type: none;
+}
+
+@media screen and (max-width: 600px) and (orientation: portrait) {
+  .archives ul {
+    padding-inline-start: 0.5rem;
+  }
+}
 
 /*# sourceMappingURL=styles.css.map */

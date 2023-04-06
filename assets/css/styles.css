@@ -10504,6 +10504,27 @@ Home
   }
 }
 /***
+Syntax highlight
+***/
+.highlighter-rouge {
+  background-color: var(--secondary-background-color);
+  opacity: 0.6;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+code.highlighter-rouge {
+  background-color: var(--secondary-background-color);
+  opacity: 0.6;
+  padding: 4px 6px;
+  border-radius: 5px;
+}
+
+pre.highlight {
+  overflow-x: scroll;
+}
+
+/***
 Projects
 ***/
 .gallery:after {
@@ -10761,27 +10782,6 @@ Collapsible
 .collapsible .item .full-content {
   margin-bottom: 5px;
   padding: 0.5rem;
-  overflow-x: scroll;
-}
-
-.collapsible .item .preview .highlighter-rouge,
-.collapsible .item .full-content .highlighter-rouge {
-  background-color: var(--secondary-background-color);
-  opacity: 0.6;
-  padding: 1rem;
-  border-radius: 5px;
-}
-
-.collapsible .item .preview code.highlighter-rouge,
-.collapsible .item .full-content code.highlighter-rouge {
-  background-color: var(--secondary-background-color);
-  opacity: 0.6;
-  padding: 4px 6px;
-  border-radius: 5px;
-}
-
-.collapsible .item .preview pre.highlight,
-.collapsible .item .full-content pre.highlight {
   overflow-x: scroll;
 }
 

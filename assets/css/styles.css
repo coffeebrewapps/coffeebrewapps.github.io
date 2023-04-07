@@ -10546,6 +10546,38 @@ blockquote {
   }
 }
 /***
+Pagination
+***/
+.pagination {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pagination ul.pager {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+.pagination ul.pager li.previous {
+  display: inline;
+  float: left;
+}
+
+.pagination ul.pager li.next {
+  display: inline;
+  float: right;
+}
+
+.pagination ul.pager a {
+  color: var(--main-text-color);
+  text-decoration: none;
+}
+
+.pagination ul.pager a:hover {
+  color: var(--lighten-text-1-color);
+}
+
+/***
 Projects
 ***/
 .gallery:after {

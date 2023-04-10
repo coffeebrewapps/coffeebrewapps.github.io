@@ -10589,6 +10589,7 @@ Projects
 .gallery .item {
   float: left;
   width: 33%;
+  margin-right: 1rem;
 }
 
 .gallery .item .thumbnail {

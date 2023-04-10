@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>The Jekyll Rabbit Hole</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>The Jekyll Rabbit Hole</h1>
+
+    <p>The rabbit hole of building a Jekyll site.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 10, 2023 | 
+
+<span>5 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/the_jekyll_rabbit_hole/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="content">
+      <h2>It Was Innocent At First</h2>
+
+<p>
+I really only wanted to just build the stylesheets and layouts from scratch. I wasn’t thinking about building plugins
+or anything. Then I started thinking, “Oh, I need to have an archives for my articles because the number of articles
+will grow and I want to have this tree hierarchy index page for all the articles sorted and grouped by year/month/day.”
+</p>
+
+<p>
+And then I built this thing called “Shots”, which are supposed to be like “Shorts” for articles. And another thought
+came about, “Oh, this list is also going to grow, and I’m building a static site, so I’m not going to have infinite
+scroll and I need to have pagination for my shots for my own (and my precious readers’) sanity.”
+</p>
+
+<p>
+So I did what most DRY supporters would do, which is to go look for existing solution from Jekyll Plugins documentation
+page and Awesome Jekyll Plugins. Indeed, what I needed were already solved by other brilliant developers, and I was
+quick to install the <code class="language-plaintext highlighter-rouge">jekyll-archives</code> and <code class="language-plaintext highlighter-rouge">jekyll-paginate-v2</code> plugins for my site.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/the_jekyll_rabbit_hole/shots.png" /></p>
+  <p><small>I’m going to take a lot of shots for this site.</small></p>
+</div>
+
+<h2>It’s Not You, It’s Me</h2>
+
+<p>
+But then things didn’t go as smoothly as I imagined when I started configuring the plugins for my site. I don’t think
+there’s anything wrong with the plugins, these are plugins that have been used by many other Jekyll users (in the range
+of 600K to 800K downloads as of the time of writing). I think it’s because of my peculiar use cases that these plugins
+don’t fit anymore. Let’s see why.
+</p>
+
+<p>
+For archiving, I wanted to have a sort of tree hierarchy for year, month and day, so it feels like navigating the site
+directory. The official plugin doesn’t really do that, it just generates the index pages for the posts that belong in
+each year, month and day. I <em>might</em> be able to write some scripts that build a tree hierarchy based on the
+generated index pages, but I thought that would be odd because clearly the plugin, while perfectly functional, doesn’t
+fit my use case.
+</p>
+
+<p>
+Then for pagination, I wanted to have the first page of the paginated collection as a root-level page, like
+<code class="language-plaintext highlighter-rouge">/shots.html</code>, so that I can put it in the navigation menu. The official plugin doesn’t really allow for that, it will
+always generate all index pages under the same directory. I tried to hack around it to make the first page go to
+<code class="language-plaintext highlighter-rouge">/shots.html</code>, but I failed to make it work. Again, it’s a perfectly functional plugin, it just doesn’t do what I
+wanted.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/the_jekyll_rabbit_hole/tree.png" /></p>
+  <p><small>The tree of articles for my site, and the first page of pagination is at the root.</small></p>
+</div>
+
+<h2>But I’m An Engineer, Right?</h2>
+
+<p>
+So I did what most engineers would do when they face a problem with no existing solution, they fix it for themselves,
+and so did I.
+</p>
+
+<p>
+Luckily for me, I’ve been coding in Ruby for the past 6+ years, so the only learning curve for building a Jekyll plugin
+is figuring out its interfaces. The good thing is that there are already many existing Jekyll plugins on Github, and
+the Jekyll project is also open-source. By reading through the source code, I figured out the structure of building a
+Jekyll generator plugin.
+</p>
+
+<p>
+And so, I built the <code class="language-plaintext highlighter-rouge">coffeebrew_jekyll_archives</code> and <code class="language-plaintext highlighter-rouge">coffeebrew_jekyll_paginate</code> plugins, and use them on my site.
+Voila! Now I have a tree hierarchy for archives and pagination that allows me to put the first page in the root.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/the_jekyll_rabbit_hole/source_code.png" /></p>
+  <p><small>Thankfully humans invented this thing called Open-Source.</small></p>
+</div>
+
+<h2>It’s Not For Everyone</h2>
+
+<p>
+Even though I published the gems, and wrote pretty extensive READMEs for them (as if there would be other contributors
+reading them), my true intention is only to use them for my site. I’m fully aware that these are built specific to my
+own use case, and may not be useful for many others. Similar to what I encountered at first, someone may try to install
+these plugins, and think that they don’t actually fit their use case. That is perfectly fine.
+</p>
+
+<p>
+I’m also aware that my plugins have missing features. For example, the archives plugin doesn’t archive based on tags
+or categories, and it only works for site posts and not other collections. I do plan to add these features slowly when
+I face the need myself. Or, if in the unlikely event that the plugins almost do what you want them to, but just miss
+out on these features, you are very much welcome to submit a feature request or better still, a pull request.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/the_jekyll_rabbit_hole/not_found.png" /></p>
+  <p><small>Opps, the feature you are looking for is not found.</small></p>
+</div>
+
+<h2>One More Thing</h2>
+
+<p>
+So the archives and pagination plugins aren’t the only plugins I have built, for the purpose of rendering the README for
+the plugins on a Jekyll-powered site, I have also built a theme for the README documentation sites. And since I need to
+use the theme on 2 sites, I figured that I might as well package it into a theme plugin.
+</p>
+
+<p>
+For this one, I’m pretty certain no one else will have the same use case as I do, but for some miraculous reason that
+you do want to use it and again, missing certain features, you are very much welcome to submit a feature request or a
+pull request.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/the_jekyll_rabbit_hole/documentation.png" /></p>
+  <p><small>A plugin for my plugins.</small></p>
+</div>
+
+<h2>I’m Done, For Now</h2>
+
+<p>
+And that’s the rabbit hole I’ve jumped through in the past week while building this site. It certainly took many cups
+of coffee to come out of it, but it was a totally fun and enjoyable process. I think I’m done building this site for
+now, and I will go on to build the apps I’ve wanted to build.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/the_jekyll_rabbit_hole/end_of_tunnel.png" /></p>
+  <p><small>I can see the end of the hole, for now.</small></p>
+</div>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/hGsmGe7kTno" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Rabbit in a shelter by Rahim Sofri
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/gM-RfQsZK98" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Latte in a coffee machine by Blake Verdoorn
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/tGTVxeOr_Rs" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Tree in Nicaragua by niko photos
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/BfrQnKBulYQ" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Source code by Shahadat Rahman
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/sxiSod0tyYQ" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> 404 page by Erik Mclean
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://www.coffeebrewapps.com/coffeebrew_jekyll_docs/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Screenshot from Coffeebrew Jekyll Theme homepage
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/gmy25xvSkq8" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Blue Ridge Parkway by Aaron Burden
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://jekyllrb.com/docs/plugins/your-first-plugin/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Your first plugin | Jekyll
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://github.com/planetjekyll/awesome-jekyll-plugins" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Awesome Jekyll Plugins
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://github.com/sverrirs/jekyll-paginate-v2" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Jekyll::Paginate V2
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://github.com/jekyll/jekyll-archives" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Jekyll Archives
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://www.coffeebrewapps.com/articles/2023/03/30/build-site-from-scratch.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Building this site from scratch
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

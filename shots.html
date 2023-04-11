@@ -48,6 +48,100 @@
 <p>Mid-day shots to boost your energy.</p>
 <div class="collapsible">
   
+    <div class="item" id="gh_as_data_server-section">
+      <div class="title">
+        <span>Using Github as a pseudo-JSON API server</span>
+        <small>Apr 11, 2023 <em>by gohkhoonhiang</em></small>
+      </div>
+      <div class="preview" id="gh_as_data_server-preview">
+        <p><p>While building the
+<a href="https://www.coffeebrewapps.com/sg_bank_int_compare/" target="_blank">SG Bank Interests Compare App</a>, I
+faced a problem: “How can I serve JSON data API while hosting the app on Github Pages?”</p>
+</p>
+      </div>
+      <div class="full-content" id="gh_as_data_server-content" hidden>
+        <p>While building the
+<a href="https://www.coffeebrewapps.com/sg_bank_int_compare/" target="_blank">SG Bank Interests Compare App</a>, I
+faced a problem: “How can I serve JSON data API while hosting the app on Github Pages?”</p>
+
+<p>I forgot how I stumbled upon the idea, but eventually I decided to make use of Github itself as a pseudo-API server.
+Here’s how I executed it for my app.</p>
+
+<p>But first, let’s talk a little bit about why Github is actually a pretty good candidate:</p>
+
+<ul>
+  <li>Versioning is built into it, thanks to git commits.</li>
+  <li>Github can serve raw files under the <code class="language-plaintext highlighter-rouge">https://raw.githubusercontent.com/</code> domain.</li>
+</ul>
+
+<p>It’s screaming at me that: “Hey, I can actually be a pretty good versioned data API server!”</p>
+
+<p>So I separated my app into 2 repositories:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sg_bank_int_compare-source</code>: This will host the source code, data files and build scripts.</li>
+  <li><code class="language-plaintext highlighter-rouge">sg_bank_int_compare</code>: This will host the built page that can be served by Github Pages.</li>
+</ul>
+
+<p>For the <code class="language-plaintext highlighter-rouge">sg_bank_int_compare-source</code> repo, I have both the page assets and the data JSON files.</p>
+
+<p>Note: Omitted some files for clarity.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src
+├── App.vue
+├── components
+│   └── CalculatorForm.vue
+├── data
+│   ├── cimb_fast_saver.json
+│   └── uob_one.json
+├── main.js
+└── scripts
+    └── calculator.js
+</code></pre></div></div>
+
+<p>Then in the <code class="language-plaintext highlighter-rouge">sg_bank_int_compare</code> repo, I further separate it into 2 branches:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">main</code>: This is where the app index page and assets will be served.</li>
+  <li><code class="language-plaintext highlighter-rouge">data</code>: This only contains the JSON data files.</li>
+</ul>
+
+<p>Whenever I make changes to the source, I will run a script that will checkout the <code class="language-plaintext highlighter-rouge">data</code> branch in
+<code class="language-plaintext highlighter-rouge">sg_bank_int_compare</code>, then copy the <code class="language-plaintext highlighter-rouge">data/*.json</code> files into the <code class="language-plaintext highlighter-rouge">data</code> directory. If there are changes to the data,
+it will create a new commit.</p>
+
+<p>The script then reads this commit hash, and compare it with the current <code class="language-plaintext highlighter-rouge">LATEST_VERSION</code> in the source file. If it’s
+different, then it will replace it with the new commit hash.</p>
+
+<p>And finally, the script will build the page and checkout the <code class="language-plaintext highlighter-rouge">main</code> branch in <code class="language-plaintext highlighter-rouge">sg_bank_int_compare</code> to create a commit.</p>
+
+<p>Now when I push the <code class="language-plaintext highlighter-rouge">data</code> branch to Github, I will be able to see the raw JSON files under
+<code class="language-plaintext highlighter-rouge">https://raw.githubusercontent.com/coffeebrewapps/sg_bank_int_compare/${LATEST_VERSION}/data/</code>. And then I push the
+<code class="language-plaintext highlighter-rouge">main</code> branch to Github, and it will be able to request for the JSON data from the same URL.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// source will be something like:</span>
+<span class="c1">// https://raw.githubusercontent.com/coffeebrewapps/sg_bank_int_compare/366b5c954e2c5155b9c9f9c728a9b428956917e2/data/cimb_fast_saver.json</span>
+<span class="nx">axios</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// parse the response and use the data for interest calculation</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nf">catch</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">});</span>
+</code></pre></div></div>
+
+<p>So, after reading so far, you might be thinking: “Why not just hardcode the data in a variable in JS and read directly?”</p>
+
+<p>Yes, I did think about that question too, but I wanted to have a separation of “client” and “server”, so that in the
+future, if I do have the resource to host the data on an actual server, I don’t have to change a lot of my client code,
+and just have to update the API URLs.</p>
+
+<p>I hope this little trick is useful for you too if you intend to build an app hosted on Github Pages that requires a
+data API but don’t have an actual server to serve it.</p>
+
+      </div>
+      <div class="btn"><a id="gh_as_data_server-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
+    </div>
+  
     <div class="item" id="solving_rubocop_mystery-section">
       <div class="title">
         <span>Solving the Rubocop mystery</span>

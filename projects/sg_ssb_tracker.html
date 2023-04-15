@@ -8,13 +8,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <title>Home</title>
+    <title>Sg_ssb_tracker</title>
   </head>
   <body>
     <script src="/assets/js/main.js"></script>
     <nav id="top-nav" class="top-nav">
   
-    <a href="/" class="current">
+    <a href="/" >
       Home
     </a>
   
@@ -26,7 +26,7 @@
       Articles
     </a>
   
-    <a href="/projects.html" >
+    <a href="/projects.html" class="current">
       Projects
     </a>
   
@@ -44,52 +44,59 @@
 </nav>
 
     <div class="container">
-      <div class="banner">
-  <img src="/assets/images/cba_banner.png"/>
-</div>
-<div class="highlights">
-  <div class="highlight">
-    <div class="content">
-      <h2>Latest Article</h2>
-      
-      <div class="thumbnail">
-        <img src="/assets/images/posts/the_jekyll_rabbit_hole/thumbnail.png"
-             onerror="this.src='/assets/images/posts/placeholder.png'"/>
-      </div>
-      <div class="caption">
-        <h3>The Jekyll Rabbit Hole</h3>
-        <p>The rabbit hole of building a Jekyll site.</p>
-        <a href="/articles/2023/04/10/the-jekyll-rabbit-hole.html">Read more <i class="fa-solid fa-arrow-right"></i></a>
-      </div>
-    </div>
+      <div class="project-info">
+  <div class="heading">
+    <h2>Singapore Savings Bonds Tracker</h1>
+    <h3>An app to track SSB allotment and monitor interests payment.</h3>
   </div>
-  <div class="highlight">
-    <div class="content">
-      <h2>Latest Project</h2>
-      
-      <div class="thumbnail">
-        <img src="/assets/images/projects/sg_ssb_tracker/thumbnail.png"
-             onerror="this.src='/assets/images/projects/placeholder.png'"/>
-      </div>
-      <div class="caption">
-        <h3>Singapore Savings Bonds Tracker</h3>
-        <p>An app to track SSB allotment and monitor interests payment.</p>
-        <a href="/projects/sg_ssb_tracker.html">View more <i class="fa-solid fa-arrow-right"></i></a>
-      </div>
+
+  <div class="body">
+    <div class="thumbnail">
+      <img src="/assets/images/projects/sg_ssb_tracker/thumbnail.png"
+           onerror="this.src='/assets/images/projects/placeholder.png'"/>
     </div>
-  </div>
-</div>
-<div class="highlights">
-  <div class="highlight">
-    <div class="content">
-      <h2>Latest Shot</h2>
-      <div class="caption">
-        
-        <p><p>While building the
-<a href="https://www.coffeebrewapps.com/sg_bank_int_compare/" target="_blank">SG Bank Interests Compare App</a>, I
-faced a problem: “How can I serve JSON data API while hosting the app on Github Pages?”</p>
+
+    <div class="intro">
+      <div class="content">
+        <p><p>This app allows users to track their SSB allotments since the first issuance in October 2015, and monitor the interests
+issuance by month for the upcoming 10 years. A simple dashboard displays at a glance this year’s total interests and
+the breakdown of the calculation.</p>
 </p>
-        <a href="/shots.html#gh_as_data_server-section">Full shot <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="section">
+        <p>Built with:</p>
+        
+        
+          <div class="tag"><i class="fa-solid fa-code"></i><span>vuejs</span></div>
+        
+          <div class="tag"><i class="fa-solid fa-code"></i><span>vuetifyjs</span></div>
+        
+      </div>
+
+      <div class="section">
+        <p>Categories:</p>
+        
+          <div class="tag"><i class="fa-solid fa-tag"></i><span>app</span></div>
+        
+          <div class="tag"><i class="fa-solid fa-tag"></i><span>finances</span></div>
+        
+      </div>
+
+      <div class="section">
+        <div class="btn">
+          
+          <a href="https://www.coffeebrewapps.com/sg_ssb_tracker/" target="_blank">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i><span>Launch App</span>
+          </a>
+        </div>
+
+        <div class="btn">
+          
+          <a href="https://github.com/coffeebrewapps/sg_ssb_tracker" target="_blank">
+            <i class="fa-brands fa-github"></i><span>View Source</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>

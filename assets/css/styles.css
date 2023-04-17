@@ -10782,6 +10782,18 @@ Article
   list-style-type: none;
 }
 
+.article .body .flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+}
+
+.article .body .flex-col {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
 @media screen and (max-width: 600px) and (orientation: portrait) {
   .article .heading .thumbnail {
     margin: 0 auto;
@@ -10795,6 +10807,14 @@ Article
   }
   .article .body .list ul {
     padding-inline-start: 0;
+  }
+  .article .body .flex-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .article .body .flex-col {
+    width: 80vw;
   }
 }
 .archives a {

@@ -48,6 +48,216 @@
 <p>Mid-day shots to boost your energy.</p>
 <div class="collapsible">
   
+    <div class="item" id="centered-even-grid-layout-section">
+      <div class="title">
+        <span>How to create the same column width grid layout in the same page</span>
+        <small>Apr 20, 2023 <em>by gohkhoonhiang</em></small>
+      </div>
+      <div class="preview" id="centered-even-grid-layout-preview">
+        <p><p>So the problem I encountered was this: I have a page that have 2 separate grid sections. Each section can have its own
+variable number of items. I want to display the items in a 3-column grid layout.</p>
+</p>
+      </div>
+      <div class="full-content" id="centered-even-grid-layout-content" hidden>
+        <p>So the problem I encountered was this: I have a page that have 2 separate grid sections. Each section can have its own
+variable number of items. I want to display the items in a 3-column grid layout.</p>
+
+<p>My first solution was taken from the web, and it’s something along this line.</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.container</span> <span class="p">{</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
+  <span class="py">grid-template-columns</span><span class="p">:</span> <span class="nb">auto</span> <span class="nb">auto</span> <span class="nb">auto</span><span class="p">;</span>
+  <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+  <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But it turned out like this when I have 2 items in the second section:</p>
+
+<div class="example-container example-1">
+  <p class="example-heading">Section 1</p>
+  <div class="example-grid">
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+  </div>
+
+  <p class="example-heading">Section 2</p>
+  <div class="example-grid">
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+  </div>
+</div>
+
+<p>Due to the <code class="language-plaintext highlighter-rouge">auto</code> value for <code class="language-plaintext highlighter-rouge">grid-template-columns</code>, when there’re only 2 items, it will stretch and fit the width of
+the container.</p>
+
+<p>So I thought I had to use math to calculate the width of each grid column, in order for the 2-item grid to only take
+up exactly 2 column-width.</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">//</span> <span class="err">8</span><span class="nt">rem</span> <span class="o">=</span> <span class="err">1</span><span class="nt">rem</span> <span class="nt">on</span> <span class="nt">each</span> <span class="nt">side</span> <span class="nt">of</span> <span class="nt">the</span> <span class="nt">grid</span> <span class="nt">for</span> <span class="err">3</span> <span class="nt">grids</span> <span class="o">+</span> <span class="nt">container</span> <span class="nt">padding</span> <span class="nt">of</span> <span class="err">1</span><span class="nt">rem</span> <span class="nt">on</span> <span class="nt">each</span> <span class="nt">side</span>
+<span class="nc">.container</span> <span class="p">{</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
+  <span class="py">grid-template-columns</span><span class="p">:</span> <span class="n">calc</span><span class="p">((</span><span class="m">100vw</span> <span class="n">-</span> <span class="m">8rem</span><span class="p">)</span> <span class="p">/</span> <span class="m">3</span><span class="p">)</span> <span class="n">calc</span><span class="p">((</span><span class="m">100vw</span> <span class="n">-</span> <span class="m">8rem</span><span class="p">)</span> <span class="p">/</span> <span class="m">3</span><span class="p">)</span> <span class="n">calc</span><span class="p">((</span><span class="m">100vw</span> <span class="n">-</span> <span class="m">8rem</span><span class="p">)</span> <span class="p">/</span> <span class="m">3</span><span class="p">);</span>
+  <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+  <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>It’s what I wanted, but there’s too much math going on.</p>
+
+<div class="example-container example-2">
+  <p class="example-heading">Section 1</p>
+  <div class="example-grid">
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+  </div>
+
+  <p class="example-heading">Section 2</p>
+  <div class="example-grid">
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+  </div>
+</div>
+
+<p>Okay, then I read about this thing called
+<a href="https://css-tricks.com/snippets/css/complete-guide-grid/#aa-special-units-functions" target="_blank">fractional units (fr)</a>,
+so I thought what about I change to this:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.container</span> <span class="p">{</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
+  <span class="py">grid-template-columns</span><span class="p">:</span> <span class="m">1</span><span class="n">fr</span> <span class="m">1</span><span class="n">fr</span> <span class="m">1</span><span class="n">fr</span><span class="p">;</span>
+  <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+  <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now this looks exactly like the previous one, without the complex calculation.</p>
+
+<div class="example-container example-3">
+  <p class="example-heading">Section 1</p>
+  <div class="example-grid">
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+  </div>
+
+  <p class="example-heading">Section 2</p>
+  <div class="example-grid">
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+    <div class="example-item">
+      <p><img src="/assets/images/projects/placeholder.png" /></p>
+    </div>
+  </div>
+</div>
+
+<p>I drank a few cups of coffee to figure this out so you don’t have to. Enjoy this mid-day shot.</p>
+
+<style>
+.example-container {
+  margin: 1rem;
+  width: 25vw;
+  border: 1px var(--lighten-text-4-color) solid;
+}
+
+.example-heading {
+  margin: 0 1rem;
+  padding: 0 1rem;
+}
+
+.example-grid {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  border: 1px var(--secondary-background-color) solid;
+  margin: 0 1rem;
+  padding: 0 1rem;
+}
+
+.example-item {
+  margin: 0 1rem;
+}
+
+.example-grid img {
+  width: 100%;
+}
+
+.example-1 .example-grid {
+  grid-template-columns: repeat(3, auto);
+}
+
+.example-2 .example-grid {
+  grid-template-columns: repeat(3, calc((25vw - 4rem) / 3));
+}
+
+.example-3 .example-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.example-4 .example-grid {
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0 !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .example-container {
+    margin: 4px;
+    width: 60vw;
+  }
+
+  .example-item {
+    margin: 0 4px;
+  }
+
+  .example-2 .example-grid {
+    grid-template-columns: repeat(3, calc((60vw - 4rem) / 3));
+  }
+}
+</style>
+
+
+      </div>
+      <div class="btn"><a id="centered-even-grid-layout-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
+    </div>
+  
     <div class="item" id="gh_as_data_server-section">
       <div class="title">
         <span>Using Github as a pseudo-JSON API server</span>

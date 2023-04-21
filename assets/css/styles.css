@@ -10537,6 +10537,10 @@ blockquote {
   opacity: 0.8;
 }
 
+pre.mermaid {
+  overflow-y: scroll;
+}
+
 @media screen and (max-width: 600px) and (orientation: portrait) {
   blockquote {
     margin-block-start: 0.4rem;

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 6)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 6)</h1>
+
+    <p>This is Part 6 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 27, 2023 | 
+
+<span>8 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_6/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#user-interface">User Interface</a></li>
+<li class="toc-entry toc-h2"><a href="#system">System</a></li>
+<li class="toc-entry toc-h2"><a href="#persistence">Persistence</a></li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">System Architecture Design</h2>
+
+<p>Previously, we have designed the data models, then the interactions between the user and the system, and also the
+interactions among the components of the system. Now it’s time to look at how the system will put together the user
+interface, business logic and data models.</p>
+
+<p>At this stage, we are still not going to make any assumption about the implementation details, such as which UI
+framework should be used, or which datastore to integrate with. These are not needed yet for the purpose of
+designing the overall system architecture, as this is still an abstract design exercise.</p>
+
+<h2 id="user-interface">User Interface</h2>
+
+<p>Since this is an app used by an actual person, we will need to have an user interface layer. This layer will accept
+input from the user, and forward the input to the system for processing. Upon receiving a result from the system, this
+layer will then render the output to the user. Let’s for now call them the “Input” and “Display” for a lack of better
+words. In the system layer, there will be a handler that handles the input from the user and then do some processing,
+and return a response that can then be used for display. Let’s call this the “InputHandler” for now.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction LR
+        subgraph UI
+            Input
+            Display
+        end
+        subgraph System
+            InputHandler
+        end
+        Input--&gt;InputHandler
+        InputHandler-.-&gt;Display
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>UI layer iteration 1.</small></p>
+</div>
+
+<p>For the “Input”, we do not know yet what is the mechanism to receive user input, whether is it going to be via a web
+form, or command line, or desktop UI. For this reason, we will put an abstraction layer between the part that takes
+the actual user input, and the part that sends the input to the “InputHandler”, let’s call that middleman the
+“Adapter” for now, which adapts the user input into a format that is accepted by the “InputHandler”.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction LR
+        subgraph UI
+            Input--&gt;Adapter
+            Display
+        end
+        subgraph System
+            InputHandler
+        end
+        Adapter--&gt;InputHandler
+        InputHandler-.-&gt;Display
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>UI layer iteration 2.</small></p>
+</div>
+
+<p>The purpose of this “Adapter” is so that we can easily change out the user-facing component without having to rewrite
+all the code that is meant to interface with the “InputHandler”. We can even allow for multiple input mechanisms at
+the same time, and all of them will just go through the “Adapter” to send the input data to the system.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction LR
+        subgraph UI
+            Input1--&gt;Adapter
+            Input2--&gt;Adapter
+            Input3--&gt;Adapter
+            Display
+        end
+        subgraph System
+            InputHandler
+        end
+        Adapter--&gt;InputHandler
+        InputHandler-.-&gt;Display
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>UI layer iteration 3.</small></p>
+</div>
+
+<p>Since we could possibly have multiple input mechanisms, it is natural that there will be multiple display mechanisms
+that correspond to each input mechanism. Again, we will need a middleman that transforms the response from the system’s
+“InputHandler” to a format that each “Display” can render to the user. Let’s call this the “Transformer” for now.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction LR
+        subgraph UI
+            Input1--&gt;Adapter
+            Input2--&gt;Adapter
+            Input3--&gt;Adapter
+            Transformer-.-&gt;Display1
+            Transformer-.-&gt;Display2
+            Transformer-.-&gt;Display3
+        end
+        subgraph System
+            InputHandler
+        end
+        Adapter--&gt;InputHandler
+        InputHandler-.-&gt;Transformer
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>UI layer iteration 4.</small></p>
+</div>
+
+<p>At this point, the UI layer is pretty complete, let’s move on to work on the details of the system layer.</p>
+
+<h2 id="system">System</h2>
+
+<p>We loosely call the layer that interfaces with the UI the “System”, because we have not made a decision regarding how
+it is implemented, like, we don’t call it the “Web Server” yet because we don’t know if it’s going to be a web app.
+When we finally make the decision, we can then refine the name of this layer. For now, let’s go with “System”.</p>
+
+<p>Now, the “InputHandler” can’t be doing everything on its own, it should delegate some tasks, such as business logic
+processing, datastore access, so that we have a clearer separation of concerns. Let’s create the various components
+that will handle each of the functions mentioned earlier.</p>
+
+<p>Note: For simplicity, we will not show the full UI layer diagram, but only the components that directly interact with
+the system layer.</p>
+
+<p>Naturally, the flow of data should go from the “InputHandler”, which might perform some input validation, then to the
+“BusinessLogic”, which will perform the actual processing on the input data, while possibly also interact with the
+“DataAccess” to retrieve or write data from and to the persistence layer.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction LR
+        subgraph UI
+          Adapter
+          Transformer
+        end
+        subgraph System
+            direction TB
+            DataAccess-.-&gt;BusinessLogic
+            BusinessLogic--&gt;DataAccess
+            BusinessLogic-.-&gt;InputHandler
+            InputHandler--&gt;BusinessLogic
+        end
+        subgraph Persistence
+            DataStore
+        end
+        DataAccess--&gt;DataStore
+        DataStore-.-&gt;DataAccess
+        Adapter--&gt;InputHandler
+        InputHandler-.-&gt;Transformer
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Interaction between UI and System.</small></p>
+</div>
+
+<h2 id="persistence">Persistence</h2>
+
+<p>Since we mentioned the persistence layer, let’s look at how the system layer actually interacts with the persistence
+layer.</p>
+
+<p>Why do we need a “DataAccess” component between the “BusinessLogic” and the persistence layer? The reason is that we
+have not made a decision regarding what persistence mechanism will be used. It could be a relational database, or NoSQL
+database, or even simple files storage. The “DataAccess” then serves as an abstraction that handles the mapping of
+CRUD actions to the underlying persistence functions.</p>
+
+<p>Similar to the abstraction of “Adapter” for input and “Transformer” for display, we could possibly allow for different
+persistence mechanisms to exist at the same time. We then just need to write the different CRUD interfaces for each
+persistence mechanism, and the “BusinessLogic” can use any one of them where applicable.</p>
+
+<p>Note: UI layer diagram omitted for simplicity.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction TB
+        subgraph System
+            DataAccess-.-&gt;BusinessLogic
+            BusinessLogic--&gt;DataAccess
+        end
+        subgraph Persistence
+            Persistence1
+            Persistence2
+            Persistence3
+        end
+        subgraph DataStore
+            rdb[(RDB)]
+            nosql[[NoSQL]]
+            fs[/filesystem/]
+        end
+    end
+    Persistence1--&gt;rdb
+    rdb-.-&gt;Persistence1
+    Persistence2--&gt;nosql
+    nosql-.-&gt;Persistence2
+    Persistence3--&gt;fs
+    fs-.-&gt;Persistence3
+    Persistence1-.-&gt;DataAccess
+    DataAccess--&gt;Persistence1
+    Persistence2-.-&gt;DataAccess
+    DataAccess--&gt;Persistence2
+    Persistence3-.-&gt;DataAccess
+    DataAccess--&gt;Persistence3
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Interaction between System and Persistence/DataStore.</small></p>
+</div>
+
+<h2 class="no_toc">Putting Them All Together</h2>
+
+<p>Now that we have the lower-level details of each layer, let’s put them all together to have a big picture view of the
+system architecture.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#deaa87"
+}
+  }
+}%%
+
+flowchart TD
+    subgraph APP
+        direction TB
+        subgraph UI
+            Input1--&gt;Adapter
+            Input2--&gt;Adapter
+            Input3--&gt;Adapter
+            Transformer-.-&gt;Display1
+            Transformer-.-&gt;Display2
+            Transformer-.-&gt;Display3
+        end
+        subgraph System
+            direction TB
+            DataAccess-.-&gt;BusinessLogic
+            BusinessLogic--&gt;DataAccess
+            BusinessLogic-.-&gt;InputHandler
+            InputHandler--&gt;BusinessLogic
+        end
+        subgraph Persistence
+            Persistence1
+            Persistence2
+            Persistence3
+        end
+        subgraph DataStore
+            rdb[(RDB)]
+            nosql[[NoSQL]]
+            fs[/filesystem/]
+        end
+    end
+    Adapter--&gt;InputHandler
+    InputHandler-.-&gt;Transformer
+    Persistence1--&gt;rdb
+    rdb-.-&gt;Persistence1
+    Persistence2--&gt;nosql
+    nosql-.-&gt;Persistence2
+    Persistence3--&gt;fs
+    fs-.-&gt;Persistence3
+    Persistence1-.-&gt;DataAccess
+    DataAccess--&gt;Persistence1
+    Persistence2-.-&gt;DataAccess
+    DataAccess--&gt;Persistence2
+    Persistence3-.-&gt;DataAccess
+    DataAccess--&gt;Persistence3
+
+</pre>
+
+<div class="table-caption">
+  <p><small>The overall system architecture.</small></p>
+</div>
+
+<p>The purpose of this exercise is to help us understand how the various subsystems of the app interact at a high level.
+This is important as it will guide us through how to draw the boundaries of various responsibilities so that there is
+clear separation of concerns.</p>
+
+<p>The goal of separating the concerns to the appropriate component or subsystem is so that we can build appropriate
+abstraction layer between where 2 subsystems interface with each other. Once we establish the interfaces, we do not
+need to constantly worry about making changes that will break other parts of the app.</p>
+
+<p>You might have noticed that the “Adapter”, “Transformer” and “DataAccess” components sound like Interface in some
+programming languages, and that’s actually correct. However, we have not made a decision regarding what framework to
+use, and the programming language of the eventual framework may not support Interfaces in the form we know it, so we
+will keep those as “concrete” component for now in our system architecture design.</p>
+
+<p>Of course this is not bullet-proof, and there is always the possibility that we have not designed the interfaces very
+well, or that the separation is not done cleanly. Regardless, we should at least have a sound foundation to start with,
+and when we find out more about the possibilities or limitations of the implementation, we can refine the design
+accordingly.</p>
+
+<p>This exercise has been useful for me in showing how the multiple components come together in a complex system
+architecture. Now that we have the skeleton of the app ready, let’s revisit the presentation of the app and design
+some wireframes!</p>
+
+<style>
+.mermaid #APP rect {
+  fill: var(--main-background-color) !important;
+}
+</style>
+
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/1W1VSHDCZiQ" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Petra, Jordan by Adam Bixby
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

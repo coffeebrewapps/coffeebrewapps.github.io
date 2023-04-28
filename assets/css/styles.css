@@ -10581,6 +10581,76 @@ Pagination
   color: var(--lighten-text-1-color);
 }
 
+.dialog-btn {
+  width: 100px;
+  background-color: var(--secondary-background-color);
+  text-align: center;
+  padding: 0 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 5px;
+}
+
+.dialog-btn:hover {
+  cursor: pointer;
+  color: var(--lighten-text-1-color);
+}
+
+.dialog {
+  position: fixed;
+  padding: 1rem;
+  top: 20vh;
+  right: 20vw;
+  bottom: 20vh;
+  left: 20vw;
+  margin: 0 auto;
+  border: 2px var(--secondary-background-color) solid;
+  background-color: var(--main-background-color);
+  z-index: 9999;
+}
+
+.dialog .dialog-close-btn {
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.dialog .dialog-close-btn:hover {
+  cursor: pointer;
+  color: var(--lighten-text-1-color);
+}
+
+.dialog .dialog-close-btn p {
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
+
+.dialog .dialog-title {
+  font-weight: 600;
+  margin-top: 0;
+  padding: 0 0.5rem;
+  border-bottom: 2px var(--secondary-background-color) solid;
+}
+
+.dialog .dialog-content {
+  padding: 0.5rem;
+  overflow: scroll;
+}
+
+@media screen and (max-width: 600px) and (orientation: portrait) {
+  .dialog {
+    top: 2rem;
+    right: 2rem;
+    bottom: 2rem;
+    left: 2rem;
+  }
+  .dialog .dialog-title {
+    margin-top: 2rem;
+  }
+}
 /***
 Projects
 ***/
@@ -10776,6 +10846,10 @@ Article
   border-bottom: 2px var(--secondary-background-color) solid;
 }
 
+.article .body .image:last-child {
+  border-bottom: none !important;
+}
+
 .article .body .image img {
   width: 50%;
 }
@@ -10805,6 +10879,84 @@ Article
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.article .body .toc {
+  border-bottom: 2px var(--secondary-background-color) solid;
+}
+
+.article .body .table {
+  margin: 0 auto;
+}
+
+.article .body .table, th, td {
+  border: 1px var(--secondary-background-color) solid;
+  border-collapse: collapse;
+}
+
+.article .body th, td {
+  padding: 0.5rem 1rem;
+}
+
+.article .body .table-caption {
+  width: 100%;
+  border-bottom: 2px var(--secondary-background-color) solid;
+  text-align: center;
+}
+
+.article .body .mermaid {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.article .body .mermaid .journey-section .label {
+  font-weight: 600;
+}
+
+.article .body .mermaid .actor-0 {
+  fill: var(--lighten-text-2-color) !important;
+}
+
+.article .body .mermaid .section-type-2,
+.article .body .mermaid .task-type-2 {
+  fill: var(--lighten-text-1-color) !important;
+}
+
+.article .body .mermaid .face {
+  stroke: var(--lighten-text-4-color) !important;
+  fill: var(--secondary-background-color) !important;
+}
+
+.article .body .mermaid.resize-80 .label {
+  font-size: 0.8rem !important;
+}
+
+.article .body .mermaid.resize-70 .label {
+  font-size: 0.7rem !important;
+}
+
+.article .body .mermaid.resize-60 .label {
+  font-size: 0.6rem !important;
+}
+
+.article .body .mermaid .note {
+  stroke: var(--lighten-text-3-color) !important;
+  fill: var(--lighten-text-4-color) !important;
+}
+
+.article .body .mermaid line {
+  stroke: var(--lighten-text-3-color) !important;
+}
+
+.article .body .mermaid .cluster-label .nodeLabel {
+  color: var(--main-text-color) !important;
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+}
+
+.article .body .mermaid .edgeLabel .edgeLabel {
+  background-color: var(--lighten-text-2-color) !important;
+  font-size: 0.8rem !important;
 }
 
 @media screen and (max-width: 600px) and (orientation: portrait) {
@@ -10896,6 +11048,98 @@ Collapsible
 
 .collapsible .item .btn a:hover {
   color: var(--lighten-text-1-color);
+}
+
+/***
+Series Info
+***/
+.series-info .heading .profile .avatar {
+  float: left;
+  width: 36px;
+  height: 36px;
+  margin: 0.5rem;
+}
+
+.series-info .heading .profile .avatar img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.series-info .heading .profile .date {
+  font-size: 0.8rem;
+}
+
+.series-info .body {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.series-info .body .thumbnail img {
+  width: 100%;
+}
+
+.series-info .body .intro {
+  padding: 0 1rem 0 1rem;
+}
+
+.series-info .body .intro .content, .section {
+  margin-top: 1rem;
+}
+
+.series-info .body .intro .section {
+  border-top: 2px var(--lighten-text-1-color) solid;
+  padding-top: 1rem;
+}
+
+.series-info .body .intro .tag {
+  display: inline-block;
+  background-color: var(--secondary-background-color);
+  border-radius: 5px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.series-info .body .intro .tag span {
+  padding-left: 5px;
+}
+
+.series-info .list ul {
+  padding-inline-start: 0 !important;
+  list-style-type: none;
+}
+
+.series-info .list a {
+  color: var(--secondary-text-color);
+  text-decoration: none;
+}
+
+.series-info .list a:hover {
+  color: var(--lighten-text-1-color);
+}
+
+@media screen and (max-width: 600px) and (orientation: portrait) {
+  .series-info {
+    padding-bottom: 2rem;
+  }
+  .series-info .body {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: initial;
+    padding-bottom: 2rem;
+    border-bottom: 2px var(--lighten-text-1-color) solid;
+  }
+  .series-info .body .thumbnail {
+    width: 100%;
+  }
+  .series-info .body .intro {
+    width: 90%;
+  }
+  .series-info .body .intro .tag {
+    font-size: 0.6rem;
+  }
+  .series-info .body .intro .section {
+    padding-top: 1rem;
+  }
 }
 
 /*# sourceMappingURL=styles.css.map */

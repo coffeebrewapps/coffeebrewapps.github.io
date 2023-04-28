@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 3.5)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 3.5)</h1>
+
+    <p>This is Part 3.5 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 25, 2023 | 
+
+<span>24 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_3.5/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#manage-transactions">Manage Transactions</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-transaction">Create Transaction</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-transaction">Edit Transaction</a></li>
+<li class="toc-entry toc-h3"><a href="#reverse-transaction">Reverse Transaction</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-transaction">Delete Transaction</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-receipts">Manage Receipts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#generate-income-receipt">Generate Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-income-receipt">Edit Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#void-income-receipt">Void Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#upload-income-receipt">Upload Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-income-receipt">Delete Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#upload-expense-receipt">Upload Expense Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-expense-receipt">Delete Expense Receipt</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-documents">Manage Documents</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#download-documents">Download Documents</a></li>
+<li class="toc-entry toc-h3"><a href="#tag-documents">Tag Documents</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-taxation">Manage Taxation</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-tax-table">Create Tax Table</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-tax-table">Edit Tax Table</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-tax-table">Delete Tax Table</a></li>
+<li class="toc-entry toc-h3"><a href="#estimate-taxes">Estimate Taxes</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-charts">Manage Charts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-chart">Create Chart</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-chart">Edit Chart</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-chart">Delete Chart</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-recurring-tasks">Manage Recurring Tasks</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-recurring-task">Create Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#disable-recurring-task">Disable Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-recurring-task">Edit Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#end-recurring-task">End Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#manually-run-recurring-task">Manually Run Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-recurring-task">Delete Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-recurring-task-step">Delete Recurring Task Step</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-system-configs">Manage System Configs</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#edit-system-config">Edit System Config</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-users">Manage Users</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-user">Create User</a></li>
+<li class="toc-entry toc-h3"><a href="#login-user">Login User</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-profile">Edit Profile</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">User Journey Design (Continued)</h2>
+
+<p>In the previous article, we have covered a few user journeys related to these functions:</p>
+
+<ul>
+  <li>Tag-based Time Tracking</li>
+  <li>Manage Tags</li>
+  <li>Manage Contacts</li>
+  <li>Manage Currencies</li>
+  <li>Manage Billing and Invoicing</li>
+  <li>Manage Templates</li>
+  <li>Manage Sequences</li>
+  <li>Manage Invoices</li>
+</ul>
+
+<p>In this article, we will continue with the remaining functions:</p>
+
+<ul>
+  <li>Manage Transactions</li>
+  <li>Manage Receipts</li>
+  <li>Manage Documents</li>
+  <li>Manage Taxation</li>
+  <li>Manage Charts</li>
+  <li>Manage Recurring Tasks</li>
+  <li>Manage System Configs</li>
+  <li>Manage Users</li>
+</ul>
+
+<h2 id="manage-transactions">Manage Transactions</h2>
+
+<p>While most <strong>Transactions</strong> in the system are generated as a result of a <strong>Receipt</strong>, there
+may be instances where there is no documentation proof available but the payment has indeed happened. Whatever the
+reason is and whether the legality of it is questionable, as an app, we will not make any assumption and simply still
+offer the capability to manually record a <strong>Transaction</strong>.</p>
+
+<h3 id="create-transaction">Create Transaction</h3>
+
+<p>The user can create an <strong>Income Transaction</strong> or an <strong>Expense Transaction</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Transaction
+    section Create Transaction
+        Go to Transactions: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Transaction journey.</small></p>
+</div>
+
+<h3 id="edit-transaction">Edit Transaction</h3>
+
+<p>Normally, there should be no use case for editing a <strong>Transaction</strong>, especially one that is generated due
+to the generation of a <strong>Receipt</strong>. However, the user should be allowed to edit an entry in the unlikely
+event that the values are entered incorrectly. We assume that the user is absolutely certain of the impact of it,
+especially if the amount doesn’t match the corresponding <strong>Receipt</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Transaction
+    section Edit Transaction
+        Go to Transactions: 5: User
+        Click "Edit": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Transaction journey.</small></p>
+</div>
+
+<h3 id="reverse-transaction">Reverse Transaction</h3>
+
+<p>In the event that there is a refund of payment, the <strong>Transaction</strong> created for it can be reversed. This
+will create a new entry that offsets the original amount. We allow the user to input the amount to reverse, because it
+is possible that a partial refund has been made instead of the full amount.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Reverse Transaction
+    section Reverse Transaction
+        Go to Transactions: 5: User
+        Click "Reverse": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Reverse Transaction journey.</small></p>
+</div>
+
+<h3 id="delete-transaction">Delete Transaction</h3>
+
+<p>Normally, deleting a <strong>Transaction</strong> will not be allowed so that the transactions are properly accounted
+for. Instead, she should use the Reverse function to create a corresponding entry to offset the amount accordingly.
+However, the user should be allowed to delete an entry that is accidentally created if she’s absolutely certain of the
+impact of it.</p>
+
+<p>Note that if the <strong>Transaction</strong> is generated due to the generation of a <strong>Receipt</strong>, then
+there is an association constraint and the user will not be able to delete this <strong>Transaction</strong> entry
+and must use the Reverse function or Void Receipt function.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Transaction
+    section Delete Transaction
+        Go to Transactions: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Transaction journey.</small></p>
+</div>
+
+<h2 id="manage-receipts">Manage Receipts</h2>
+
+<h3 id="generate-income-receipt">Generate Income Receipt</h3>
+
+<p>After the user has issued an <strong>Invoice</strong> to her client and has received payment, she can generate a
+<strong>Receipt</strong> and a corresponding <strong>Income Transaction</strong> for the payment. This will be done in
+the Invoices page by using the “Generate Receipt” function.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Generate Receipt
+    section Initiate Generation
+        Go to Invoices: 5: User
+        Click "Generate Receipt": 5: User
+    section Configure Receipt
+        Select Receipt Config: 5: User
+        Input Fields: 5: User
+    section Preview and Generate
+        Preview Receipt: 5: User
+        Generate: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Generate Receipt journey.</small></p>
+</div>
+
+<h3 id="edit-income-receipt">Edit Income Receipt</h3>
+
+<p>Because the generation of a <strong>Receipt</strong> will result in an <strong>Income Transaction</strong> being
+created, and there might have been other <strong>Transactions</strong> created in between the generation and now, it
+is not possible to simply edit the <strong>Receipt</strong> and the <strong>Income Transaction</strong> without
+messing up the <strong>Transactions</strong> amount summation.</p>
+
+<p>For this reason, we will not allow the user to directly edit an existing <strong>Receipt</strong>.</p>
+
+<h3 id="void-income-receipt">Void Income Receipt</h3>
+
+<p>Instead, she will have to void it and generate the <strong>Receipt</strong> again. What happens is that the void action
+will also reverse the <strong>Income Transaction</strong>, so that when she re-generates the <strong>Receipt</strong>,
+it will not result in double entry of the income.</p>
+
+<p>To make it more convenient, after voiding the <strong>Receipt</strong>, the user has the option to immediately
+re-generate a new one without going to the Invoices page and go through the Generate Receipt journey all over again.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Void and Regenerate Receipt
+    section Void Receipt
+        Go to Income Receipts: 5: User
+        Click "Void": 5: User
+        Confirm: 5: User
+    section Regenerate Receipt
+        Click "Regenerate": 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Void and Regenerate Receipt (cont'd)
+    section Configure Receipt
+        Select Receipt Config: 5: User
+        Input Fields: 5: User
+    section Preview and Generate
+        Preview Receipt: 5: User
+        Generate: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Void and Regenerate Receipt journey.</small></p>
+</div>
+
+<h3 id="upload-income-receipt">Upload Income Receipt</h3>
+
+<p>For the case where the user receives payment via a third-party provider, and the <strong>Income Receipt</strong> is
+generated by the provider, the user can upload the document and the system will create a corresponding
+<strong>Income Transaction</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Upload Income Receipt
+    section Upload Income Receipt
+        Go to Income Receipts: 5: User
+        Click "Upload": 5: User
+        Input Fields: 5: User
+        Select File: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Upload Income Receipt journey.</small></p>
+</div>
+
+<h3 id="delete-income-receipt">Delete Income Receipt</h3>
+
+<p>The user may have accidentally uploaded an <strong>Income Receipt</strong> and needs to delete it. In this case, the
+user can do so via the Delete function, and the system will automatically create an offset <strong>Transaction</strong>
+for the deletion.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Income Receipt
+    section Delete Income Receipt
+        Go to Income Receipts: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Income Receipt journey.</small></p>
+</div>
+
+<h3 id="upload-expense-receipt">Upload Expense Receipt</h3>
+
+<p>On the other hand, the user may also have expenses and want to upload an <strong>Expense Receipt</strong> from the
+provider. The user can upload the document and the system will create a corresponding
+<strong>Expense Transaction</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Upload Expense Receipt
+    section Upload Expense Receipt
+        Go to Expense Receipts: 5: User
+        Click "Upload": 5: User
+        Input Fields: 5: User
+        Select File: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Upload Expense Receipt journey.</small></p>
+</div>
+
+<h3 id="delete-expense-receipt">Delete Expense Receipt</h3>
+
+<p>The user may have accidentally uploaded an <strong>Expense Receipt</strong> and needs to delete it. In this case, the
+user can do so via the Delete function, and the system will automatically create an offset <strong>Transaction</strong>
+for the deletion.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Expense Receipt
+    section Delete Expense Receipt
+        Go to Expense Receipts: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Expense Receipt journey.</small></p>
+</div>
+
+<h2 id="manage-documents">Manage Documents</h2>
+
+<p><strong>Documents</strong> are automatically generated by the system, or uploaded by the user. These are raw files as
+a result of the actions mentioned earlier, so there is no Create, Update and Delete action available. If she needs to
+delete an uploaded <strong>Receipt</strong>, then it needs to be done through the Delete Income Receipt or Delete
+Expense Receipt journey. This is to ensure that the corresponding <strong>Transaction</strong> for each
+<strong>Document</strong> is properly accounted for.</p>
+
+<p>However, the user can have a view of all the generated or uploaded <strong>Documents</strong> and download the raw
+files from a single page. Since the <strong>Documents</strong> may be tagged when they are generated or uploaded, she
+can also filter by <strong>Tags</strong> to download the raw files.</p>
+
+<h3 id="download-documents">Download Documents</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Download Documents
+    section Download Documents
+        Go to Documents: 5: User
+        Click "Download": 5: User
+        Input Filters: 5: User
+        Confirm: 5: User
+        Save Files: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Download Documents journey.</small></p>
+</div>
+
+<h3 id="tag-documents">Tag Documents</h3>
+
+<p>Additionally, the user may also tag the <strong>Documents</strong> independently from the corresponding
+<strong>Invoice</strong> or <strong>Receipt</strong> for further categorisation.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Tag Documents
+    section Tag Documents
+        Go to Documents: 5: User
+        Click "Tag": 5: User
+        Input Tags: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Tag Documents journey.</small></p>
+</div>
+
+<h2 id="manage-taxation">Manage Taxation</h2>
+
+<h3 id="create-tax-table">Create Tax Table</h3>
+
+<p>For the purpose of tax estimation, the user can create a <strong>Tax Table</strong> with the relevant
+<strong>Tax Tiers</strong> and <strong>Tax Deductibles</strong>. This is a single user journey where the
+<strong>Tax Table</strong>, its <strong>Tiers</strong> and <strong>Deductibles</strong> are rendered in a single page
+so that the user does not have to navigate between multiple pages to setup everything.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Tax Table
+    section Create Tax Table
+        Go to Tax Tables: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Tax Table (cont'd)
+    section Create Tax Tier (Multiple Entries)
+        Go to Tax Tiers: 5: User
+        Click "Add Tier": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Tax Table (cont'd)
+    section Create Tax Deductible (Multiple Entries)
+        Go to Tax Deductibles: 5: User
+        Click "Add Deductible": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Tax Table journey.</small></p>
+</div>
+
+<h3 id="edit-tax-table">Edit Tax Table</h3>
+
+<p>Since the <strong>Tax Table</strong> is for display purpose only, there’s no impact to other data if changes are made
+to the <strong>Tax Tiers</strong> or <strong>Tax Deductibles</strong>. As such, we will allow the user to edit all
+fields where needed.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Tax Table
+    section Edit Tax Table
+        Go to Tax Tables: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Tax Tier
+    section Edit Tax Tier (Multiple Entries)
+        Go to Tax Tiers: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Tax Deductible
+    section Edit Tax Deductible (Multiple Entries)
+        Go to Tax Deductibles: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Tax Table journey.</small></p>
+</div>
+
+<h3 id="delete-tax-table">Delete Tax Table</h3>
+
+<p>Since the <strong>Tax Table</strong> is for display purpose only, there’s no impact to other data if it is deleted. As
+such, we will allow the user to delete the entry where needed.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Tax Table
+    section Delete Tax Table
+        Go to Tax Tables: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Tax Tier
+    section Delete Tax Tier
+        Go to Tax Tiers: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Tax Deductible
+    section Delete Tax Deductible
+        Go to Tax Deductibles: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Tax Table journey.</small></p>
+</div>
+
+<h3 id="estimate-taxes">Estimate Taxes</h3>
+
+<p>The <strong>Tax Tables</strong> are meant to estimate the taxes due to the <strong>Income Transactions</strong> and
+<strong>Expense Transactions</strong> created for the user’s business. She can view the tax estimation using one of
+the <strong>Tax Tables</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Estimate Taxes
+    section Estimate Taxes
+        Go to Tax Tables: 5: User
+        Click "Estimate Taxes": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Estimate Taxes journey.</small></p>
+</div>
+
+<h2 id="manage-charts">Manage Charts</h2>
+
+<h3 id="create-chart">Create Chart</h3>
+
+<p>The user can configure <strong>Charts</strong> to be displayed using either <strong>Work Logs</strong> or
+<strong>Transactions</strong> as data source, with the options to select the grouping category and filter by tags and
+date range.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Chart
+    section Create Chart
+        Go to Charts: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Chart journey.</small></p>
+</div>
+
+<h3 id="edit-chart">Edit Chart</h3>
+
+<p>The user can edit the options of a <strong>Chart</strong> and it will be re-rendered accordingly. Since there is no
+impact on other data in the system, the user can edit all fields of the <strong>Chart</strong> as needed.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Chart
+    section Edit Chart
+        Go to Charts: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Chart journey.</small></p>
+</div>
+
+<h3 id="delete-chart">Delete Chart</h3>
+
+<p>If the user no longer requires a <strong>Chart</strong> to be displayed, she can delete it.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Chart
+    section Delete Chart
+        Go to Charts: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Chart journey.</small></p>
+</div>
+
+<h2 id="manage-recurring-tasks">Manage Recurring Tasks</h2>
+
+<h3 id="create-recurring-task">Create Recurring Task</h3>
+
+<p>Suppose that the user wants to setup recurring <strong>Income Transactions</strong> or
+<strong>Expense Transactions</strong>. The system offers built-in task templates so that she can use them for this
+purpose. This will be done in a Recurring Tasks page.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Recurring Task
+    section Initiate Setup
+        Go to Recurring Tasks: 5: User
+        Click "New": 5: User
+    section Configure Task
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Recurring Task (cont'd)
+    section Configure Task Steps (Multiple Entries)
+        Click "Add Step": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Recurring Task journey.</small></p>
+</div>
+
+<h3 id="disable-recurring-task">Disable Recurring Task</h3>
+
+<p>The user may want to temporarily disable a <strong>Recurring Task</strong>, eg. when she suspends a third-party
+service subscription. Instead of deleting the task entirely, she can choose to disable it instead.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Disable Recurring Task
+    section Disable Recurring Task
+        Go to Recurring Tasks: 5: User
+        Click "Disable": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Disable Recurring Task journey.</small></p>
+</div>
+
+<h3 id="edit-recurring-task">Edit Recurring Task</h3>
+
+<p>The user may also edit a <strong>Recurring Task</strong>, eg. changing the description or schedule. However, the user
+should not be able to edit the task steps if the task has been run before, because those runs reference the steps and
+we will not be able to simply add or remove steps.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Recurring Task
+    section Edit Recurring Task
+        Go to Recurring Tasks: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Recurring Task journey.</small></p>
+</div>
+
+<h3 id="end-recurring-task">End Recurring Task</h3>
+
+<p>Instead of updating the steps of a task, the user will need to end the task and create a new one with new steps. This
+can be done by the “End Task” function.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title End Recurring Task
+    section End Recurring Task
+        Go to Recurring Tasks: 5: User
+        Click "End": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>End Recurring Task journey.</small></p>
+</div>
+
+<h3 id="manually-run-recurring-task">Manually Run Recurring Task</h3>
+
+<p>Normally the tasks will run by the configured schedule, but we will allow the user to manually run a task if it’s
+necessary, but we will not allow any change to be made to the parameters.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Manually Run Recurring Task
+    section Manually Run Recurring Task
+        Go to Recurring Tasks: 5: User
+        Click "Run": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Manually Run Recurring Task journey.</small></p>
+</div>
+
+<h3 id="delete-recurring-task">Delete Recurring Task</h3>
+
+<p>In the event that the user accidentally creates a task, if it has not been run before, then she can delete it.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Recurring Task
+    section Delete Recurring Task
+        Go to Recurring Tasks: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Recurring Task journey.</small></p>
+</div>
+
+<h3 id="delete-recurring-task-step">Delete Recurring Task Step</h3>
+
+<p>In the event that the user accidentally creates a step, if it has not been run before, then she can delete it.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Recurring Task Step
+    section Delete Recurring Task Step
+        Go to Recurring Task Steps: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Recurring Task Step journey.</small></p>
+</div>
+
+<h2 id="manage-system-configs">Manage System Configs</h2>
+
+<p>The user can setup the <strong>System Config</strong> which will apply to the entire app throughout the effective
+period. The app will come with default settings, and the user can change them as needed. For simplicity, there will be
+no Create action, all changes are done as an Edit action. Since these settings are required for the system to function
+properly, there will be no Delete action available.</p>
+
+<h3 id="edit-system-config">Edit System Config</h3>
+
+<p>Everytime the user makes a change, the system will automatically set the effective end date of the latest record, and
+set the effective start date of the new record created from the change.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit System Config
+    section Edit System Config
+        Go to System Configs: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit System Config journey.</small></p>
+</div>
+
+<h2 id="manage-users">Manage Users</h2>
+
+<h3 id="create-user">Create User</h3>
+
+<p>At the first time the user launches the app, she will need to create a new <strong>User</strong> record for herself.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create User
+    section Create User
+        Launch App 1st Time: 5: User
+        Click "New User": 5: User
+        Input Credentials: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create User journey.</small></p>
+</div>
+
+<h3 id="login-user">Login User</h3>
+
+<p>After creating a <strong>User</strong> record, the user can subsequently login to the app using the credentials created
+earlier.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Login User
+    section Login User
+        Launch App: 5: User
+        Click "Login": 5: User
+        Input Credentials: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Login User journey.</small></p>
+</div>
+
+<h3 id="edit-profile">Edit Profile</h3>
+
+<p>The user may then change her name or password in the Profile page.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Profile
+    section Edit Profile
+        Go to Profile: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Profile journey.</small></p>
+</div>
+
+<h2 class="no_toc">That’s A Wrap</h2>
+
+<p>Finally, we have gone through all the user journeys of the app. The purpose of this exercise is to understand what are
+the various user workflows, so that we have a clearer idea how to design the system architecture and interactions.</p>
+
+<p>In the process of writing the user journey diagrams, I also made a few changes to the data models and refined the
+requirements. This is not uncommon, because no one knows exactly every detail at the beginning, not even the end users
+themselves. It is through the process of design and analysis that we can find out the shortcomings of the earlier steps
+of the process, and refine them accordingly.</p>
+
+<p>Which is why, I like to start with design and analysis first, instead of dive straight into implementation. When
+dealing with abstract designs, making changes is easy, I just have to update the Mermaid syntax or a few text. If I
+have started with implementation, I would have to delete many lines of codes, or even create database migrations to
+change the data schema.</p>
+
+<p>This has been a fruitful exercise for me. Let’s move on to designing the sequence diagrams of the system!</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/_g1WdcKcV3w" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Embarking on an adventure by Mantas Hesthaven
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

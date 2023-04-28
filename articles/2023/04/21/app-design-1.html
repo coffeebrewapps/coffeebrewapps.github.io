@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 1)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 1)</h1>
+
+    <p>This is Part 1 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 21, 2023 | 
+
+<span>6 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_1/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2 id="requirements-gathering">Requirements Gathering</h2>
+
+<p>Let’s start with the requirements.</p>
+
+<p>I need to build a simple accounting app for sole proprietors. There’re certain key features that need to be
+included in the app, and there’re certain assumptions to be made regarding the usage of the app.</p>
+
+<h2 id="assumptions">Assumptions</h2>
+
+<h3 id="multi-user-support">Multi-user Support</h3>
+
+<p>Though this is an app for sole prioprietors, we assume that the business owner might hire an accountant to manage the
+business’s finances, so we will build multi-user support at the outset. However, to keep it simple at the start, we
+will not have admin features to manage multiple users. That means, each new user will just create her own account and
+be able to access all the data in the app created so far.</p>
+
+<h3 id="power-user">Power User</h3>
+
+<p>While there are accounting laws that require the business owner to keep proper records of all business transactions,
+as an app, we will allow the user to do anything that is possible with the data at her own discretion. This means that
+actions such as editing a record amount or deleting a transaction record are allowed in the app.</p>
+
+<p>The only time when deletion is not allowed is if there are associated data, in this case, the user has to delete the
+associated data first and finally delete the record itself. This gives the user the full control over the scope of
+data to be deleted, rather than the app making the assumption to always delete all associated data.</p>
+
+<h3 id="taxation-estimation">Taxation Estimation</h3>
+
+<p>We assume that the business owner merely uses the app for tracking transactions due to operating the business, and so
+the taxation estimation is based only on business-related transactions.</p>
+
+<h2 id="tag-based-time-tracking">Tag-based Time Tracking</h2>
+
+<p>The user needs to be able to log down the tasks she has worked on with start and end time, and tag each with one or more
+labels. The labels are free-form, but must be prefixed with the tag category, so that the user can know what the tag
+is intended for. For example:</p>
+
+<table class="table">
+<thead>
+<tr>
+<th>Task</th><th>Tags</th><th>Start Time</th><th>End Time</th><th>Total Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Documentation</td><td><span class="table-tag">company:company-abc</span><span class="table-tag">activity:admin</span></td><td>2023-04-03T14:23:52</td><td>2023-04-03T15:52:42</td><td>1 hr 28 min</td>
+</tr>
+<tr>
+<td>Feature #13</td><td><span class="table-tag">company:company-abc</span><span class="table-tag">activity:dev</span></td><td>2023-04-03T16:12:05</td><td>2023-04-03T20:38:13</td><td>4 hr 26 min</td>
+</tr>
+<tr>
+<td>Feature #9</td><td><span class="table-tag">company:company-xyz</span><span class="table-tag">activity:dev</span></td><td>2023-04-04T08:14:55</td><td>2023-04-04T13:24:52</td><td>5 hr 9 min</td>
+</tr>
+</tbody>
+</table>
+
+<div class="table-caption">
+  <p><small>The user can add as many tags as possible to each task.</small></p>
+</div>
+
+<h2 id="configurable-invoicing-and-receipts">Configurable Invoicing and Receipts</h2>
+
+<p>With the information from the time tracker, the user needs to be able to filter by tags, and generate invoices for each
+grouping. For example, the user wants to invoice Company ABC for the month of April, so she will create filters like
+this:</p>
+
+<ul>
+  <li>company: company-abc</li>
+  <li>date_range: 2023-04-01 to 2023-04-30</li>
+  <li>activity: all</li>
+  <li>template: default</li>
+</ul>
+
+<p>The invoice template should also be configurable per billable target, with these fields editable by the user:</p>
+
+<ul>
+  <li>Company name and address and logo</li>
+  <li>Bill to company/person name and address</li>
+  <li>Invoice number format</li>
+  <li>Invoice date and due date</li>
+  <li>Invoice currency</li>
+  <li>Unit of cost, eg. hours</li>
+  <li>Unit price based on tag category</li>
+  <li>Additional add-ons, eg. tax as a percentage</li>
+  <li>Deductions, eg. discounts as a fixed amount</li>
+  <li>Payment terms</li>
+  <li>Color scheme</li>
+</ul>
+
+<p>There can be a few built-in templates for the user to choose from, or she can create a new template using custom
+HTML/CSS.</p>
+
+<p>Alongside the invoices, the user may also need to generate receipts for payments received based on the invoivces.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_1/invoice_sample.png" /></p>
+  <p><small>Automatically generated invoice with the filtered tasks.</small></p>
+</div>
+
+<h2 id="receipts-upload">Receipts Upload</h2>
+
+<p>Where a service is offered on third-party platforms, eg. app stores, there will be no invoice generated, so there will
+be no income transaction created. Instead, the user should be able to import receipts generated from the third-party
+platforms and create a corresponding income transaction.</p>
+
+<p>On the other hand, the user may also upload expense receipts as proof of documentation for tax deductions purpose.</p>
+
+<p>For these documents uploaded, the user can tag them so that it will be easier for her to compile the documents later
+to submit as proof of documentation for tax filing purpose.</p>
+
+<h2 id="setup-recurring-transactions">Setup Recurring Transactions</h2>
+
+<p>Where the user subscribes to recurring third-party services as part of business expenses, these expenses can be
+configured so that the user does not need to add them manually.</p>
+
+<p>On the other hand, the user can also setup recurring income transactions where she receives regular payments from
+another party for her services and products, eg. if she offers a subscription plan to her clients.</p>
+
+<p>Alongside the setup, the user can also create a reminder for each recurring expense so that she can see a reminder
+alert to make payment accordingly. The latest alert will show as a banner at the top of the page, and all the previous
+alerts will be accessible in an inbox page.</p>
+
+<h2 id="currency-conversion">Currency Conversion</h2>
+
+<p>Where the user provides services to a different locale’s clients, she can configure the billing currency for the client
+and configure the exchange rate for each currency. This will be used for tax computation purpose.</p>
+
+<h2 id="analytics-based-on-time-tracking">Analytics Based On Time Tracking</h2>
+
+<p>Also, the user needs to be able to view from a dashboard, the time spent on various tasks and projects. For example,
+the user configures to generate a bar chart using filters like this:</p>
+
+<ul>
+  <li>chart_type: bar</li>
+  <li>data_source: work_logs</li>
+  <li>group_by: company</li>
+  <li>scale: month</li>
+  <li>range: 2023-01-01 to 2023-04-30</li>
+</ul>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_1/analytics_sample.png" /></p>
+  <p><small>Automatically generated charts grouped by company tags.</small></p>
+</div>
+
+<p>Or if she wants to see the breakdown by activities:</p>
+
+<ul>
+  <li>chart_type: bar</li>
+  <li>data_source: work_logs</li>
+  <li>group_by: activity</li>
+  <li>scale: month</li>
+  <li>range: 2023-01-01 to 2023-04-30</li>
+</ul>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_1/analytics_sample_by_activity.png" /></p>
+  <p><small>Automatically generated charts grouped by activity tags.</small></p>
+</div>
+
+<h2 id="configurable-income-tax-structure">Configurable Income Tax Structure</h2>
+
+<p>The user can configure the tax structure that is specific to her locale for the purpose of tax computation. Multiple
+instances can be configured, especially if the tax rates have changed between years. Then the user will be able to
+select which instance to use for the current year’s computation. For example:</p>
+
+<table class="table">
+<thead>
+<tr>
+<th>Tier Min ($)</th><th>Tier Max ($)</th><th>Rate (%)</th><th>Tier Max Payable ($)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0.00</td><td>20,000.00</td><td>0.00</td><td>0.00</td>
+</tr>
+<tr>
+<td>20,000.01</td><td>30,000.00</td><td>2.00</td><td>200.00</td>
+</tr>
+<tr>
+<td>30,000.01</td><td>40,000.00</td><td>3.50</td><td>350.00</td>
+</tr>
+<tr>
+<td>40,000.01</td><td>80,000.00</td><td>7.00</td><td>2,800.00</td>
+</tr>
+<tr>
+<td>80,000.01</td><td>120,000.00</td><td>11.50</td><td>4,600.00</td>
+</tr>
+<tr>
+<td>120,000.01</td><td>160,000.00</td><td>15.00</td><td>6,000.00</td>
+</tr>
+<tr>
+<td>160,000.01</td><td>200,000.00</td><td>18.00</td><td>7,200.00</td>
+</tr>
+<tr>
+<td>200,000.01</td><td>240,000.00</td><td>19.00</td><td>7,600.00</td>
+</tr>
+<tr>
+<td>240,000.01</td><td>280,000.00</td><td>19.50</td><td>7,800.00</td>
+</tr>
+<tr>
+<td>280,000.01</td><td>320,000.00</td><td>20.00</td><td>8,000.00</td>
+</tr>
+<tr>
+<td>320,000.01</td><td>500,000.00</td><td>22.00</td><td>39,600.00</td>
+</tr>
+<tr>
+<td>500,000.01</td><td>1,000,000.00</td><td>23.00</td><td>11,500.00</td>
+</tr>
+<tr>
+<td>1,000,000.01</td><td>999,999,999.99</td><td>24.00</td><td>239,760,000.00</td>
+</tr>
+</tbody>
+</table>
+
+<div class="table-caption">
+  <p><small>The user can configure a tiered tax structure.</small></p>
+</div>
+
+<p>Alongside the tax structure, deductions are also configurable. This works by creating the categories eligible for
+deductions, and then later when entering an expense transaction, it can be tagged with the correct category for
+automatic computation for the deductions. Where the deductions do not depend on expense transactions, then a fixed
+amount can be configured. For example:</p>
+
+<table class="table">
+<thead>
+<tr>
+<th>Type</th><th>Category</th><th>Rate (%)</th><th>Max Deductible ($)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Transaction</td><td>Course Fees</td><td>100.00</td><td>5,500</td>
+</tr>
+<tr>
+<td>Fixed</td><td>Earned Income</td><td>N/A</td><td>100.00</td>
+</tr>
+</tbody>
+</table>
+
+<div class="table-caption">
+  <p><small>The user can configure different categories for deductibles.</small></p>
+</div>
+
+<h2 id="thats-all">That’s All</h2>
+
+<p>That’s about all the features needed in the minimum viable product now. Let’s move on to designing the app!</p>
+
+<style>
+.table-tag {
+  background-color: var(--secondary-background-color);
+  padding: 4px;
+  font-size: 0.8rem;
+  margin: 0 0.5rem;
+  border-radius: 2px;
+}
+</style>
+
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/RLw-UC03Gwc" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Person writing bucket list on book by Glenn Carstens-Peters
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

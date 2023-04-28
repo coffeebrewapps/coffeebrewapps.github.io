@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 7)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 7)</h1>
+
+    <p>This is Part 7 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 27, 2023 | 
+
+<span>9 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_7/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#basic-ui-components">Basic UI Components</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#windows">Windows</a></li>
+<li class="toc-entry toc-h3"><a href="#forms">Forms</a></li>
+<li class="toc-entry toc-h3"><a href="#filters">Filters</a></li>
+<li class="toc-entry toc-h3"><a href="#tables">Tables</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#basic-ux">Basic UX</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#login">Login</a></li>
+<li class="toc-entry toc-h3"><a href="#login-error">Login Error</a></li>
+<li class="toc-entry toc-h3"><a href="#login-success">Login Success</a></li>
+<li class="toc-entry toc-h3"><a href="#create-form">Create Form</a></li>
+<li class="toc-entry toc-h3"><a href="#page-scrolling">Page Scrolling</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-form">Delete Form</a></li>
+<li class="toc-entry toc-h3"><a href="#data-table-with-filters">Data Table with Filters</a></li>
+<li class="toc-entry toc-h3"><a href="#view-popup-window">View Popup Window</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">UI/UX Design</h2>
+
+<p>Finally, we’ve arrived at probably the most exciting part of the design process, which is to design the user interface
+and user experience of the app. Personally, I’m not a trained UI/UX designer, so I will just do my best to design simple
+components and elements for basic interactions. The usual elements like windows, form elements and tables. I will also
+attempt to design some UX from the point of view of a user, which might not be conventional from the UX designer’s
+point of view.</p>
+
+<p>In the previous exercise, I’ve mentioned that we have not yet decided on the UI framework to use for the app. However,
+it is still possible to design a UI that is applicable for use on a device, most likely it will be a laptop or desktop.
+For such devices, a GUI or CLI will both work. But since a CLI is just lines of text, we won’t go into the details of
+the CLI design, but instead focus on a GUI design.</p>
+
+<p>Let’s get started!</p>
+
+<h2 id="basic-ui-components">Basic UI Components</h2>
+
+<p>There’re a few basic components, which are common throughout the app:</p>
+
+<ul>
+  <li><strong>Window</strong>: the outermost container that consists of smaller components.</li>
+  <li><strong>Form</strong>: the container within a window that consists of input elements.</li>
+  <li><strong>Table</strong>: the container within a window that displays data with CRUD actions.</li>
+</ul>
+
+<h3 id="windows">Windows</h3>
+
+<p>For Windows, there are 2 possible layouts:</p>
+
+<ul>
+  <li><strong>Resizable window</strong>: this window can be resized as needed.</li>
+  <li><strong>Popup window</strong>: this window is an overlay on top of the resizable window, usually used in a case to display additional information on top of the content in the base window.</li>
+</ul>
+
+<p>For the resizable window, there are 2 possible states:</p>
+
+<ul>
+  <li><strong>Logged out</strong>: this is when the user is logged out of the app, and there will be no side navigation.</li>
+  <li><strong>Logged in</strong>: this is when the user is logged in to the app, and there will be side navigation.</li>
+</ul>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/blank_window.png" />
+  <img src="/assets/images/posts/app_design_7/logged_in_window.png" />
+  <img src="/assets/images/posts/app_design_7/popup_window.png" /></p>
+  <p><small>Blank window, logged-in window, popup window with and without buttons.</small></p>
+</div>
+
+<h3 id="forms">Forms</h3>
+
+<p>For forms, there are a few basic input elements.</p>
+
+<ul>
+  <li><strong>Text input</strong>: where the user enters text.</li>
+  <li><strong>Input label</strong>: this is the text next to the input to describe what is the purpose of the input.</li>
+  <li><strong>Input error</strong>: this is the text below or next to the input to describe what is the error of the input.</li>
+  <li><strong>Button</strong>: this is where the user can trigger an event, eg. confirm, view. There’re 2 variations: text-based and icon-based.</li>
+  <li><strong>Dropdown</strong>: this is the input where a list of options is available for the user to select.</li>
+  <li><strong>Datepicker</strong>: this is the input where the user can select a date. There’re 2 variations: single date and date range.</li>
+  <li><strong>Toggle button</strong>: this is the input where the user can toggle between 2 states, eg. active and not active.</li>
+  <li><strong>Tooltip</strong>: this is the text that is displayed when the user hover over an element.</li>
+  <li><strong>Hyperlink</strong>: this is the text that the user can click to trigger an event.</li>
+  <li><strong>Display text</strong>: normal text that is non-interactive. There’re 2 variations: normal weight and bold.</li>
+  <li><strong>Tag</strong>: this is the special text that is used to render the <strong>Tag</strong> data value.</li>
+</ul>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/form_elements.png" /></p>
+  <p><small>Form elements, eg. text input, dropdown, datepicker, toggle button.</small></p>
+</div>
+
+<h3 id="filters">Filters</h3>
+
+<p>Filters are another variation of forms, except that they have a specific purpose of filtering data in a data table.
+Because they are a subset of forms, all form elements can be used in filters.</p>
+
+<p>In this example, we have filters using date range element and dropdown element, with icon-based buttons for confirming
+or resetting the input.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/filters.png" /></p>
+  <p><small>Filters control.</small></p>
+</div>
+
+<h3 id="tables">Tables</h3>
+
+<p>For tables, the purpose is to display data, and it is common to perform CRUD actions on the data, so we will have those
+actions available. At the table level, there is a Create action. At the row level, there are 3 actions: Read, Update
+and Delete.</p>
+
+<p>Additionally, there is pagination available to each data table. Instead of using pages, we will use limit and offset
+for fetching paged data. The limit and offset values can be changed by the user in the filters.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/crud_table.png" /></p>
+  <p><small>Data table with CRUD actions.</small></p>
+</div>
+
+<h2 id="basic-ux">Basic UX</h2>
+
+<p>Now that we have the UI components decided, we can design some common UX using the components.</p>
+
+<h3 id="login">Login</h3>
+
+<p>The first interaction the user will have with the app is the Login screen. If she’s an existing user, then she can just
+input her username and password and login to the app.</p>
+
+<p>If she’s new to the app, then she can use the New User action (which is rendered using a hyperlink element) to create
+an account. For simplicity, we will not draw out the New User UX, which is just a form filling flow that we have
+another example to illustrate later.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/login_window.png" /></p>
+  <p><small>Login window.</small></p>
+</div>
+
+<h3 id="login-error">Login Error</h3>
+
+<p>If the user enters the wrong credentials, then the screen will remain in the logged-out state. In addition, we will
+also display an error message to inform her of the failed attempt.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/login_error.png" /></p>
+  <p><small>Login error - display error message.</small></p>
+</div>
+
+<h3 id="login-success">Login Success</h3>
+
+<p>If the user has successfully logged in to the app, then she will see the Charts page as the home page.</p>
+
+<p>There is a side navigation which has all the menu items to the various modules of the app, eg. Work Logs, Tags.</p>
+
+<p>The active menu item is highlighted with a darker color to inform the user what page she is currently viewing.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/login_success.png" /></p>
+  <p><small>Login success - redirect to home page.</small></p>
+</div>
+
+<h3 id="create-form">Create Form</h3>
+
+<p>Create is a common action in the app. Here, we can see an example of a Create Chart form.</p>
+
+<p>Most forms, especially for Create and Edit actions, will be rendered in a window, but there may be instances where
+the form is simply rendered in a popup window. It will depend on the use case and the amount of input required from
+the user.</p>
+
+<p>All forms will have action buttons, in most cases, there will be a Confirm button to submit the form, and a Cancel
+button to abort the form filling journey and redirect the user to the previous page.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/create_form_page.png" /></p>
+  <p><small>Create data form page.</small></p>
+</div>
+
+<h3 id="page-scrolling">Page Scrolling</h3>
+
+<p>In the event that the content of the page cannot fit into the viewport, then a scrollbar will be rendered to signal
+that there is more content available to the bottom of the page through scrolling.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/vertical_scrolling.png" /></p>
+  <p><small>Vertical scrolling when page is longer than viewport.</small></p>
+</div>
+
+<h3 id="delete-form">Delete Form</h3>
+
+<p>Delete is also another common action in the app. Here is an example of a Delete Form.</p>
+
+<p>In this case, there is no other input required except for confirmation, so we render it in a popup window, and provide
+only the Confirm and Cancel buttons.</p>
+
+<p>There will be a title text on top that can be used to describe what is the action, then a primary text that is bold
+which can be used to ask for confirmation, and a secondary text in normal weight which can be used to display the
+description of the record to be deleted.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/delete_popup.png" /></p>
+  <p><small>Delete data confirmation popup window.</small></p>
+</div>
+
+<h3 id="data-table-with-filters">Data Table with Filters</h3>
+
+<p>Data listing is essential in the app. Here, we have an example of a data table with filters control.</p>
+
+<p>The filters can be used to select a limited set of data to be displayed. By default, there are some values that the
+system already use to select the data. If the user has changed the values, she can also use the Reset action to set
+the values back to default.</p>
+
+<p>This is a typical data table with all CRUD actions available. In addition, at the row level, there is a special action
+for End Work Log, which replaces the Update action, when the Work Log has no end time yet.</p>
+
+<p>Additional page-level buttons can also be added, eg. there is a Generate Invoice button that allows the user generate
+invoice right from the Work Logs page.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/table_with_filters_page.png" /></p>
+  <p><small>Data table with filters control.</small></p>
+</div>
+
+<h3 id="view-popup-window">View Popup Window</h3>
+
+<p>Viewing the details of a data row can be done via 2 ways: in a window, or in a popup window.</p>
+
+<p>Here, we demonstrate what it looks like to render a data row in a popup window.</p>
+
+<p>The popup window uses a 2-column layout to render the fields of the Work Log, with some fields spanning 2 columns due
+to having potentially longer text to display.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/view_popup.png" /></p>
+  <p><small>View data popup window.</small></p>
+</div>
+
+<p>Similar to a window, a popup window also supports vertical scrolling if the content cannot fit into the popup window
+size.</p>
+
+<p>In addition to data display, we also provide some action buttons for the convenience of the user to Edit or Delete
+the record, so that she doesn’t have to close the window in order to perform these actions.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/popup_scrolling.png" /></p>
+  <p><small>Popup window with vertical scrolling.</small></p>
+</div>
+
+<h2 class="no_toc">This Is It</h2>
+
+<p>Here’s an overview of all the components we have designed for now. This overview diagram also illustrates some page
+transition flow when the state of the app changes.</p>
+
+<p>UI/UX design is definitely not my strength, but it is still a very critical part of the design process, which is why
+I still required myself to do the exercise. The same can be said for the previous design exercises we have gone through
+earlier. If you’re a trained frontend engineer, you might find drawing sequence diagrams and designing system
+architecture a little challenging, but these are also equally important part of the design process, and it is beneficial
+to go through them regardless. As we practise these exercises more with each app we build, we will surely learn a few
+tricks and get better the next time.</p>
+
+<p>With that, we can conclude the design phase of the app. It’s time to get into the lower-level details of the app,
+which is to actually build it with code!</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_7/wireframe_v2.png" /></p>
+  <p><small>The overall UI/UX of the app. (<a href="/assets/images/posts/app_design_7/wireframe_v2.png" target="_blank">View full size</a>)</small></p>
+</div>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/hLit2zL-Dhk" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Woman's hands drawing a wireframe by Kelly Sikkema
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

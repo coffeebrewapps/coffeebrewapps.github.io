@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 8)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 8)</h1>
+
+    <p>This is Part 8 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 28, 2023 | 
+
+<span>8 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_8/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2 id="delayed-decision">Delayed Decision</h2>
+
+<p>Now we have come to the implementation details of the app. In the previous exercises, we were only dealing with the
+abstract design, without specific reference to a particular programming language, or UI framework or datastore
+mechanism. That was so that we didn’t have to make a decision so early in the development process, regarding the actual
+tech stack to use, and focus on ironing out the critical details such as user interactions and system architecture.</p>
+
+<p>I’m not sure about the general engineers public, but I can fall into analysis paralysis when it comes to choosing what
+framework to use for my app. Should I use my most familiar framework so I can build it fast? Or should I pick up a new
+framework I’ve always wanted to learn but risk delaying my launch? If I have started with choosing a framework at the
+outset, I might have spent too much time agonising over the choice of framework, and wasted the opportunity to work on
+the straightforward part, which is to design the actual app. (In fact, I spent half a day researching the various
+frameworks while writing this very article.)</p>
+
+<p>Having said all that, now we have no choice but to agonise over which framework to use for the app I’m going to build.
+But we don’t just decide which framework to use based on preference and familiarity, let’s do this exercise methodically
+by going through the limitations and determine which framework can both satisfy the requirements and accommodate the
+limitations.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_8/if_not_now_when.png" /></p>
+  <p><small>We can’t delay the decision forever.</small></p>
+</div>
+
+<h2 id="the-limitations">The Limitations</h2>
+
+<p>Most modern-day apps today are built as web apps or mobile apps. But I have a few limitations on the app that building
+it as a web app or mobile app may not be feasible.</p>
+
+<h3 id="where-to-store-the-data">Where to Store the Data?</h3>
+
+<p>Since this is a finance-related app, data privacy should be handled carefully. Honestly, as an individual engineer, I
+would not have the resource or expertise to deal with the strict laws of data privacy for my app. As much as possible,
+I want to avoid the responsibility of safeguarding user data and making sure there is no breach.</p>
+
+<p>For this reason, I would likely want the user to have full control of the data. This is not possible with a web app,
+where the data will need to be hosted on the cloud, even if it’s under a third-party service like AWS, I’m still
+responsible for making sure I’ve set up the network security properly such that data breach is unlikely.</p>
+
+<p>That leaves us with the other popular alternative, which is building it as a mobile app. With a mobile app, offline
+data access is possible. There’s no need to store the data on the cloud, and all data live on-device. The only way the
+data will be breached is when the user’s device is compromised, which is beyond the scope of my control and
+responsibility.</p>
+
+<h3 id="user-experience-on-mobile">User Experience on Mobile</h3>
+
+<p>Now that we are considering building a mobile app, let’s see how well the user experience will go on mobile. Recall
+that the app is heavy on data entry and file generation. While these are not impossible on the mobile app, the user
+experience may not be very smooth and fluid.</p>
+
+<p>For example, making data tables responsive is not an easy task. How to render a row with too many columns on a narrow
+viewport? On one hand, I’m not an experienced UI/UX designer to be able to solve this problem easily. On the other
+hand, as far as I know, even the experienced UI/UX designers still have not solved this problem fully. (In my other
+article comparing Vuetify2 and Vuetify3, I mentioned that the data table is not fully responsive on mobile.)</p>
+
+<h3 id="what-desktop-app-is-back">What? Desktop App is Back?</h3>
+
+<p>So, that leaves us with the only option we have not considered earlier, which is to build a desktop app. As far as I
+can remember, the last time I touched a desktop app was more than 10 years ago, when I was building a school project
+using .NET framework.</p>
+
+<p>Should I use a desktop app framework again to build this app? It’s not impossible, I just need to spend some time to
+learn the syntax and toolkits, right?</p>
+
+<h3 id="what-about-cross-platform-support">What About Cross-Platform Support?</h3>
+
+<p>Okay, so we are more or less set on building it as a desktop app. Let’s step back a little and think about why web apps
+have been so popular in recent years. For me, I think the reason is because of its portability. You can view a web
+app on Windows, or MacOS, or Linux, or iOS, or Android, or any mobile device that has a web browser.</p>
+
+<p>So, if we were to build a desktop app, we must at least be able to support viewing it on Windows, MacOS and Linux.
+Which means, we need a desktop app framework that has cross-platform support.</p>
+
+<h3 id="let-the-search-begin">Let the Search Begin</h3>
+
+<p>We have identified the need to use a desktop app framework that has cross-platform support. Let’s input this keyword
+exactly in Google Search and see what we get.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_8/google_search.png" /></p>
+  <p><small>Okay, the first answer is not always relevant, it’s actually talking about <em>Mobile</em> cross-platform frameworks.</small></p>
+</div>
+
+<h2 id="cue-google-search-results">Cue Google Search Results</h2>
+
+<p>After going through at least 4 pages of the search results, here’re a few frameworks from a couple articles I’ve
+shortlisted to be relevant:</p>
+
+<table class="table">
+<tr>
+<th>Framework</th><th>Cons</th>
+</tr>
+<tr>
+<td>Tauri</td><td>Require learning Rust</td>
+</tr>
+<tr>
+<td>Flutter</td><td>Require learning Dart</td>
+</tr>
+<tr>
+<td>Xamarin.Forms</td><td>Require learning C#</td>
+</tr>
+<tr>
+<td>Electron</td><td>Resource intensive and large app size</td>
+</tr>
+<tr>
+<td>Neutralinojs</td><td>Relatively new and small community</td>
+</tr>
+<tr>
+<td>Wails</td><td>Require learning Go</td>
+</tr>
+</table>
+
+<p>Notice that I only included the Cons in the comparison table, because I’m sure they all have their strengths and can
+do the job that I require them to, so the only differentiating factor I’m looking at is, “How bad is the Bad?”</p>
+
+<p>Tauri, Flutter, Xamarin.Forms and Wails are all established frameworks with a large community, but they require me to
+learn a new programming language to use their toolkits and APIs. I’m not against learning something new as it’s part
+and parcel of being in the ever-evolving tech industry, but I have a time constraint which is to (hopefully) build the
+app within 1 month. If I were to use these frameworks, then I need to spend more time figuring out how to use them,
+rather than figuring out how to build the logic.</p>
+
+<p>Electron is an extremely popular framework, with a very large community. It allows me to use the good o’ HTML/CSS/JS
+stack. The only downside is that every Electron app comes with an embedded Node.js and Chromium engine, making it a
+rather bloated solution.</p>
+
+<p>Interestingly, I found out that there’s actually a lesser known Electron alternative called Neutralinojs. It’s very
+lightweight because it uses native web browser library on the OS, instead of embedding the browser engine in the app.
+The only problem is that it’s a relatively new framework, and the community is very small compared to Electron’s.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_8/signpost.png" /></p>
+  <p><small>Where do we go from here?</small></p>
+</div>
+
+<h2 id="and-the-winner-is">And The Winner Is…</h2>
+
+<p>In the end, I decided to choose Electron to support my cross-platform desktop app. Yes, I decided to take the easy way
+which is to not learn a new programming language and stick with the familiar HTML/CSS/JS stack (not that frontend
+development is my specialty to begin with, but that still beats an entirely new language, right?)</p>
+
+<p>Electron still has a pretty big downside, which is its bloat, but I still chose it over Neutralinojs because of a larger
+community. I’m already not very familiar with frontend development, if I had to dig around a lot to debug an issue,
+that will make my development time even longer.</p>
+
+<p>Having said that, I hope one day I can give Neutralinojs a try, so that I can use it for future projects.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_8/electronjs_home.png" /></p>
+  <p><small>The winner has emerged from my exercise of choosing a framework.</small></p>
+</div>
+
+<h2 id="the-big-but-then">The Big “But Then”</h2>
+
+<p>Disclaimer time. Everyone may have a different opinion on what is critical and what’s not when deciding what framework
+to use. These are my own criteria (actually dangerously close to being preferences) and limitations, and may not be
+applicable to another person. Whatever the reason for choosing a framework is, at the end of the day, I’m the one who
+is going to use it to build the app, so I will have to bear the consequences of having chosen the wrong option. But we
+always learn from our mistakes, right? The pitfalls I experience in this project will form the guiding principles for
+my next project’s choice of framework.</p>
+
+<p>Anyway, you think choosing a framework is the only thing I dread? No! I think choosing a name for my app is a bigger
+problem. But I will spare you the agony of reading through my name-picking process, because that is neither technical
+nor methodical.</p>
+
+<p>For now, we can conclude this series of articles about the process of designing and building an app from scratch. Once
+I start development, I might have new insights or findings to write about, and I will publish them when it happens.
+I thank you for your patience in reading through all 10 articles and have come this far. Even if you’ve only read this
+one article, I still thank you for your 10 minutes of attention.</p>
+
+<p>Stay tuned for the launch of the app!</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_8/things_take_time.png" /></p>
+  <p><small>It will take some time for the app to materialise.</small></p>
+</div>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/v31lgBn5114" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Yellow iron framework of a building with a crane on top of it by Ashkan Forouzani
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/_Xwnk1DgTb8" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Brown wooden blocks on white table by Brett Jordan
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://www.google.com/search?client=safari&rls=en&q=desktop+app+framework+that+has+cross-platform+support&ie=UTF-8&oe=UTF-8" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Screenshot from Google Search results
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/Aohf8gqa7Zc" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Signpost in Provinz Pichincha, Ecuador by Alexander Schimmeck
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://www.electronjs.org" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Screenshot from electronjs.org homepage
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/M5OpeuHep1E" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Brown wooden framed white and black by Duane Mendes
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://www.hongkiat.com/blog/frameworks-tools-build-cross-platform-desktop-apps/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Top Cross-Platform Desktop App Frameworks & Tools
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://geekflare.com/build-desktop-apps-tools/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> 12 Best Frameworks and Toolkits to Build Desktop Applications
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://tauri.app" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Tauri Apps
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://flutter.dev" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Flutter
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://learn.microsoft.com/en-us/xamarin/xamarin-forms/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Xamarin.Forms
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://neutralino.js.org" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Neutralinojs
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://wails.io" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Wails
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/17/vuetify2-vs-vuetify3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Vuetify2 vs Vuetify3
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

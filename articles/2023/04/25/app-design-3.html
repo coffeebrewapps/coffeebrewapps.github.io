@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 3)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 3)</h1>
+
+    <p>This is Part 3 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 25, 2023 | 
+
+<span>22 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_3/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#tag-based-time-tracking">Tag-based Time Tracking</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-work-log">Create Work Log</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-work-log">Edit Work Log</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-work-log">Delete Work Log</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-tags">Manage Tags</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-tag">Create Tag</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-tag">Edit Tag</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-tag">Delete Tag</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-contacts">Manage Contacts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-contact">Create Contact</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-contact">Edit Contact</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-contact">Delete Contact</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-currencies">Manage Currencies</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-currency">Create Currency</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-currency">Edit Currency</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-currency">Delete Currency</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-billing-and-invoicing">Manage Billing and Invoicing</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#configure-billing-and-invoicing">Configure Billing and Invoicing</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-billing-and-invoicing">Edit Billing and Invoicing</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-billing-and-invoicing">Delete Billing and Invoicing</a></li>
+<li class="toc-entry toc-h3"><a href="#manage-invoice-and-receipt-templates">Manage Invoice and Receipt Templates</a></li>
+<li class="toc-entry toc-h3"><a href="#create-template">Create Template</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-template">Edit Template</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-template">Delete Template</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-sequences">Manage Sequences</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-sequence">Create Sequence</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-sequence">Edit Sequence</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-sequence">Delete Sequence</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-invoices">Manage Invoices</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#generate-basic-invoice-based-on-work-logs">Generate Basic Invoice Based on Work Logs</a></li>
+<li class="toc-entry toc-h3"><a href="#generate-invoice-with-additional-invoice-lines">Generate Invoice with Additional Invoice Lines</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-invoice">Edit Invoice</a></li>
+<li class="toc-entry toc-h3"><a href="#void-invoice">Void Invoice</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">User Journey Design</h2>
+
+<p>Now that we have determined the domain models of the app, we will move on to designing the user journey, which is the
+flow of how the user will interact with the data models.</p>
+
+<p>The most common interactions the user will have with the data models are what we call <strong>CRUD</strong>: create,
+read, update and delete. With these actions, we can guess that there will be corresponding functions on each data
+model to handle the CRUD requests.</p>
+
+<p>In this exercise, we will go back to the 1st part where we list down the user requirements, and design the
+<strong>CRUD</strong> journey of each requirement. This will then inform us how to connect the various data functions
+to form the flow of each user journey, which will then be presented with a Sequence Diagram at the system level.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Design an App
+    section Requirements Gathering
+        Done: 5: Me
+    section Domain Modelling
+        Done: 5: Me
+    section User Journey Design
+        Todo: 5: Me
+
+</pre>
+
+<div class="table-caption">
+  <p><small>My user journey in designing an app.</small></p>
+</div>
+
+<h2 id="tag-based-time-tracking">Tag-based Time Tracking</h2>
+
+<h3 id="create-work-log">Create Work Log</h3>
+
+<p>Typically, the user will navigate to the Work Logs page, click on a “Start” button to initiate a new
+<strong>Work Log</strong>. Then she will input the start time and description for the entry. For convenience, the
+system may pre-fill the start time with the current time, but we provide the flexibility to change the time if say,
+this is a back-filled entry. She may also input the end time, content and tags if this is a back-filled entry, but if
+not, then she will submit the start time and description right away.</p>
+
+<p>At the end of the work, she will go to the <strong>Work Log</strong>, and click the “End” button to complete the log.
+Now, the system may pre-fill the end time, but again, we allow the flexibility for the user to input the value. She
+may also input the content which can be a detailed log of the work done, and add a few tags, then submit the entry.</p>
+
+<p>This completes the flow of creating a new <strong>Work Log</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Work Log
+    section Start Work Log
+        Go to Work Logs: 5: User
+        Click "Start": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Work Log (cont'd)
+    section End Work Log
+        Go to Work Logs: 5: User
+        Click "End": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Work Log journey.</small></p>
+</div>
+
+<h3 id="edit-work-log">Edit Work Log</h3>
+
+<p>It may also be possible that the user wants to update an existing <strong>Work Log</strong>, eg. when she notices a
+mistake in the content, or that she would like to refine the description. We will allow the user to do so via the
+“Edit” button. Then she can make changes to any of the fields, including the start and end time. Here we don’t
+restrict which fields are editable, because we want to give the user complete control over the log since this is what
+she will use to invoice her clients.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Work Log
+    section Edit Work Log
+        Go to Work Logs: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Work Log journey.</small></p>
+</div>
+
+<h3 id="delete-work-log">Delete Work Log</h3>
+
+<p>In an unlikely case, the user may want to remove an existing <strong>Work Log</strong>, perhaps because she had the
+intention to start work and initiated a log, but was caught in unexpected situations and could not actually do any
+work, so she had to remove the log.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Work Log
+    section Delete Work Log
+        Go to Work Logs: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Work Log journey.</small></p>
+</div>
+
+<h2 id="manage-tags">Manage Tags</h2>
+
+<p>By default, whenever the user adds a <strong>Tag</strong> to the <strong>Invoice</strong> or any record that accepts
+tagging, the system will automatically create the <strong>Tag</strong> entry with the default styling. The user can
+then edit the <strong>Tag</strong>, or even create new ones without using them at first.</p>
+
+<h3 id="create-tag">Create Tag</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Tag
+    section Create Tag
+        Go to Tags: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Tag journey.</small></p>
+</div>
+
+<h3 id="edit-tag">Edit Tag</h3>
+
+<p>The user may also edit a <strong>Tag</strong>, eg. changing the description and styles. However, since the category
+and name form the composite primary key, we will not allow editing these fields.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Tag
+    section Edit Tag
+        Go to Tags: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Tag journey.</small></p>
+</div>
+
+<h3 id="delete-tag">Delete Tag</h3>
+
+<p>In the event that the user accidentally creates a <strong>Tag</strong>, she may delete it. Again, if the
+<strong>Tag</strong> is already in use, then we will not allow deletion of it.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Tag
+    section Delete Tag
+        Go to Tags: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Tag journey.</small></p>
+</div>
+
+<h2 id="manage-contacts">Manage Contacts</h2>
+
+<h3 id="create-contact">Create Contact</h3>
+
+<p>Now let’s say the user has found a new client, and would like to setup invoicing for this client. Before she can do so,
+she would need to create a new <strong>Contact</strong> entry first.</p>
+
+<p>For a start, the user may only need to input important information such as name, address, and contact details. The
+other fields are not needed for generating <strong>Invoices</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Contact
+    section Create Contact
+        Go to Contacts: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Contact journey.</small></p>
+</div>
+
+<h3 id="edit-contact">Edit Contact</h3>
+
+<p>We also allow the user to edit an existing <strong>Contact</strong>, eg. when the client changes address or contact
+details.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Contact
+    section Edit Contact
+        Go to Contacts: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Contact journey.</small></p>
+</div>
+
+<h3 id="delete-contact">Delete Contact</h3>
+
+<p>Normally, the user would not need to delete a <strong>Contact</strong>, especially if there’re already data associated
+with the <strong>Contact</strong>. So if the user attempts to delete an entry that already has associated data, the
+system will not allow the action.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Contact
+    section Delete Contact
+        Go to Contacts: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Contact journey.</small></p>
+</div>
+
+<h2 id="manage-currencies">Manage Currencies</h2>
+
+<p>The user may want to configure <strong>Currencies</strong> for the purpose of tax computation if the client uses a
+different <strong>Currency</strong>.</p>
+
+<h3 id="create-currency">Create Currency</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Currency
+    section Create Currency
+        Go to Currencies: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Currency journey.</small></p>
+</div>
+
+<h3 id="edit-currency">Edit Currency</h3>
+
+<p>If the user has made a mistake in configuring the <strong>Currency</strong>, she may edit it accordingly. Or if the
+<strong>Currency</strong> exchange rate is no longer effective, then she can update the effective end date.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Currency
+    section Edit Currency
+        Go to Currencies: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Currency journey.</small></p>
+</div>
+
+<h3 id="delete-currency">Delete Currency</h3>
+
+<p>If the user has accidentally created a <strong>Currency</strong>, she may delete it, but only if it is not yet used
+by any configuration.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Currency
+    section Delete Currency
+        Go to Currencies: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Currency journey.</small></p>
+</div>
+
+<h2 id="manage-billing-and-invoicing">Manage Billing and Invoicing</h2>
+
+<h3 id="configure-billing-and-invoicing">Configure Billing and Invoicing</h3>
+
+<p>After creating a new <strong>Contact</strong> for the client, the user then proceeds to configure invoicing for this
+client. To make the user experience more seamless, we allow the user to configure invoicing for the
+<strong>Contact</strong> in the same Contacts page by just clicking on a “Configure Invoice” button, so there’s no
+need for her to navigate to a different page.</p>
+
+<p>The page will render each config in a separate section, and the user can independently configure for each as needed.</p>
+
+<p>To configure an <strong>Invoice</strong>, the user also needs to select the <strong>Invoice Template</strong> to use.
+For convenience, we let the user select from a list of built-in templates. If she needs to create new templates, then
+she can do so separately first, and come back to configuring for this particular <strong>Contact</strong>. For the
+<strong>Sequence</strong>, the user will need to create one separately first before being able to use it in the
+<strong>Invoice</strong>.</p>
+
+<p>Along with the <strong>Invoice</strong>, the user may also configure the <strong>Income Receipt</strong> that will be
+generated for the <strong>Contact</strong> when payment is made. Similarly, there will be built-in templates
+available for use to generate the <strong>Receipt</strong>, but she will need to first create the
+<strong>Sequence</strong> separately before being able to use it in the <strong>Receipt</strong>.</p>
+
+<p>Lastly, the user may also want to configure the billing structure for this <strong>Contact</strong> if she wants the
+system to automatically generate <strong>Invoice Lines</strong> instead of having to manually input them.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Configure Invoice
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Configure Invoice (cont'd)
+    section Create Invoice Config
+        Go to Invoice Configs: 5: User
+        Click "New Invoice Config": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Configure Invoice (cont'd)
+    section Create Receipt Config
+        Go to Receipt Configs: 5: User
+        Click "New Receipt Config": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Configure Invoice (cont'd)
+    section Create Billing Config (Multiple Entries)
+        Go to Billing Configs: 5: User
+        Click "Add Billing Config": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Configure Billing and Invoicing journey.</small></p>
+</div>
+
+<h3 id="edit-billing-and-invoicing">Edit Billing and Invoicing</h3>
+
+<p>Updating existing <strong>Invoice Configs</strong>, <strong>Receipt Configs</strong> and
+<strong>Billing Configs</strong> is allowed, but we will restrict the fields that can be edited. For example, we will
+not allow editing the invoice cycle or due date cycle configs, because then the previously generated
+<strong>Invoice</strong> associated with this particular instance will not make sense anymore.</p>
+
+<p>If there is a major change in the invoice cycle, then the user should create a new <strong>Invoice Config</strong>
+and use it to generate subsequent <strong>Invoices</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Invoice Config
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+    section Edit Invoice Config
+        Go to Invoice Configs: 5: User
+        Click "Edit Invoice Config": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Receipt Config
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+    section Edit Receipt Config
+        Go to Receipt Configs: 5: User
+        Click "Edit Receipt Config": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Billing Config
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+    section Edit Billing Config
+        Go to Billing Configs: 5: User
+        Click "Edit Billing Config": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Billing and Invoicing journey.</small></p>
+</div>
+
+<h3 id="delete-billing-and-invoicing">Delete Billing and Invoicing</h3>
+
+<p>It is unlikely that the user would need to delete an existing <strong>Invoice Config</strong>,
+<strong>Receipt Config</strong> or <strong>Billing Config</strong>, unless it is created accidentally and she wants to
+remove it. The user will only be able to delete entries that have no associated data.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Invoice Config
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+    section Delete Invoice Config
+        Go to Invoice Configs: 5: User
+        Click "Delete Invoice Config": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Receipt Config
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+    section Delete Receipt Config
+        Go to Receipt Configs: 5: User
+        Click "Delete Receipt Config": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-70">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Billing Config
+    section Initiate Configuration
+        Go to Contacts: 5: User
+        Click "Configure Invoice": 5: User
+    section Delete Billing Config
+        Go to Billing Configs: 5: User
+        Click "Delete Billing Config": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Billing and Invoicing journey.</small></p>
+</div>
+
+<h3 id="manage-invoice-and-receipt-templates">Manage Invoice and Receipt Templates</h3>
+
+<p>Let’s say the user doesn’t want to use the built-in templates and wants to create custom ones for her clients, then
+she will go to the Templates page to configure them.</p>
+
+<p>For convenience, we will list all templates in a single page, and use a type field to differentiate between
+<strong>Invoice Template</strong> and <strong>Receipt Template</strong>, since both types have the same fields
+otherwise.</p>
+
+<h3 id="create-template">Create Template</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Template
+    section Create Template
+        Go to Templates: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Template journey.</small></p>
+</div>
+
+<h3 id="edit-template">Edit Template</h3>
+
+<p>The user may also want to edit an existing template, so we will allow for that. The user can go to the Templates page
+and click on the “Edit” button for the template she wishes to edit.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Template
+    section Edit Template
+        Go to Templates: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Template journey.</small></p>
+</div>
+
+<h3 id="delete-template">Delete Template</h3>
+
+<p>The user may also want to delete an existing template, but we will only allow deletion of a template that is not used
+by any <strong>Invoice Config</strong> or <strong>Receipt Config</strong>. The user can go to the Templates page
+and click on the “Delete” button for the template she wishes to delete.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Template
+    section Delete Template
+        Go to Templates: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Template journey.</small></p>
+</div>
+
+<h2 id="manage-sequences">Manage Sequences</h2>
+
+<h3 id="create-sequence">Create Sequence</h3>
+
+<p>The user may also want to customise the <strong>Sequence</strong> for each <strong>Contact</strong>, and can do so in
+the Sequences page.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Create Sequence
+    section Create Sequence
+        Go to Sequences: 5: User
+        Click "New": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Sequence journey.</small></p>
+</div>
+
+<h3 id="edit-sequence">Edit Sequence</h3>
+
+<p>Once a <strong>Sequence</strong> has been used in an <strong>Invoice</strong> or <strong>Receipt</strong>, it should
+not be changed anymore. Instead, the user will need to create a new sequence with a different starting number and
+change the other fields accordingly. So there will be no “Edit” action for <strong>Sequences</strong>.</p>
+
+<h3 id="delete-sequence">Delete Sequence</h3>
+
+<p>A user may delete a <strong>Sequence</strong> that has not been used in any <strong>Invoice</strong> or
+<strong>Receipt</strong>. This can be done in the Sequences page.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Delete Sequence
+    section Delete Sequence
+        Go to Sequences: 5: User
+        Click "Delete": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Sequence journey.</small></p>
+</div>
+
+<h2 id="manage-invoices">Manage Invoices</h2>
+
+<h3 id="generate-basic-invoice-based-on-work-logs">Generate Basic Invoice Based on Work Logs</h3>
+
+<p>Now that the user has configured how to generate <strong>Invoices</strong> and <strong>Receipts</strong>, we will have
+a function for the user to filter the <strong>Work Logs</strong> to generate a new <strong>Invoice</strong>. This will
+be done at the Work Logs page. Typically, the user only needs to include <strong>Work Logs</strong> for the
+<strong>Invoice</strong>, and input the invoice date and due date accordingly.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Generate Invoice
+    section Initiate Generation
+        Go to Work Logs: 5: User
+        Click "Generate Invoice": 5: User
+    section Configure Invoice
+        Select Invoice Config: 5: User
+        Input Work Log Filters: 5: User
+        Input Invoice Fields: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Generate Invoice
+    section Preview and Generate
+        Preview Invoice: 5: User
+        Generate: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Basic Generate Invoice journey.</small></p>
+</div>
+
+<h3 id="generate-invoice-with-additional-invoice-lines">Generate Invoice with Additional Invoice Lines</h3>
+
+<p>In the event that the <strong>Work Logs</strong> are not the only billable items, the user may add additional
+<strong>Invoice Lines</strong> for the additional billing items.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Generate Invoice with Invoice Lines
+    section Initiate Generation
+        Go to Work Logs: 5: User
+        Click "Generate Invoice": 5: User
+    section Configure Invoice
+        Select Invoice Config: 5: User
+        Input Work Log Filters: 5: User
+        Input Invoice Fields: 5: User
+
+</pre>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Generate Invoice with Invoice Lines (cont'd)
+    section Add Invoice Line (Multiple Entries)
+        Click "Add Line": 5: User
+        Input Fields: 5: User
+        Confirm: 5: User
+    section Preview and Generate
+        Preview Invoice: 5: User
+        Generate: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Generate Invoice with Additional Invoice Lines journey.</small></p>
+</div>
+
+<h3 id="edit-invoice">Edit Invoice</h3>
+
+<p>If the user is not satisfied with the generated <strong>Invoice</strong>, she can edit the fields and re-generate the
+document. This will be done in a separate Invoices page. Note that since the existing <strong>Invoice</strong> has
+already filtered the <strong>Work Logs</strong> and used them for generating the <strong>Invoice Lines</strong>, it is
+not feasible to allow editing the data source, so we will only allow editing static fields like invoice date.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid resize-80">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Edit Invoice
+    section Edit Invoice
+        Go to Invoices: 5: User
+        Click "Edit": 5: User
+        Change Fields: 5: User
+    section Preview and Generate
+        Preview Invoice: 5: User
+        Generate: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Invoice journey.</small></p>
+</div>
+
+<h3 id="void-invoice">Void Invoice</h3>
+
+<p>In the unfortunate event that the user has generated an <strong>Invoice</strong> incorrectly, instead of deleting it
+entirely, we will allow her to void it instead. This is for accountability reason, because there’s a
+<strong>Sequence</strong> in the <strong>Invoice</strong>, any missing number should be accounted for.</p>
+
+<p>Once the user voids an <strong>Invoice</strong>, it can no longer be edited.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#deaa87",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+journey
+    title Void Invoice
+    section Initiate Void
+        Go to Invoices: 5: User
+        Click "Void": 5: User
+        Confirm: 5: User
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Void Invoice journey.</small></p>
+</div>
+
+<h2 class="no_toc">Wrap Up For Now</h2>
+
+<p>We’ve covered quite a bit in this exercise, let’s take a break for now and we will continue with the remaining user
+journeys in the next one.</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/AMQEB4-uG9k" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Silhouette photography person on curve-road by Khamkéo Vilaysing
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

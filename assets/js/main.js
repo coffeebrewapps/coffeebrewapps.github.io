@@ -23,3 +23,12 @@ function toggleCollapse(btn) {
     btn.innerHTML = "Expand";
   }
 }
+
+function toggleDialog(dialogId) {
+  var dialog = document.getElementById(dialogId);
+  if (dialog.style.display === 'none') {
+    dialog.style.display = 'block';
+  } else {
+    dialog.style.display = 'none';
+  }
+}

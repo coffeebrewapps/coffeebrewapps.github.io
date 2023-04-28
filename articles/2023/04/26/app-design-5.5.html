@@ -1,0 +1,2532 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 5.5)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 5.5)</h1>
+
+    <p>This is Part 5.5 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 26, 2023 | 
+
+<span>27 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_5.5/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#manage-income-receipts">Manage Income Receipts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#generate-income-receipt">Generate Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#void-income-receipt">Void Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#upload-income-receipt">Upload Income Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-uploaded-income-receipt">Delete Uploaded Income Receipt</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-expense-receipts">Manage Expense Receipts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#upload-expense-receipt">Upload Expense Receipt</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-uploaded-expense-receipt">Delete Uploaded Expense Receipt</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-documents">Manage Documents</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#download-documents">Download Documents</a></li>
+<li class="toc-entry toc-h3"><a href="#tag-documents">Tag Documents</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-taxation">Manage Taxation</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-tax-table">Create Tax Table</a></li>
+<li class="toc-entry toc-h3"><a href="#create-tax-tier">Create Tax Tier</a></li>
+<li class="toc-entry toc-h3"><a href="#create-tax-deductible">Create Tax Deductible</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-tax-table">Edit Tax Table</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-tax-tier">Edit Tax Tier</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-tax-deductible">Edit Tax Deductible</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-tax-table">Delete Tax Table</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-tax-tier">Delete Tax Tier</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-tax-deductible">Delete Tax Deductible</a></li>
+<li class="toc-entry toc-h3"><a href="#estimate-taxes">Estimate Taxes</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-charts">Manage Charts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-chart">Create Chart</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-chart">Edit Chart</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-chart">Delete Chart</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-recurring-tasks">Manage Recurring Tasks</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-recurring-task">Create Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#create-recurring-task-step">Create Recurring Task Step</a></li>
+<li class="toc-entry toc-h3"><a href="#disable-recurring-task">Disable Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-recurring-task">Edit Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#end-recurring-task">End Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#run-recurring-task">Run Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-recurring-task">Delete Recurring Task</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-recurring-task-step">Delete Recurring Task Step</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-system-configs">Manage System Configs</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#edit-system-config">Edit System Config</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-users">Manage Users</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-user">Create User</a></li>
+<li class="toc-entry toc-h3"><a href="#login-user">Login User</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-profile">Edit Profile</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">Sequence Diagram Design (Continued)</h2>
+
+<p>In the previous article, we’ve covered a few sequence diagram designs related to these functions:</p>
+
+<ul>
+  <li>Tag-based Time Tracking</li>
+  <li>Manage Tags</li>
+  <li>Manage Contacts</li>
+  <li>Manage Currencies</li>
+  <li>Manage Billing and Invoicing</li>
+  <li>Manage Templates</li>
+  <li>Manage Sequences</li>
+  <li>Manage Invoices</li>
+  <li>Manage Transactions</li>
+</ul>
+
+<p>We’ve also created our system components diagrams to give us a better view of which components are interacting in each
+sequence diagram, using what functions available in each component.</p>
+
+<p>In this article, we will continue with the remaining functions:</p>
+
+<ul>
+  <li>Manage Receipts</li>
+  <li>Manage Documents</li>
+  <li>Manage Taxation</li>
+  <li>Manage Charts</li>
+  <li>Manage Recurring Tasks</li>
+  <li>Manage System Configs</li>
+  <li>Manage Users</li>
+</ul>
+
+<h2 id="manage-income-receipts">Manage Income Receipts</h2>
+
+<h3 id="generate-income-receipt">Generate Income Receipt</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Invoicing
+    participant Receipt
+    participant Tag
+    participant Document
+    participant Transaction
+
+    User-&gt;&gt;+System: Request Invoices Page
+    System-&gt;&gt;+Invoicing: listInvoices()
+    Invoicing--&gt;&gt;-System: Invoices
+    System--&gt;&gt;-User: Render Invoices Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Generate Receipt[invoiceId=1]
+    System-&gt;&gt;+Receipt: listConfigs()
+    Receipt--&gt;&gt;-System: ReceiptConfigs
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Receipt Form
+    Note right of User: Wait for user action
+
+    alt confirm preview
+        User-&gt;&gt;+System: Input and Preview
+        System-&gt;&gt;+Receipt: previewIncomeReceipt(invoiceId=1, options)
+        Receipt--&gt;&gt;-System: IncomeReceipt[tempId=1]
+        System-&gt;&gt;-User: Render Receipt Preview
+        Note right of User: Wait for user action
+
+        alt confirm generate
+            User-&gt;&gt;+System: Generate
+
+            opt tags present
+                loop each tag
+                  System-&gt;&gt;+Tag: createIfNotExists()
+                  Tag--&gt;&gt;-System: Tag[id=n]
+                end
+            end
+
+            System-&gt;&gt;+Receipt: generateIncomeReceiptFromPreview(tempId=1)
+            Receipt-&gt;&gt;+Document: create()
+            Document--&gt;&gt;-Receipt: Document[id=1]
+            Receipt--&gt;&gt;-System: IncomeReceipt[id=1]
+            System-&gt;&gt;+Transaction: create(type=Income)
+            Transaction--&gt;&gt;-System: Transaction[id=1]
+            System--&gt;&gt;-User: Render Receipt Page
+        else cancel generate
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Invoicing: listInvoices()
+            Invoicing--&gt;&gt;-System: Invoices
+            System--&gt;&gt;-User: Render Invoices Page
+        end
+    else cancel preview
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Invoicing: listInvoices()
+        Invoicing--&gt;&gt;-System: Invoices
+        System--&gt;&gt;-User: Render Invoices Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Generate Income Receipt sequence.</small></p>
+</div>
+
+<h3 id="void-income-receipt">Void Income Receipt</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Tag
+    participant Document
+
+    User-&gt;&gt;+System: Request Income Receipts Page
+    System-&gt;&gt;+Receipt: listIncomeReceipts()
+    Receipt--&gt;&gt;-System: Income Receipts
+    System--&gt;&gt;-User: Render Income Receipts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Void IncomeReceipt[id=1]
+    System-&gt;&gt;+Receipt: viewIncomeReceipt(id=1)
+    Receipt--&gt;&gt;-System: IncomeReceipt[id=1]
+    System--&gt;&gt;-User: Render Income Receipt Form
+    Note right of User: Wait for user action
+
+    alt confirm void
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Receipt: voidIncomeReceipt(id=1)
+        Receipt--&gt;&gt;-System: IncomeReceipt[id=1]
+        System-&gt;&gt;+Transaction: create(type=Income Reversal)
+        Transaction--&gt;&gt;-System: Transaction[id=2]
+        System--&gt;&gt;-User: Render Income Receipt Page
+
+        opt regenerate receipt
+            User-&gt;&gt;+System: Regenerate Receipt[invoiceId=1]
+            System-&gt;&gt;+Receipt: listConfigs()
+            Receipt--&gt;&gt;-System: ReceiptConfigs
+            System-&gt;&gt;+Tag: list()
+            Tag--&gt;&gt;-System: Tags
+            System--&gt;&gt;-User: Render Receipt Form
+            Note right of User: Wait for user action
+
+            alt confirm preview
+                User-&gt;&gt;+System: Input and Preview
+                System-&gt;&gt;+Receipt: previewIncomeReceipt(invoiceId=1, options)
+                Receipt--&gt;&gt;-System: IncomeReceipt[tempId=1]
+                System-&gt;&gt;-User: Render Receipt Preview
+                Note right of User: Wait for user action
+
+                alt confirm regenerate
+                    User-&gt;&gt;+System: Generate
+
+                    opt tags present
+                        loop each tag
+                          System-&gt;&gt;+Tag: createIfNotExists()
+                          Tag--&gt;&gt;-System: Tag[id=n]
+                        end
+                    end
+
+                    System-&gt;&gt;+Receipt: generateIncomeReceiptFromPreview(tempId=1)
+                    Receipt-&gt;&gt;+Document: create()
+                    Document--&gt;&gt;-Receipt: Document[id=1]
+                    Receipt--&gt;&gt;-System: IncomeReceipt[id=2]
+                    System-&gt;&gt;+Transaction: create(type=Income)
+                    Transaction--&gt;&gt;-System: Transaction[id=3]
+                    System--&gt;&gt;-User: Render Income Receipt Page
+                else cancel regenerate
+                    User-&gt;&gt;+System: Cancel
+                    System-&gt;&gt;+Receipt: viewIncomeReceipt(id=1)
+                    Receipt--&gt;&gt;-System: IncomeReceipt[id=1]
+                    System--&gt;&gt;-User: Render Income Receipt Page
+                end
+            else cancel preview
+                User-&gt;&gt;+System: Cancel
+                System-&gt;&gt;+Receipt: viewIncomeReceipt(id=1)
+                Receipt--&gt;&gt;-System: IncomeReceipt[id=1]
+                System--&gt;&gt;-User: Render Income Receipt Page
+            end
+        end
+    else cancel void
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Receipt: listIncomeReceipts()
+        Receipt--&gt;&gt;-System: IncomeReceipts
+        System--&gt;&gt;-User: Render Income Receipts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Void Income Receipt sequence.</small></p>
+</div>
+
+<h3 id="upload-income-receipt">Upload Income Receipt</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Tag
+    participant Document
+    participant Transaction
+
+    User-&gt;&gt;+System: Request Income Receipts Page
+    System-&gt;&gt;+Receipt: listIncomeReceipts()
+    Receipt--&gt;&gt;-System: IncomeReceipts
+    System--&gt;&gt;-User: Render Income Receipts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Upload Receipt
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Upload Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Receipt: uploadIncomeReceipt()
+        Receipt-&gt;&gt;+Document: create()
+        Document--&gt;&gt;-Receipt: Document[id=1]
+        Receipt--&gt;&gt;-System: IncomeReceipt[id=1]
+        System-&gt;&gt;+Transaction: create(type=Income)
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System--&gt;&gt;-User: Render Receipt Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Receipt: listIncomeReceipts()
+        Receipt--&gt;&gt;-System: IncomeReceipts
+        System--&gt;&gt;-User: Render Income Receipts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Upload Income Receipt sequence.</small></p>
+</div>
+
+<h3 id="delete-uploaded-income-receipt">Delete Uploaded Income Receipt</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Document
+    participant Transaction
+
+    User-&gt;&gt;+System: Request Income Receipts Page
+    System-&gt;&gt;+Receipt: listIncomeReceipts()
+    Receipt--&gt;&gt;-System: IncomeReceipts
+    System--&gt;&gt;-User: Render Income Receipts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete Uploaded IncomeReceipt[id=1]
+    System--&gt;&gt;-User: Render Delete Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Receipt: deleteUploadedIncomeReceipt(id=1)
+        Receipt-&gt;&gt;+Document: delete(id=1)
+        Document--&gt;&gt;-Receipt: success
+        Receipt--&gt;&gt;-System: success
+        System-&gt;&gt;+Transaction: create(type=Income Reversal)
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System-&gt;&gt;+Receipt: listIncomeReceipts()
+        Receipt--&gt;&gt;-System: IncomeReceipts
+        System--&gt;&gt;-User: Render Income Receipts Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Receipt: listIncomeReceipts()
+        Receipt--&gt;&gt;-System: IncomeReceipts
+        System--&gt;&gt;-User: Render Income Receipts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Income Receipt sequence.</small></p>
+</div>
+
+<h2 id="manage-expense-receipts">Manage Expense Receipts</h2>
+
+<h3 id="upload-expense-receipt">Upload Expense Receipt</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Tag
+    participant Document
+    participant Transaction
+
+    User-&gt;&gt;+System: Request Expense Receipts Page
+    System-&gt;&gt;+Receipt: listExpenseReceipts()
+    Receipt--&gt;&gt;-System: ExpenseReceipts
+    System--&gt;&gt;-User: Render Expense Receipts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Upload Receipt
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Upload Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Receipt: uploadExpenseReceipt()
+        Receipt-&gt;&gt;+Document: create()
+        Document--&gt;&gt;-Receipt: Document[id=1]
+        Receipt--&gt;&gt;-System: ExpenseReceipt[id=1]
+        System-&gt;&gt;+Transaction: create(type=Expense)
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System--&gt;&gt;-User: Render Receipt Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Receipt: listExpenseReceipts()
+        Receipt--&gt;&gt;-System: ExpenseReceipts
+        System--&gt;&gt;-User: Render Expense Receipts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Upload Expense Receipt sequence.</small></p>
+</div>
+
+<h3 id="delete-uploaded-expense-receipt">Delete Uploaded Expense Receipt</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Document
+    participant Transaction
+
+    User-&gt;&gt;+System: Request Expense Receipts Page
+    System-&gt;&gt;+Receipt: listExpenseReceipts()
+    Receipt--&gt;&gt;-System: ExpenseReceipts
+    System--&gt;&gt;-User: Render Expense Receipts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete Uploaded ExpenseReceipt[id=1]
+    System--&gt;&gt;-User: Render Delete Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Receipt: deleteUploadedExpenseReceipt(id=1)
+        Receipt-&gt;&gt;+Document: delete(id=1)
+        Document--&gt;&gt;-Receipt: success
+        Receipt--&gt;&gt;-System: success
+        System-&gt;&gt;+Transaction: create(type=Expense Reversal)
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System-&gt;&gt;+Receipt: listExpenseReceipts()
+        Receipt--&gt;&gt;-System: ExpenseReceipts
+        System--&gt;&gt;-User: Render Expense Receipts Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Receipt: listExpenseReceipts()
+        Receipt--&gt;&gt;-System: ExpenseReceipts
+        System--&gt;&gt;-User: Render Expense Receipts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Expense Receipt sequence.</small></p>
+</div>
+
+<h2 id="manage-documents">Manage Documents</h2>
+
+<h3 id="download-documents">Download Documents</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Document
+
+    User-&gt;&gt;+System: Request Documents Page
+    System-&gt;&gt;+Document: list()
+    Document--&gt;&gt;-System: Documents
+    System--&gt;&gt;-User: Render Documents Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Download Documents
+    System--&gt;&gt;-User: Render Download Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Document: download(filters)
+        Document--&gt;&gt;-System: Raw Files
+        System--&gt;&gt;-User: Render Save Files Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Document: list()
+        Document--&gt;&gt;-System: Documents
+        System--&gt;&gt;-User: Render Documents Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Download Documents sequence.</small></p>
+</div>
+
+<h3 id="tag-documents">Tag Documents</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Document
+    participant Tag
+
+    User-&gt;&gt;+System: Request Documents Page
+    System-&gt;&gt;+Document: list()
+    Document--&gt;&gt;-System: Documents
+    System--&gt;&gt;-User: Render Documents Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Tag Document[id=1]
+    System-&gt;&gt;+Document: view(id=1)
+    Document--&gt;&gt;-System: Document[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Document Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Document: tag(id=1, tags=tags)
+        Document--&gt;&gt;-System: Document[id=1]
+        System--&gt;&gt;-User: Render Document Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Document: list()
+        Document--&gt;&gt;-System: Documents
+        System--&gt;&gt;-User: Render Documents Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Tag Documents sequence.</small></p>
+</div>
+
+<h2 id="manage-taxation">Manage Taxation</h2>
+
+<h3 id="create-tax-table">Create Tax Table</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Tax Table
+    System--&gt;&gt;-User: Render Tax Table Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Taxation: createTaxTable()
+        Taxation--&gt;&gt;-System: TaxTable[id=1]
+        System--&gt;&gt;-User: Render Tax Table Page
+        Note right of System: Follow the Create Tax Tier sequence
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTables()
+        Taxation--&gt;&gt;-System: TaxTables
+        System--&gt;&gt;-User: Render TaxTables Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Tax Table sequence.</small></p>
+</div>
+
+<h3 id="create-tax-tier">Create Tax Tier</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tiers Section
+    System-&gt;&gt;+Taxation: listTaxTiers(tableId)
+    Taxation--&gt;&gt;-System: TaxTiers
+    System--&gt;&gt;-User: Render Tax Tiers Section
+    Note right of User: Rendered as a section within Tax Table Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Add Tax Tier
+    System--&gt;&gt;-User: Render Tax Tier Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Taxation: createTaxTier()
+        Taxation--&gt;&gt;-System: TaxTier[id=1]
+        System-&gt;&gt;+Taxation: listTaxTiers(tableId)
+        Taxation--&gt;&gt;-System: TaxTiers
+        System--&gt;&gt;-User: Render Tax Tiers Section
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTiers()
+        Taxation--&gt;&gt;-System: TaxTiers
+        System--&gt;&gt;-User: Render Tax Tiers Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Tax Tier sequence.</small></p>
+</div>
+
+<h3 id="create-tax-deductible">Create Tax Deductible</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+    participant Tag
+
+    User-&gt;&gt;+System: Request Tax Deductibles Section
+    System-&gt;&gt;+Taxation: listTaxDeductibles(tableId)
+    Taxation--&gt;&gt;-System: TaxDeductibles
+    System--&gt;&gt;-User: Render Tax Deductibles Section
+    Note right of User: Rendered as a section within Tax Table Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Add Tax Deductible
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Tax Deductible Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Taxation: createTaxDeductible()
+        Taxation--&gt;&gt;-System: TaxDeductible[id=1]
+        System-&gt;&gt;+Taxation: listTaxDeductibles(tableId)
+        Taxation--&gt;&gt;-System: TaxDeductibles
+        System--&gt;&gt;-User: Render Tax Deductibles Section
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxDeductibles()
+        Taxation--&gt;&gt;-System: TaxDeductibles
+        System--&gt;&gt;-User: Render Tax Deductibles Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Tax Deductible sequence.</small></p>
+</div>
+
+<h3 id="edit-tax-table">Edit Tax Table</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit TaxTable[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System--&gt;&gt;-User: Render Tax Table Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Taxation: editTaxTable(id=1)
+        Taxation--&gt;&gt;-System: TaxTable[id=1]
+        System--&gt;&gt;-User: Render Tax Table Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTables()
+        Taxation--&gt;&gt;-System: TaxTables
+        System--&gt;&gt;-User: Render TaxTables Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Tax Table sequence.</small></p>
+</div>
+
+<h3 id="edit-tax-tier">Edit Tax Tier</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit TaxTiers[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System-&gt;&gt;+Taxation: listTaxTiers(tableId=1)
+    Taxation--&gt;&gt;-System: TaxTiers
+    System--&gt;&gt;-User: Render Tax Table Page with Tax Tiers Section
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit TaxTier[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTier(id=1)
+    Taxation--&gt;&gt;-System: TaxTier[id=1]
+    System--&gt;&gt;-User: Render Tax Tier Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Taxation: editTaxTier(id=1)
+        Taxation--&gt;&gt;-System: TaxTier[id=1]
+        System-&gt;&gt;+Taxation: listTaxTiers(tableId=1)
+        Taxation--&gt;&gt;-System: TaxTiers
+        System--&gt;&gt;-User: Render Tax Tiers Section
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTiers(tableId=1)
+        Taxation--&gt;&gt;-System: TaxTiers
+        System--&gt;&gt;-User: Render Tax Tiers Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Tax Tier sequence.</small></p>
+</div>
+
+<h3 id="edit-tax-deductible">Edit Tax Deductible</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+    participant Tag
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit TaxDeductibles[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System-&gt;&gt;+Taxation: listTaxDeductibles(tableId=1)
+    Taxation--&gt;&gt;-System: TaxDeductibles
+    System--&gt;&gt;-User: Render Tax Table Page with Tax Deductibles Section
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit TaxDeductible[id=1]
+    System-&gt;&gt;+Taxation: viewTaxDeductible(id=1)
+    Taxation--&gt;&gt;-System: TaxDeductible[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Tax Deductible Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Taxation: editTaxDeductible(id=1)
+        Taxation--&gt;&gt;-System: TaxDeductible[id=1]
+        System-&gt;&gt;+Taxation: listTaxDeductibles(tableId=1)
+        Taxation--&gt;&gt;-System: TaxDeductibles
+        System--&gt;&gt;-User: Render Tax Deductibles Section
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxDeductibles(tableId=1)
+        Taxation--&gt;&gt;-System: TaxDeductibles
+        System--&gt;&gt;-User: Render Tax Deductibles Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Tax Deductible sequence.</small></p>
+</div>
+
+<h3 id="delete-tax-table">Delete Tax Table</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete TaxTable[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System--&gt;&gt;-User: Render Tax Table Form
+    Note right of User: Wait for user action
+
+    alt confirm delete
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Taxation: deleteTaxTable(id=1)
+
+        Taxation-&gt;&gt;Taxation: listTaxDeductibles(tableId=1)
+        Taxation--&gt;&gt;Taxation: TaxDeductibles
+        loop each tax deductible
+            Taxation-&gt;&gt;Taxation: deleteTaxDeductible(id=1)
+            Taxation--&gt;&gt;Taxation: success
+        end
+
+        Taxation-&gt;&gt;Taxation: listTaxTiers(tableId=1)
+        Taxation--&gt;&gt;Taxation: TaxTiers
+        loop each tax deductible
+            Taxation-&gt;&gt;Taxation: deleteTaxTier(id=1)
+            Taxation--&gt;&gt;Taxation: success
+        end
+
+        Taxation--&gt;&gt;-System: success
+
+        System-&gt;&gt;+Taxation: listTaxTables()
+        Taxation--&gt;&gt;-System: TaxTables
+        System--&gt;&gt;-User: Render Tax Tables Page
+    else cancel delete
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTables()
+        Taxation--&gt;&gt;-System: TaxTables
+        System--&gt;&gt;-User: Render Tax Tables Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Tax Table sequence.</small></p>
+</div>
+
+<h3 id="delete-tax-tier">Delete Tax Tier</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete TaxTiers[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System-&gt;&gt;+Taxation: listTaxTiers(tableId=1)
+    Taxation--&gt;&gt;-System: TaxTiers
+    System--&gt;&gt;-User: Render Tax Table Page with Tax Tiers Section
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete TaxTier[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTier(id=1)
+    Taxation--&gt;&gt;-System: TaxTier[id=1]
+    System--&gt;&gt;-User: Render Tax Tier Form
+    Note right of User: Wait for user action
+
+    alt confirm delete
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Taxation: deleteTaxTier(id=1)
+        Taxation--&gt;&gt;-System: success
+        System-&gt;&gt;+Taxation: listTaxTiers(tableId=1)
+        Taxation--&gt;&gt;-System: TaxTiers
+        System--&gt;&gt;-User: Render Tax Tiers Section
+    else cancel delete
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTiers(tableId=1)
+        Taxation--&gt;&gt;-System: TaxTiers
+        System--&gt;&gt;-User: Render Tax Tiers Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Tax Tier sequence.</small></p>
+</div>
+
+<h3 id="delete-tax-deductible">Delete Tax Deductible</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete TaxDeductibles[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System-&gt;&gt;+Taxation: listTaxDeductibles(tableId=1)
+    Taxation--&gt;&gt;-System: TaxDeductibles
+    System--&gt;&gt;-User: Render Tax Table Page with Tax Deductibles Section
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete TaxDeductible[id=1]
+    System-&gt;&gt;+Taxation: viewTaxDeductible(id=1)
+    Taxation--&gt;&gt;-System: TaxDeductible[id=1]
+    System--&gt;&gt;-User: Render Tax Deductible Form
+    Note right of User: Wait for user action
+
+    alt confirm delete
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Taxation: deleteTaxDeductible(id=1)
+        Taxation--&gt;&gt;-System: success
+        System-&gt;&gt;+Taxation: listTaxDeductibles(tableId=1)
+        Taxation--&gt;&gt;-System: TaxDeductibles
+        System--&gt;&gt;-User: Render Tax Deductibles Section
+    else cancel delete
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxDeductibles(tableId=1)
+        Taxation--&gt;&gt;-System: TaxDeductibles
+        System--&gt;&gt;-User: Render Tax Deductibles Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Tax Deductible sequence.</small></p>
+</div>
+
+<h3 id="estimate-taxes">Estimate Taxes</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Taxation
+
+    User-&gt;&gt;+System: Request Tax Tables Page
+    System-&gt;&gt;+Taxation: listTaxTables()
+    Taxation--&gt;&gt;-System: TaxTables
+    System--&gt;&gt;-User: Render Tax Tables Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Estimate Taxes[id=1]
+    System-&gt;&gt;+Taxation: viewTaxTable(id=1)
+    Taxation--&gt;&gt;-System: TaxTable[id=1]
+    System--&gt;&gt;-User: Render Tax Table Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Taxation: estimateTaxes(id=1)
+        Taxation--&gt;&gt;-System: TaxTable[id=1]
+        System--&gt;&gt;-User: Render Estimated Taxes Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Taxation: listTaxTables()
+        Taxation--&gt;&gt;-System: TaxTables
+        System--&gt;&gt;-User: Render Tax Tables Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Estimate Taxes sequence.</small></p>
+</div>
+
+<h2 id="manage-charts">Manage Charts</h2>
+
+<h3 id="create-chart">Create Chart</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Chart
+    participant Tag
+
+    User-&gt;&gt;+System: Request Charts Page
+    System-&gt;&gt;+Chart: list()
+    Chart--&gt;&gt;-System: ChartConfigs
+    System--&gt;&gt;-User: Render Charts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Chart
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Chart Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Chart: create(options)
+        Chart--&gt;&gt;-System: ChartConfig[id=1]
+        System-&gt;&gt;+Chart: list()
+        Chart--&gt;&gt;-System: ChartConfigs
+        System--&gt;&gt;-User: Render Charts Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Chart: list()
+        Chart--&gt;&gt;-System: ChartConfigs
+        System--&gt;&gt;-User: Render Charts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Chart sequence.</small></p>
+</div>
+
+<h3 id="edit-chart">Edit Chart</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Chart
+    participant Tag
+
+    User-&gt;&gt;+System: Request Charts Page
+    System-&gt;&gt;+Chart: list()
+    Chart--&gt;&gt;-System: ChartConfigs
+    System--&gt;&gt;-User: Render Charts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit ChartConfig[id=1]
+    System-&gt;&gt;+Chart: view(id=1)
+    Chart--&gt;&gt;-System: ChartConfig[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Chart Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Chart: edit(id=1)
+        Chart--&gt;&gt;-System: ChartConfig[id=1]
+        System-&gt;&gt;+Chart: list()
+        Chart--&gt;&gt;-System: ChartConfigs
+        System--&gt;&gt;-User: Render Charts Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Chart: list()
+        Chart--&gt;&gt;-System: ChartConfigs
+        System--&gt;&gt;-User: Render Charts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Chart sequence.</small></p>
+</div>
+
+<h3 id="delete-chart">Delete Chart</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Chart
+
+    User-&gt;&gt;+System: Request Charts Page
+    System-&gt;&gt;+Chart: list()
+    Chart--&gt;&gt;-System: ChartConfigs
+    System--&gt;&gt;-User: Render Charts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Delete ChartConfig[id=1]
+    System-&gt;&gt;+Chart: view(id=1)
+    Chart--&gt;&gt;-System: ChartConfig[id=1]
+    System--&gt;&gt;-User: Render Chart Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Chart: delete(id=1)
+        Chart--&gt;&gt;-System: success
+        System-&gt;&gt;+Chart: list()
+        Chart--&gt;&gt;-System: ChartConfigs
+        System--&gt;&gt;-User: Render Charts Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Chart: list()
+        Chart--&gt;&gt;-System: ChartConfigs
+        System--&gt;&gt;-User: Render Charts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Chart sequence.</small></p>
+</div>
+
+<h2 id="manage-recurring-tasks">Manage Recurring Tasks</h2>
+
+<h3 id="create-recurring-task">Create Recurring Task</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Page
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Recurring Task
+    System--&gt;&gt;-User: Render Recurring Task Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+RecurringTask: createTask()
+        RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Page
+        Note right of System: Follow the Create Recurring Task Step sequence
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+RecurringTask: listTasks()
+        RecurringTask--&gt;&gt;-System: RecurringTasks
+        System--&gt;&gt;-User: Render RecurringTasks Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Recurring Task sequence.</small></p>
+</div>
+
+<h3 id="create-recurring-task-step">Create Recurring Task Step</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Task Steps Section
+    System-&gt;&gt;+RecurringTask: listSteps(taskId)
+    RecurringTask--&gt;&gt;-System: RecurringTaskSteps
+    System--&gt;&gt;-User: Render Recurring Task Steps Section
+    Note right of User: Rendered as a section within Recurring Task Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Add Recurring Task Step
+    System--&gt;&gt;-User: Render Recurring Task Step Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+RecurringTask: createStep()
+        RecurringTask--&gt;&gt;-System: RecurringTaskStep[id=1]
+        System-&gt;&gt;+RecurringTask: listSteps(taskId)
+        RecurringTask--&gt;&gt;-System: RecurringTaskSteps
+        System--&gt;&gt;-User: Render Recurring Task Steps Section
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+RecurringTask: listSteps()
+        RecurringTask--&gt;&gt;-System: RecurringTaskSteps
+        System--&gt;&gt;-User: Render Recurring Task Steps Section
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Recurring Task Step sequence.</small></p>
+</div>
+
+<h3 id="disable-recurring-task">Disable Recurring Task</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Section
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Disable RecurringTask[id=1]
+    System-&gt;&gt;+RecurringTask: viewTask(id=1)
+    RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+    System--&gt;&gt;-User: Render Recurring Task Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+RecurringTask: disableTask(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+RecurringTask: listTasks()
+        RecurringTask--&gt;&gt;-System: RecurringTasks
+        System--&gt;&gt;-User: Render Recurring Tasks Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Disable Recurring Task sequence.</small></p>
+</div>
+
+<h3 id="edit-recurring-task">Edit Recurring Task</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Section
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit RecurringTask[id=1]
+    System-&gt;&gt;+RecurringTask: viewTask(id=1)
+    RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+    System--&gt;&gt;-User: Render Recurring Task Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+RecurringTask: editTask(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+RecurringTask: listTasks()
+        RecurringTask--&gt;&gt;-System: RecurringTasks
+        System--&gt;&gt;-User: Render Recurring Tasks Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Recurring Task sequence.</small></p>
+</div>
+
+<h3 id="end-recurring-task">End Recurring Task</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Section
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: End RecurringTask[id=1]
+    System-&gt;&gt;+RecurringTask: viewTask(id=1)
+    RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+    System--&gt;&gt;-User: Render Recurring Task Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+RecurringTask: endTask(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+RecurringTask: listTasks()
+        RecurringTask--&gt;&gt;-System: RecurringTasks
+        System--&gt;&gt;-User: Render Recurring Tasks Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>End Recurring Task sequence.</small></p>
+</div>
+
+<h3 id="run-recurring-task">Run Recurring Task</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Section
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Run RecurringTask[id=1]
+    System-&gt;&gt;+RecurringTask: viewTask(id=1)
+    RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+    System--&gt;&gt;-User: Render Recurring Task Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+RecurringTask: runTask(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTaskRun[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Run Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+RecurringTask: listTasks()
+        RecurringTask--&gt;&gt;-System: RecurringTasks
+        System--&gt;&gt;-User: Render Recurring Tasks Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Run Recurring Task sequence.</small></p>
+</div>
+
+<h3 id="delete-recurring-task">Delete Recurring Task</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Page
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    alt task in used
+        User-&gt;&gt;+System: Delete RecurringTask[id=1]
+        System-&gt;&gt;+RecurringTask: taskIsUsed(id=1)
+        RecurringTask--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else task not in used
+        User-&gt;&gt;+System: Delete RecurringTask[id=1]
+        System-&gt;&gt;+RecurringTask: taskIsUsed(id=1)
+        RecurringTask--&gt;&gt;-System: false
+        System-&gt;&gt;+RecurringTask: viewTask(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+RecurringTask: deleteTask(id=1)
+
+            opt steps present
+                RecurringTask-&gt;&gt;RecurringTask: listSteps(taskId=1)
+                RecurringTask--&gt;&gt;RecurringTask: RecurringTaskSteps
+
+                loop each step
+                  RecurringTask-&gt;&gt;RecurringTask: deleteStep(stepId=1)
+                  RecurringTask--&gt;&gt;RecurringTask: success
+                end
+            end
+
+            RecurringTask--&gt;&gt;-System: success
+            System-&gt;&gt;+RecurringTask: listTasks()
+            RecurringTask--&gt;&gt;-System: RecurringTasks
+            System--&gt;&gt;-User: Render Recurring Tasks Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+RecurringTask: listTasks()
+            RecurringTask--&gt;&gt;-System: RecurringTasks
+            System--&gt;&gt;-User: Render Recurring Tasks Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Recurring Task sequence.</small></p>
+</div>
+
+<h3 id="delete-recurring-task-step">Delete Recurring Task Step</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant RecurringTask
+
+    User-&gt;&gt;+System: Request Recurring Tasks Page
+    System-&gt;&gt;+RecurringTask: listTasks()
+    RecurringTask--&gt;&gt;-System: RecurringTasks
+    System--&gt;&gt;-User: Render Recurring Tasks Page
+    Note right of User: Wait for user action
+
+    alt task in use
+        User-&gt;&gt;+System: Delete RecurringTaskSteps[id=1]
+        System-&gt;&gt;+RecurringTask: taskIsUsed(id=1)
+        RecurringTask--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else task not in use
+        User-&gt;&gt;+System: Delete RecurringTaskSteps[id=1]
+        System-&gt;&gt;+RecurringTask: taskIsUsed(id=1)
+        RecurringTask--&gt;&gt;-System: false
+
+        System-&gt;&gt;+RecurringTask: viewRecurringTask(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTask[id=1]
+        System-&gt;&gt;+RecurringTask: listSteps(taskId=1)
+        RecurringTask--&gt;&gt;-System: RecurringTaskSteps
+        System--&gt;&gt;-User: Render Recurring Task Page with Recurring Task Steps Section
+        Note right of User: Wait for user action
+
+        User-&gt;&gt;+System: Delete RecurringTaskStep[id=1]
+        System-&gt;&gt;+RecurringTask: viewRecurringTaskStep(id=1)
+        RecurringTask--&gt;&gt;-System: RecurringTaskStep[id=1]
+        System--&gt;&gt;-User: Render Recurring Task Step Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+RecurringTask: deleteStep(id=1)
+            RecurringTask--&gt;&gt;-System: success
+            System-&gt;&gt;+RecurringTask: listSteps(taskId=1)
+            RecurringTask--&gt;&gt;-System: RecurringTaskSteps
+            System--&gt;&gt;-User: Render Recurring Task Steps Section
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+RecurringTask: listSteps(taskId=1)
+            RecurringTask--&gt;&gt;-System: RecurringTaskSteps
+            System--&gt;&gt;-User: Render Recurring Task Steps Section
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Recurring Task Step sequence.</small></p>
+</div>
+
+<h2 id="manage-system-configs">Manage System Configs</h2>
+
+<h3 id="edit-system-config">Edit System Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant SystemConfig
+
+    User-&gt;&gt;+System: Request System Configs Page
+    System-&gt;&gt;+SystemConfig: list()
+    SystemConfig--&gt;&gt;-System: SystemConfigs
+    System--&gt;&gt;-User: Render System Configs Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit System Config
+    System-&gt;&gt;+SystemConfig: viewLatest()
+    SystemConfig--&gt;&gt;-System: SystemConfig[id=n]
+    System--&gt;&gt;-User: Render System Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+SystemConfig: create()
+        SystemConfig-&gt;&gt;SystemConfig: deactivate(id=n, effectiveEnd=now())
+        SystemConfig--&gt;&gt;SystemConfig: SystemConfig[id=n]
+        SystemConfig-&gt;&gt;SystemConfig: view(id=n+1)
+        SystemConfig--&gt;&gt;-System: SystemConfig[id=n+1]
+        System--&gt;&gt;-User: Render System Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+SystemConfig: list()
+        SystemConfig--&gt;&gt;-System: SystemConfigs
+        System--&gt;&gt;-User: Render System Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit System Config sequence.</small></p>
+</div>
+
+<h2 id="manage-users">Manage Users</h2>
+
+<h3 id="create-user">Create User</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant UserProfile
+
+    User-&gt;&gt;+System: Launch App
+    System--&gt;&gt;-User: Render Login Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New User
+    System--&gt;&gt;-User: Render User Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input Credentials and Confirm
+        System-&gt;&gt;+UserProfile: create(credentials)
+        UserProfile--&gt;&gt;-System: User[id=1]
+        System-&gt;&gt;+User: Render App
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System--&gt;&gt;-User: Render Login Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create User sequence.</small></p>
+</div>
+
+<h3 id="login-user">Login User</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant UserProfile
+
+    User-&gt;&gt;+System: Launch App
+    System--&gt;&gt;-User: Render Login Page
+    Note right of User: Wait for user action
+
+    alt confirm
+        alt valid credentials
+            User-&gt;&gt;+System: Input Credentials and Confirm
+            System-&gt;&gt;+UserProfile: authenticate(credentials)
+            UserProfile--&gt;&gt;-System: User[id=1]
+            System-&gt;&gt;+User: Render App
+        else invalid credentials
+            User-&gt;&gt;+System: Input Credentials and Confirm
+            System-&gt;&gt;+UserProfile: authenticate(credentials)
+            UserProfile--&gt;&gt;-System: null
+            System-&gt;&gt;+User: Abort and Display Error
+        end
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System--&gt;&gt;-User: Render Login Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Login User sequence.</small></p>
+</div>
+
+<h3 id="edit-profile">Edit Profile</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant UserProfile
+
+    User-&gt;&gt;+System: Request Profile Page
+    System-&gt;&gt;+UserProfile: view(id=1)
+    UserProfile--&gt;&gt;-System: User[id=1]
+    System--&gt;&gt;-User: Render Profile Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Profile[id=1]
+    System--&gt;&gt;-User: Render Profile Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+UserProfile: edit(id=1)
+        UserProfile--&gt;&gt;-System: User[id=1]
+        System-&gt;&gt;+User: Render Profile Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System--&gt;&gt;-User: Render Profile Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Profile sequence.</small></p>
+</div>
+
+<h2 class="no_toc">That’s A Wrap</h2>
+
+<p>Finally, we have created the sequence diagrams corresponding to the user journeys of the app. The purpose of this
+exercise is to understand the interactions between various system components, so that we can better understand what
+functions are required for each component.</p>
+
+<p>In the process of writing the sequence diagrams, I also discovered a few missing user journeys and made a few
+amendments to the journeys to streamline the processes. I also refined the system components and added a few functions
+and remove some others. Again, this is not uncommon, as we might not have known every detail at the outset.</p>
+
+<p>With the system components and sequence diagrams ready, let’s move on to designing the system architecture!</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/lFtttcsx5Vk" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> A person drawing a diagram on a piece of paper by Kelly Sikkema
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

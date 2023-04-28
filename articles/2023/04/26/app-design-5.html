@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 5)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 5)</h1>
+
+    <p>This is Part 5 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 26, 2023 | 
+
+<span>28 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_5/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#tag-based-time-tracking">Tag-based Time Tracking</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#start-work-log">Start Work Log</a></li>
+<li class="toc-entry toc-h3"><a href="#end-work-log">End Work Log</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-work-log">Edit Work Log</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-work-log">Delete Work Log</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-tags">Manage Tags</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-tag">Create Tag</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-tag">Edit Tag</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-tag">Delete Tag</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-contacts">Manage Contacts</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-contact">Create Contact</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-contact">Edit Contact</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-contact">Delete Contact</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-currencies">Manage Currencies</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-currency">Create Currency</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-currency">Edit Currency</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-currency">Delete Currency</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-billing-and-invoicing">Manage Billing and Invoicing</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#configure-billing-and-invoicing">Configure Billing and Invoicing</a></li>
+<li class="toc-entry toc-h3"><a href="#create-invoice-config">Create Invoice Config</a></li>
+<li class="toc-entry toc-h3"><a href="#create-receipt-config">Create Receipt Config</a></li>
+<li class="toc-entry toc-h3"><a href="#create-billing-config">Create Billing Config</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-invoice-config">Edit Invoice Config</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-receipt-config">Edit Receipt Config</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-billing-config">Edit Billing Config</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-invoice-config">Delete Invoice Config</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-receipt-config">Delete Receipt Config</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-billing-config">Delete Billing Config</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-templates">Manage Templates</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-template">Create Template</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-template">Edit Template</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-template">Delete Template</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-sequences">Manage Sequences</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-sequence">Create Sequence</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-sequence">Delete Sequence</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-invoices">Manage Invoices</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#generate-invoice">Generate Invoice</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-invoice">Edit Invoice</a></li>
+<li class="toc-entry toc-h3"><a href="#void-invoice">Void Invoice</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#manage-transactions">Manage Transactions</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#create-transaction">Create Transaction</a></li>
+<li class="toc-entry toc-h3"><a href="#edit-transaction">Edit Transaction</a></li>
+<li class="toc-entry toc-h3"><a href="#reverse-transaction">Reverse Transaction</a></li>
+<li class="toc-entry toc-h3"><a href="#delete-transaction">Delete Transaction</a></li>
+</ul>
+</li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">Sequence Diagram Design</h2>
+
+<p>Previously, we have designed the user journey, which sees things from the perspective of the end user. Now, we will
+approach from the other perspective, and design the workflow from the system’s point of view. We will use Sequence
+Diagrams for this purpose.</p>
+
+<p>We will try to follow closely the order of the user journey from the previous exercises, so that it’s easier to compare
+and see how a user journey translates into system processes. Remember that we’ve also identified the system components
+of this app, so we will use the component name and functions in our sequence diagrams here.</p>
+
+<h2 id="tag-based-time-tracking">Tag-based Time Tracking</h2>
+
+<h3 id="start-work-log">Start Work Log</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant WorkLog
+    participant Tag
+
+    User-&gt;&gt;+System: Request Work Logs Page
+    System-&gt;&gt;+WorkLog: list()
+    WorkLog--&gt;&gt;-System: WorkLogs
+    System--&gt;&gt;-User: Render Work Logs Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Start Work
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Work Log Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+WorkLog: create()
+        WorkLog--&gt;&gt;-System: WorkLog[id=1]
+        System--&gt;&gt;-User: Render Work Log Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+WorkLog: list()
+        WorkLog--&gt;&gt;-System: WorkLogs
+        System--&gt;&gt;-User: Render Work Logs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Start Work Log sequence.</small></p>
+</div>
+
+<h3 id="end-work-log">End Work Log</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant WorkLog
+    participant Tag
+
+    User-&gt;&gt;+System: Request Work Logs Page
+    System-&gt;&gt;+WorkLog: list()
+    WorkLog--&gt;&gt;-System: WorkLogs
+    System--&gt;&gt;-User: Render Work Logs Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: End WorkLog[id=1]
+    System-&gt;&gt;+WorkLog: view(id=1)
+    WorkLog--&gt;&gt;-System: WorkLog[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Work Log Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+WorkLog: edit(id=1)
+        WorkLog--&gt;&gt;-System: WorkLog[id=1]
+        System--&gt;&gt;-User: Render Work Log Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+WorkLog: list()
+        WorkLog--&gt;&gt;-System: WorkLogs
+        System--&gt;&gt;-User: Render Work Logs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>End Work Log sequence.</small></p>
+</div>
+
+<h3 id="edit-work-log">Edit Work Log</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant WorkLog
+    participant Tag
+
+    User-&gt;&gt;+System: Request Work Logs Page
+    System-&gt;&gt;+WorkLog: list()
+    WorkLog--&gt;&gt;-System: WorkLogs
+    System--&gt;&gt;-User: Render Work Logs Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit WorkLog[id=1]
+    System-&gt;&gt;+WorkLog: view(id=1)
+    WorkLog--&gt;&gt;-System: WorkLog[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Work Log Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+WorkLog: edit(id=1)
+        WorkLog--&gt;&gt;-System: WorkLog[id=1]
+        System--&gt;&gt;-User: Render Work Log Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+WorkLog: list()
+        WorkLog--&gt;&gt;-System: WorkLogs
+        System--&gt;&gt;-User: Render Work Logs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Work Log sequence.</small></p>
+</div>
+
+<h3 id="delete-work-log">Delete Work Log</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant WorkLog
+
+    User-&gt;&gt;+System: Request Work Logs Page
+    System-&gt;&gt;+WorkLog: list()
+    WorkLog--&gt;&gt;-System: WorkLogs
+    System--&gt;&gt;-User: Render Work Logs Page
+    Note right of User: Wait for user action
+
+    alt work log in used
+        User-&gt;&gt;+System: Delete WorkLog[id=1]
+        System-&gt;&gt;+WorkLog: isUsed(id=1)
+        WorkLog--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else work log not in used
+        User-&gt;&gt;+System: Delete WorkLog[id=1]
+        System-&gt;&gt;+WorkLog: isUsed(id=1)
+        WorkLog--&gt;&gt;-System: false
+        System-&gt;&gt;+WorkLog: view(id=1)
+        WorkLog--&gt;&gt;-System: WorkLog[id=1]
+        System--&gt;&gt;-User: Render Work Log Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+WorkLog: delete(id=1)
+            WorkLog--&gt;&gt;-System: success
+            System-&gt;&gt;+WorkLog: list()
+            WorkLog--&gt;&gt;-System: WorkLogs
+            System--&gt;&gt;-User: Render Work Logs Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+WorkLog: list()
+            WorkLog--&gt;&gt;-System: WorkLogs
+            System--&gt;&gt;-User: Render Work Logs Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Work Log sequence.</small></p>
+</div>
+
+<h2 id="manage-tags">Manage Tags</h2>
+
+<h3 id="create-tag">Create Tag</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Tag
+
+    User-&gt;&gt;+System: Request Tags Page
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Tags Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Tag
+    System--&gt;&gt;-User: Render Tag Form
+    Note right of User: Wait for user action
+
+    alt confirm create
+        alt tag does not exist
+            User-&gt;&gt;+System: Input and Confirm
+            System-&gt;&gt;+Tag: create()
+            Tag--&gt;&gt;-System: Tag[id=1]
+            System--&gt;&gt;-User: Render Tag Page
+        else tag already exists
+            User-&gt;&gt;+System: Input and Confirm
+            System-&gt;&gt;+Tag: create()
+            Tag--&gt;&gt;-System: error
+            System--&gt;&gt;-User: Display Error
+        end
+    else cancel create
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Tag: list()
+        Tag--&gt;&gt;-System: Tags
+        System--&gt;&gt;-User: Render Tags Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Tag sequence.</small></p>
+</div>
+
+<h3 id="edit-tag">Edit Tag</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Tag
+
+    User-&gt;&gt;+System: Request Tags Page
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Tags Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Tag[id=1]
+    System-&gt;&gt;+Tag: view(id=1)
+    Tag--&gt;&gt;-System: Tag[id=1]
+    System--&gt;&gt;-User: Render Tag Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Tag: edit(id=1)
+        Tag--&gt;&gt;-System: Tag[id=1]
+        System--&gt;&gt;-User: Render Tag Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Tag: list()
+        Tag--&gt;&gt;-System: Tags
+        System--&gt;&gt;-User: Render Tags Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Tag sequence.</small></p>
+</div>
+
+<h3 id="delete-tag">Delete Tag</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Tag
+
+    User-&gt;&gt;+System: Request Tags Page
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Tags Page
+    Note right of User: Wait for user action
+
+    alt tag in used
+        User-&gt;&gt;+System: Delete Tag[id=1]
+        System-&gt;&gt;+Tag: isUsed(id=1)
+        Tag--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else tag not in used
+        User-&gt;&gt;+System: Delete Tag[id=1]
+        System-&gt;&gt;+Tag: isUsed(id=1)
+        Tag--&gt;&gt;-System: false
+        System-&gt;&gt;+Tag: view(id=1)
+        Tag--&gt;&gt;-System: Tag[id=1]
+        System--&gt;&gt;-User: Render Tag Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Tag: delete(id=1)
+            Tag--&gt;&gt;-System: success
+            System-&gt;&gt;+Tag: list()
+            Tag--&gt;&gt;-System: Tags
+            System--&gt;&gt;-User: Render Tags Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Tag: list()
+            Tag--&gt;&gt;-System: Tags
+            System--&gt;&gt;-User: Render Tags Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Tag sequence.</small></p>
+</div>
+
+<h2 id="manage-contacts">Manage Contacts</h2>
+
+<h3 id="create-contact">Create Contact</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Contact
+
+    User-&gt;&gt;+System: Request Contacts Page
+    System-&gt;&gt;+Contact: list()
+    Contact--&gt;&gt;-System: Contacts
+    System--&gt;&gt;-User: Render Contacts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Contact
+    System--&gt;&gt;-User: Render Contact Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Contact: create()
+        Contact--&gt;&gt;-System: Contact[id=1]
+        System--&gt;&gt;-User: Render Contact Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Contact: list()
+        Contact--&gt;&gt;-System: Contacts
+        System--&gt;&gt;-User: Render Contacts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Contact sequence.</small></p>
+</div>
+
+<h3 id="edit-contact">Edit Contact</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Contact
+
+    User-&gt;&gt;+System: Request Contacts Page
+    System-&gt;&gt;+Contact: list()
+    Contact--&gt;&gt;-System: Contacts
+    System--&gt;&gt;-User: Render Contacts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Contact[id=1]
+    System-&gt;&gt;+Contact: view(id=1)
+    Contact--&gt;&gt;-System: Contact[id=1]
+    System--&gt;&gt;-User: Render Contact Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Contact: edit(id=1)
+        Contact--&gt;&gt;-System: Contact[id=1]
+        System--&gt;&gt;-User: Render Contact Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Contact: list()
+        Contact--&gt;&gt;-System: Contacts
+        System--&gt;&gt;-User: Render Contacts Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Contact sequence.</small></p>
+</div>
+
+<h3 id="delete-contact">Delete Contact</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Contact
+
+    User-&gt;&gt;+System: Request Contacts Page
+    System-&gt;&gt;+Contact: list()
+    Contact--&gt;&gt;-System: Contacts
+    System--&gt;&gt;-User: Render Contacts Page
+    Note right of User: Wait for user action
+
+    alt contact in used
+        User-&gt;&gt;+System: Delete Contact[id=1]
+        System-&gt;&gt;+Contact: isUsed(id=1)
+        Contact--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else contact not in used
+        User-&gt;&gt;+System: Delete Contact[id=1]
+        System-&gt;&gt;+Contact: isUsed(id=1)
+        Contact--&gt;&gt;-System: false
+        System-&gt;&gt;+Contact: view(id=1)
+        Contact--&gt;&gt;-System: Contact[id=1]
+        System--&gt;&gt;-User: Render Contact Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Contact: delete(id=1)
+            Contact--&gt;&gt;-System: success
+            System-&gt;&gt;+Contact: list()
+            Contact--&gt;&gt;-System: Contacts
+            System--&gt;&gt;-User: Render Contacts Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Contact: list()
+            Contact--&gt;&gt;-System: Contacts
+            System--&gt;&gt;-User: Render Contacts Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Contact sequence.</small></p>
+</div>
+
+<h2 id="manage-currencies">Manage Currencies</h2>
+
+<h3 id="create-currency">Create Currency</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Currency
+
+    User-&gt;&gt;+System: Request Currencies Page
+    System-&gt;&gt;+Currency: list()
+    Currency--&gt;&gt;-System: Currencies
+    System--&gt;&gt;-User: Render Currencies Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Currency
+    System--&gt;&gt;-User: Render Currency Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Currency: create()
+        Currency--&gt;&gt;-System: Currency[id=1]
+        System--&gt;&gt;-User: Render Currency Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Currency: list()
+        Currency--&gt;&gt;-System: Currencies
+        System--&gt;&gt;-User: Render Currencies Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Currency sequence.</small></p>
+</div>
+
+<h3 id="edit-currency">Edit Currency</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Currency
+
+    User-&gt;&gt;+System: Request Currencies Page
+    System-&gt;&gt;+Currency: list()
+    Currency--&gt;&gt;-System: Currencies
+    System--&gt;&gt;-User: Render Currencies Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Currency[id=1]
+    System-&gt;&gt;+Currency: view(id=1)
+    Currency--&gt;&gt;-System: Currency[id=1]
+    System--&gt;&gt;-User: Render Currency Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Currency: edit(id=1)
+        Currency--&gt;&gt;-System: Currency[id=1]
+        System--&gt;&gt;-User: Render Currency Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Currency: list()
+        Currency--&gt;&gt;-System: Currencies
+        System--&gt;&gt;-User: Render Currencies Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Currency sequence.</small></p>
+</div>
+
+<h3 id="delete-currency">Delete Currency</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Currency
+
+    User-&gt;&gt;+System: Request Currencies Page
+    System-&gt;&gt;+Currency: list()
+    Currency--&gt;&gt;-System: Currencies
+    System--&gt;&gt;-User: Render Currencies Page
+    Note right of User: Wait for user action
+
+    alt currency in used
+        User-&gt;&gt;+System: Delete Currency[id=1]
+        System-&gt;&gt;+Currency: isUsed(id=1)
+        Currency--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else currency not in used
+        User-&gt;&gt;+System: Delete Currency[id=1]
+        System-&gt;&gt;+Currency: isUsed(id=1)
+        Currency--&gt;&gt;-System: false
+        System-&gt;&gt;+Currency: view(id=1)
+        Currency--&gt;&gt;-System: Currency[id=1]
+        System--&gt;&gt;-User: Render Currency Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Currency: delete(id=1)
+            Currency--&gt;&gt;-System: success
+            System-&gt;&gt;+Currency: list()
+            Currency--&gt;&gt;-System: Currencies
+            System--&gt;&gt;-User: Render Currencies Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Currency: list()
+            Currency--&gt;&gt;-System: Currencies
+            System--&gt;&gt;-User: Render Currencies Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Currency sequence.</small></p>
+</div>
+
+<h2 id="manage-billing-and-invoicing">Manage Billing and Invoicing</h2>
+
+<h3 id="configure-billing-and-invoicing">Configure Billing and Invoicing</h3>
+
+<p>Although in the user journey we have put configuring <strong>Invoice</strong>, <strong>Receipt</strong> and
+<strong>Billing</strong> in the same journey, this is merely a convenience in user experience. Technically, the user is
+configuring each model with independent UI and Confirm action.</p>
+
+<p>As such, we will also design the sequence diagram independently for each action.</p>
+
+<p>To avoid repetition, we will create a shared sequence diagram that will be applicable for all the actions in configuring
+<strong>Invoice</strong>, <strong>Receipt</strong> and <strong>Billing</strong>, and put a note in each sequence diagram
+to link to the shared diagram.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Contact
+    participant Invoicing
+    participant Receipt
+    participant Billing
+
+    User-&gt;&gt;+System: Request Contacts Page
+    System-&gt;&gt;+Contact: list()
+    Contact--&gt;&gt;-System: Contacts
+    System--&gt;&gt;-User: Render Contacts Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Configure Invoice
+    System-&gt;&gt;+Invoicing: listConfigs()
+    Invoicing--&gt;&gt;-System: InvoiceConfigs
+    System-&gt;&gt;+Receipt: listConfigs()
+    Receipt--&gt;&gt;-System: ReceiptConfigs
+    System-&gt;&gt;+Billing: listConfigs()
+    Billing--&gt;&gt;-System: BillingConfigs
+
+    System--&gt;&gt;-User: Render Configs Page with Invoice, Receipt, Billing Configs Sections
+    Note right of User: Wait for user action
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Shared sequence for Configure Billing and Invoicing.</small></p>
+</div>
+
+<h3 id="create-invoice-config">Create Invoice Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Invoicing
+    participant Template
+    participant Sequence
+    participant Tag
+
+    Note right of User: Initiate Shared Sequence
+    User-&gt;&gt;+System: New Invoice Config
+
+    System-&gt;&gt;+Template: list(types=[Invoice])
+    Template--&gt;&gt;-System: InvoiceTemplates
+    System-&gt;&gt;+Sequence: list()
+    Sequence--&gt;&gt;-System: Sequences
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+
+    System--&gt;&gt;-User: Render Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Invoicing: createConfig()
+        Invoicing--&gt;&gt;-System: InvoiceConfig[id=1]
+        System--&gt;&gt;-User: Render Invoice Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        Note right of System: Retrieve Configs as per Shared Sequence
+        System--&gt;&gt;-User: Render Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Invoice Config sequence.</small></p>
+</div>
+
+<h3 id="create-receipt-config">Create Receipt Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Template
+    participant Sequence
+
+    Note right of User: Initiate Shared Sequence
+    User-&gt;&gt;+System: New Receipt Config
+
+    System-&gt;&gt;+Receipt: list()
+    Receipt--&gt;&gt;-System: ReceiptTemplates
+    System-&gt;&gt;+Sequence: list()
+    Sequence--&gt;&gt;-System: Sequences
+
+    System--&gt;&gt;-User: Render Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Receipt: createConfig()
+        Receipt--&gt;&gt;-System: ReceiptConfig[id=1]
+        System--&gt;&gt;-User: Render Receipt Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        Note right of System: Retrieve Configs as per Shared Sequence
+        System--&gt;&gt;-User: Render Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Receipt Config sequence.</small></p>
+</div>
+
+<h3 id="create-billing-config">Create Billing Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Billing
+    participant Tag
+
+    Note right of User: Initiate Shared Sequence
+    User-&gt;&gt;+System: Add Billing Config
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Billing: createConfig()
+        Billing--&gt;&gt;-System: BillingConfig[id=1]
+        System--&gt;&gt;-User: Render Billing Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        Note right of System: Retrieve Configs as per Shared Sequence
+        System--&gt;&gt;-User: Render Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Billing Config sequence.</small></p>
+</div>
+
+<h3 id="edit-invoice-config">Edit Invoice Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Invoicing
+    participant Template
+    participant Sequence
+    participant Tag
+
+    Note right of User: Initiate Shared Sequence
+    User-&gt;&gt;+System: Edit InvoiceConfig[id=1]
+    System-&gt;&gt;+Invoicing: viewConfig(id=1)
+    Invoicing--&gt;&gt;-System: InvoiceConfig[id=1]
+
+    System-&gt;&gt;+Template: list()
+    Template--&gt;&gt;-System: InvoiceTemplates
+    System-&gt;&gt;+Sequence: list()
+    Sequence--&gt;&gt;-System: Sequences
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+
+    System--&gt;&gt;-User: Render Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Invoicing: editConfig(id=1)
+        Invoicing--&gt;&gt;-System: InvoiceConfig[id=1]
+        System--&gt;&gt;-User: Render Invoice Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        Note right of System: Retrieve Configs as per Shared Sequence
+        System--&gt;&gt;-User: Render Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Invoice Config sequence.</small></p>
+</div>
+
+<h3 id="edit-receipt-config">Edit Receipt Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+    participant Template
+    participant Sequence
+
+    Note right of User: Initiate Shared Sequence
+    User-&gt;&gt;+System: Edit ReceiptConfig[id=1]
+    System-&gt;&gt;+Receipt: viewConfig(id=1)
+    Receipt--&gt;&gt;-System: ReceiptConfig[id=1]
+
+    System-&gt;&gt;+Template: list()
+    Template--&gt;&gt;-System: ReceiptTemplates
+    System-&gt;&gt;+Sequence: list()
+    Sequence--&gt;&gt;-System: Sequences
+
+    System--&gt;&gt;-User: Render Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Receipt: editConfig(id=1)
+        Receipt--&gt;&gt;-System: ReceiptConfig[id=1]
+        System--&gt;&gt;-User: Render Receipt Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        Note right of System: Retrieve Configs as per Shared Sequence
+        System--&gt;&gt;-User: Render Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Receipt Config sequence.</small></p>
+</div>
+
+<h3 id="edit-billing-config">Edit Billing Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Billing
+    participant Tag
+
+    Note right of User: Initiate Shared Sequence
+    User-&gt;&gt;+System: Edit Billing Config
+    System-&gt;&gt;+Billing: viewConfig(id=1)
+    Billing--&gt;&gt;-System: BillingConfig[id=1]
+
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Config Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Billing: editConfig(id=1)
+        Billing--&gt;&gt;-System: BillingConfig[id=1]
+        System--&gt;&gt;-User: Render Billing Config Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        Note right of System: Retrieve Configs as per Shared Sequence
+        System--&gt;&gt;-User: Render Configs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Billing Config sequence.</small></p>
+</div>
+
+<h3 id="delete-invoice-config">Delete Invoice Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Invoicing
+
+    Note right of User: Initiate Shared Sequence
+
+    alt config in used
+        User-&gt;&gt;+System: Delete InvoiceConfig[id=1]
+        System-&gt;&gt;+Invoicing: configIsUsed(id=1)
+        Invoicing--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else config not in used
+        User-&gt;&gt;+System: Delete InvoiceConfig[id=1]
+        System-&gt;&gt;+Invoicing: configIsUsed(id=1)
+        Invoicing--&gt;&gt;-System: false
+        System--&gt;&gt;-User: Render Config Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Invoicing: deleteConfig(id=1)
+            Invoicing--&gt;&gt;-System: success
+            Note right of System: Retrieve Configs as per Shared Sequence
+            System--&gt;&gt;-User: Render Configs Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            Note right of System: Retrieve Configs as per Shared Sequence
+            System--&gt;&gt;-User: Render Configs Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Invoice Config sequence.</small></p>
+</div>
+
+<h3 id="delete-receipt-config">Delete Receipt Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Receipt
+
+    Note right of User: Initiate Shared Sequence
+
+    alt config in used
+        User-&gt;&gt;+System: Delete ReceiptConfig[id=1]
+        System-&gt;&gt;+Receipt: configIsUsed(id=1)
+        Receipt--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else config not in used
+        User-&gt;&gt;+System: Delete ReceiptConfig[id=1]
+        System-&gt;&gt;+Receipt: configIsUsed(id=1)
+        Receipt--&gt;&gt;-System: false
+        System--&gt;&gt;-User: Render Config Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Receipt: deleteConfig(id=1)
+            Receipt--&gt;&gt;-System: success
+            Note right of System: Retrieve Configs as per Shared Sequence
+            System--&gt;&gt;-User: Render Configs Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            Note right of System: Retrieve Configs as per Shared Sequence
+            System--&gt;&gt;-User: Render Configs Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Receipt Config sequence.</small></p>
+</div>
+
+<h3 id="delete-billing-config">Delete Billing Config</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Billing
+
+    Note right of User: Initiate Shared Sequence
+
+    alt config in used
+        User-&gt;&gt;+System: Delete BillingConfig[id=1]
+        System-&gt;&gt;+Billing: configIsUsed(id=1)
+        Billing--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else config not in used
+        User-&gt;&gt;+System: Delete BillingConfig[id=1]
+        System-&gt;&gt;+Billing: configIsUsed(id=1)
+        Billing--&gt;&gt;-System: false
+        System--&gt;&gt;-User: Render Config Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Billing: deleteConfig(id=1)
+            Billing--&gt;&gt;-System: success
+            Note right of System: Retrieve Configs as per Shared Sequence
+            System--&gt;&gt;-User: Render Configs Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            Note right of System: Retrieve Configs as per Shared Sequence
+            System--&gt;&gt;-User: Render Configs Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Billing Config sequence.</small></p>
+</div>
+
+<h2 id="manage-templates">Manage Templates</h2>
+
+<h3 id="create-template">Create Template</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Template
+
+    User-&gt;&gt;+System: Request Templates Page
+    System-&gt;&gt;+Template: list()
+    Template--&gt;&gt;-System: Templates
+    System--&gt;&gt;-User: Render Templates Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Template
+    System--&gt;&gt;-User: Render Template Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Template: create()
+        Template--&gt;&gt;-System: Template[id=1]
+        System--&gt;&gt;-User: Render Template Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Template: list()
+        Template--&gt;&gt;-System: Templates
+        System--&gt;&gt;-User: Render Templates Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Template sequence.</small></p>
+</div>
+
+<h3 id="edit-template">Edit Template</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Template
+
+    User-&gt;&gt;+System: Request Templates Page
+    System-&gt;&gt;+Template: list()
+    Template--&gt;&gt;-System: Templates
+    System--&gt;&gt;-User: Render Templates Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Template[id=1]
+    System--&gt;&gt;-User: Render Template Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Template: edit(id=1)
+        Template--&gt;&gt;-System: Template[id=1]
+        System--&gt;&gt;-User: Render Template Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Template: list()
+        Template--&gt;&gt;-System: Templates
+        System--&gt;&gt;-User: Render Templates Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Template sequence.</small></p>
+</div>
+
+<h3 id="delete-template">Delete Template</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Template
+
+    User-&gt;&gt;+System: Request Templates Page
+    System-&gt;&gt;+Template: list()
+    Template--&gt;&gt;-System: Templates
+    System--&gt;&gt;-User: Render Templates Page
+    Note right of User: Wait for user action
+
+    alt template in used
+        User-&gt;&gt;+System: Delete Template[id=1]
+        System-&gt;&gt;+Template: isUsed(id=1)
+        Template--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else template not in used
+        User-&gt;&gt;+System: Delete Template[id=1]
+        System-&gt;&gt;+Template: isUsed(id=1)
+        Template--&gt;&gt;-System: false
+        System--&gt;&gt;-User: Render Template Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Template: delete(id=1)
+            Template--&gt;&gt;-System: success
+            System-&gt;&gt;+Template: list()
+            Template--&gt;&gt;-System: Templates
+            System--&gt;&gt;-User: Render Templates Page
+        else cancel delete
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Template: list()
+            Template--&gt;&gt;-System: Templates
+            System--&gt;&gt;-User: Render Templates Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Template sequence.</small></p>
+</div>
+
+<h2 id="manage-sequences">Manage Sequences</h2>
+
+<h3 id="create-sequence">Create Sequence</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Sequence
+
+    User-&gt;&gt;+System: Request Sequences Page
+    System-&gt;&gt;+Sequence: list()
+    Sequence--&gt;&gt;-System: Sequences
+    System--&gt;&gt;-User: Render Sequences Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Sequence
+    System--&gt;&gt;-User: Render Sequence Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+        System-&gt;&gt;+Sequence: create()
+        Sequence--&gt;&gt;-System: Sequence[id=1]
+        System--&gt;&gt;-User: Render Sequence Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Sequence: list()
+        Sequence--&gt;&gt;-System: Sequences
+        System--&gt;&gt;-User: Render Sequences Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Sequence sequence.</small></p>
+</div>
+
+<h3 id="delete-sequence">Delete Sequence</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Sequence
+
+    User-&gt;&gt;+System: Request Sequences Page
+    System-&gt;&gt;+Sequence: list()
+    Sequence--&gt;&gt;-System: Sequences
+    System--&gt;&gt;-User: Render Sequences Page
+    Note right of User: Wait for user action
+
+    alt sequence in used
+        User-&gt;&gt;+System: Delete Sequence[id=1]
+        System-&gt;&gt;+Sequence: isUsed(id=1)
+        Sequence--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else sequence not in used
+        User-&gt;&gt;+System: Delete Sequence[id=1]
+        System-&gt;&gt;+Sequence: isUsed(id=1)
+        Sequence--&gt;&gt;-System: false
+        System--&gt;&gt;-User: Render Sequence Form
+        Note right of User: Wait for user action
+
+        alt confirm delete
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Sequence: delete(id=1)
+            Sequence--&gt;&gt;-System: success
+            System-&gt;&gt;+Sequence: list()
+            Sequence--&gt;&gt;-System: Sequences
+            System--&gt;&gt;-User: Render Sequences Page
+        else cancel
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Sequence: list()
+            Sequence--&gt;&gt;-System: Sequences
+            System--&gt;&gt;-User: Render Sequences Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Sequence sequence.</small></p>
+</div>
+
+<h2 id="manage-invoices">Manage Invoices</h2>
+
+<h3 id="generate-invoice">Generate Invoice</h3>
+
+<p>We have identified 2 different user journeys for generating <strong>Invoices</strong>. One involves the basic generation
+where the <strong>Invoice Lines</strong> are all generated automatically from <strong>Work Logs</strong>, and the other
+is where the user adds additional <strong>Invoice Lines</strong>.</p>
+
+<p>Both actually interact with the system in the same way, except for the difference in the UI, so we will only design
+the common system sequence for both journeys.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant WorkLog
+    participant Invoicing
+    participant Tag
+    participant Document
+
+    User-&gt;&gt;+System: Request Work Logs Page
+    System-&gt;&gt;+WorkLog: list()
+    WorkLog--&gt;&gt;-System: WorkLogs
+    System--&gt;&gt;-User: Render WorkLogs Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Generate Invoice
+    System-&gt;&gt;+Invoicing: listConfigs()
+    Invoicing--&gt;&gt;-System: InvoiceConfigs
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+
+    System--&gt;&gt;-User: Render Invoice Form
+    Note right of User: Wait for user action
+
+    alt confirm preview
+        User-&gt;&gt;+System: Input and Preview
+        System-&gt;&gt;+WorkLog: list(filters)
+        WorkLog--&gt;&gt;-System: WorkLogs
+        System-&gt;&gt;+Invoicing: previewInvoice(options=options, workLogs=workLogs, invoiceLines=lines)
+        Invoicing--&gt;&gt;-System: Invoice[tempId=1]
+        System-&gt;&gt;-User: Render Invoice Preview
+        Note right of User: Wait for user action
+
+        alt confirm generate
+            User-&gt;&gt;+System: Generate
+
+            opt tags present
+                loop each tag
+                  System-&gt;&gt;+Tag: createIfNotExists()
+                  Tag--&gt;&gt;-System: Tag[id=n]
+                end
+            end
+
+            System-&gt;&gt;+Invoicing: generateInvoiceFromPreview(tempId=1)
+            Invoicing-&gt;&gt;+Document: create()
+            Document--&gt;&gt;-Invoicing: Document[id=1]
+            Invoicing--&gt;&gt;-System: Invoice[id=1]
+            System--&gt;&gt;-User: Render Invoice Page
+        else cancel generate
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+WorkLog: list()
+            WorkLog--&gt;&gt;-System: WorkLogs
+            System--&gt;&gt;-User: Render Work Logs Page
+        end
+    else cancel preview
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+WorkLog: list()
+        WorkLog--&gt;&gt;-System: WorkLogs
+        System--&gt;&gt;-User: Render Work Logs Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Generate Invoice sequence.</small></p>
+</div>
+
+<h3 id="edit-invoice">Edit Invoice</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Invoicing
+    participant Tag
+    participant Document
+
+    User-&gt;&gt;+System: Request Invoices Page
+    System-&gt;&gt;+Invoicing: listInvoices()
+    Invoicing--&gt;&gt;-System: Invoices
+    System--&gt;&gt;-User: Render Invoices Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Invoice[id=1]
+    System-&gt;&gt;+Invoicing: viewInvoice(id=1)
+    Invoicing--&gt;&gt;-System: Invoice[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Invoice Form
+    Note right of User: Wait for user action
+
+    alt confirm preview
+        User-&gt;&gt;+System: Input and Preview
+        System-&gt;&gt;+Invoicing: previewInvoice(options=options, workLogs=Invoice[id=1].workLogs, invoiceLines=Invoice[id=1].lines)
+        Invoicing--&gt;&gt;-System: Invoice[tempId=1]
+        System-&gt;&gt;-User: Render Invoice Preview
+        Note right of User: Wait for user action
+
+        alt confirm generate
+            User-&gt;&gt;+System: Generate
+
+            opt tags present
+                loop each tag
+                  System-&gt;&gt;+Tag: createIfNotExists()
+                  Tag--&gt;&gt;-System: Tag[id=n]
+                end
+            end
+
+            System-&gt;&gt;+Invoicing: generateInvoiceFromPreview(tempId=1)
+            Invoicing-&gt;&gt;+Document: create()
+            Document--&gt;&gt;-Invoicing: Document[id=2]
+            Invoicing--&gt;&gt;-System: Invoice[id=1]
+            System--&gt;&gt;-User: Render Invoice Page
+        else cancel generate
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Invoicing: listInvoices()
+            Invoicing--&gt;&gt;-System: Invoices
+            System--&gt;&gt;-User: Render Invoices Page
+        end
+    else cancel preview
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Invoicing: listInvoices()
+        Invoicing--&gt;&gt;-System: Invoices
+        System--&gt;&gt;-User: Render Invoices Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Invoice sequence.</small></p>
+</div>
+
+<h3 id="void-invoice">Void Invoice</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Invoicing
+
+    User-&gt;&gt;+System: Request Invoices Page
+    System-&gt;&gt;+Invoicing: listInvoices()
+    Invoicing--&gt;&gt;-System: Invoices
+    System--&gt;&gt;-User: Render Invoices Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Void Invoice[id=1]
+    System-&gt;&gt;+Invoicing: viewInvoice(id=1)
+    Invoicing--&gt;&gt;-System: Invoice[id=1]
+    System--&gt;&gt;-User: Render Invoice Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Confirm
+        System-&gt;&gt;+Invoicing: voidInvoice(id=1)
+        Invoicing--&gt;&gt;-System: Invoice[id=1]
+        System--&gt;&gt;-User: Render Invoice Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Invoicing: listInvoices()
+        Invoicing--&gt;&gt;-System: Invoices
+        System--&gt;&gt;-User: Render Invoices Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Void Invoice sequence.</small></p>
+</div>
+
+<h2 id="manage-transactions">Manage Transactions</h2>
+
+<h3 id="create-transaction">Create Transaction</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Transaction
+    participant Tag
+
+    User-&gt;&gt;+System: Request Transactions Page
+    System-&gt;&gt;+Transaction: list()
+    Transaction--&gt;&gt;-System: Transactions
+    System--&gt;&gt;-User: Render Transactions Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: New Transaction
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Transaction Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Transaction: create()
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System--&gt;&gt;-User: Render Transaction Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Transaction: list()
+        Transaction--&gt;&gt;-System: Transactions
+        System--&gt;&gt;-User: Render Transactions Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Create Transaction sequence.</small></p>
+</div>
+
+<h3 id="edit-transaction">Edit Transaction</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Transaction
+    participant Tag
+
+    User-&gt;&gt;+System: Request Transactions Page
+    System-&gt;&gt;+Transaction: list()
+    Transaction--&gt;&gt;-System: Transactions
+    System--&gt;&gt;-User: Render Transactions Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Edit Transaction[id=1]
+    System-&gt;&gt;+Transaction: view(id=1)
+    Transaction--&gt;&gt;-System: Transaction[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Transaction Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Transaction: edit(id=1)
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System--&gt;&gt;-User: Render Transaction Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Transaction: list()
+        Transaction--&gt;&gt;-System: Transactions
+        System--&gt;&gt;-User: Render Transactions Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Edit Transaction sequence.</small></p>
+</div>
+
+<h3 id="reverse-transaction">Reverse Transaction</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Transaction
+    participant Tag
+
+    User-&gt;&gt;+System: Request Transactions Page
+    System-&gt;&gt;+Transaction: list()
+    Transaction--&gt;&gt;-System: Transactions
+    System--&gt;&gt;-User: Render Transactions Page
+    Note right of User: Wait for user action
+
+    User-&gt;&gt;+System: Reverse Transaction[id=1]
+    System-&gt;&gt;+Transaction: view(id=1)
+    Transaction--&gt;&gt;-System: Transaction[id=1]
+    System-&gt;&gt;+Tag: list()
+    Tag--&gt;&gt;-System: Tags
+    System--&gt;&gt;-User: Render Transaction Form
+    Note right of User: Wait for user action
+
+    alt confirm
+        User-&gt;&gt;+System: Input and Confirm
+
+        opt tags present
+            loop each tag
+              System-&gt;&gt;+Tag: createIfNotExists()
+              Tag--&gt;&gt;-System: Tag[id=n]
+            end
+        end
+
+        System-&gt;&gt;+Transaction: create(type=Reverse, associated_id=1)
+        Transaction--&gt;&gt;-System: Transaction[id=2]
+        System--&gt;&gt;-User: Render Transaction Page
+    else cancel
+        User-&gt;&gt;+System: Cancel
+        System-&gt;&gt;+Transaction: list()
+        Transaction--&gt;&gt;-System: Transactions
+        System--&gt;&gt;-User: Render Transactions Page
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Reverse Transaction sequence.</small></p>
+</div>
+
+<h3 id="delete-transaction">Delete Transaction</h3>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+sequenceDiagram
+    participant User
+    participant System
+    participant Transaction
+    participant Tag
+
+    User-&gt;&gt;+System: Request Transactions Page
+    System-&gt;&gt;+Transaction: list()
+    Transaction--&gt;&gt;-System: Transactions
+    System--&gt;&gt;-User: Render Transactions Page
+    Note right of User: Wait for user action
+
+    alt transaction in use
+        User-&gt;&gt;+System: Delete Transaction[id=1]
+        System-&gt;&gt;+Transaction: isUsed(id=1)
+        Transaction--&gt;&gt;-System: true
+        System--&gt;&gt;-User: Abort and Display Error
+    else transaction not in use
+        User-&gt;&gt;+System: Delete Transaction[id=1]
+        System-&gt;&gt;+Transaction: isUsed(id=1)
+        Transaction--&gt;&gt;-System: false
+        System-&gt;&gt;+Transaction: view(id=1)
+        Transaction--&gt;&gt;-System: Transaction[id=1]
+        System--&gt;&gt;-User: Render Transaction Form
+        Note right of User: Wait for user action
+
+        alt confirm
+            User-&gt;&gt;+System: Confirm
+            System-&gt;&gt;+Transaction: delete(id=1)
+            Transaction--&gt;&gt;-System: success
+            System-&gt;&gt;+Transaction: list()
+            Transaction--&gt;&gt;-System: Transactions
+            System--&gt;&gt;-User: Render Transactions Page
+        else cancel
+            User-&gt;&gt;+System: Cancel
+            System-&gt;&gt;+Transaction: list()
+            Transaction--&gt;&gt;-System: Transactions
+            System--&gt;&gt;-User: Render Transactions Page
+        end
+    end
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Delete Transaction sequence.</small></p>
+</div>
+
+<h2 class="no_toc">Let’s Take a Break</h2>
+
+<p>We’ve covered quite a lot in this article, let’s take a break for now and we will continue with the remaining sequence
+diagrams in the next one.</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/_XXNjSziZuA" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Sign illustration by Hanna Morris
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

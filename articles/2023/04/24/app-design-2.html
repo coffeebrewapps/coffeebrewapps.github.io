@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 2)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 2)</h1>
+
+    <p>This is Part 2 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 24, 2023 | 
+
+<span>24 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_2/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#transactions">Transactions</a></li>
+<li class="toc-entry toc-h2"><a href="#tags">Tags</a></li>
+<li class="toc-entry toc-h2"><a href="#work-logs">Work Logs</a></li>
+<li class="toc-entry toc-h2"><a href="#invoice-configs-and-invoice-templates">Invoice Configs and Invoice Templates</a></li>
+<li class="toc-entry toc-h2"><a href="#invoices-and-invoice-lines">Invoices and Invoice Lines</a></li>
+<li class="toc-entry toc-h2"><a href="#income-receipt-configs-and-income-receipt-templates">Income Receipt Configs and Income Receipt Templates</a></li>
+<li class="toc-entry toc-h2"><a href="#income-receipts">Income Receipts</a></li>
+<li class="toc-entry toc-h2"><a href="#expense-receipts">Expense Receipts</a></li>
+<li class="toc-entry toc-h2"><a href="#sequences">Sequences</a></li>
+<li class="toc-entry toc-h2"><a href="#contacts-and-billing-configs">Contacts and Billing Configs</a></li>
+<li class="toc-entry toc-h2"><a href="#currencies">Currencies</a></li>
+<li class="toc-entry toc-h2"><a href="#documents">Documents</a></li>
+<li class="toc-entry toc-h2"><a href="#invoice-documents--receipt-documents">Invoice Documents / Receipt Documents</a></li>
+<li class="toc-entry toc-h2"><a href="#recurring-tasks-and-recurring-task-steps">Recurring Tasks and Recurring Task Steps</a></li>
+<li class="toc-entry toc-h2"><a href="#recurring-task-and-step-runs">Recurring Task and Step Runs</a></li>
+<li class="toc-entry toc-h2"><a href="#tax-tables-tax-tiers-and-tax-deductibles">Tax Tables, Tax Tiers and Tax Deductibles</a></li>
+<li class="toc-entry toc-h2"><a href="#alerts">Alerts</a></li>
+<li class="toc-entry toc-h2"><a href="#chart-configs">Chart Configs</a></li>
+<li class="toc-entry toc-h2"><a href="#system-configs">System Configs</a></li>
+<li class="toc-entry toc-h2"><a href="#users">Users</a></li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">Domain Modelling</h2>
+
+<p>Now that we have the requirements of the app, let’s start with defining the domain models.</p>
+
+<p>Domain models are the essence of an app. If the models are defined as fitting as possible, it will make implementing
+the business logic more seamless later. If the models are designed to be as generic as possible, it will make it less
+painful to change the implementation later.</p>
+
+<p>Of course, we cannot possibly predict everything that will happen during the course of implementation, and we need
+to be prepared that some of the initial designs will have to change. Which is why, it will be better if we do not make
+too much assumption about what web framework or datastore mechanism will be used for actual implementation during the
+modelling stage.</p>
+
+<p>Having said that, for the convenience of documenting the domain models, we will use <code class="language-plaintext highlighter-rouge">json</code> data type for key-value or
+array type fields. Not all datastores can support JSON data type natively, and if that is the case, then we will map
+the key-value or array type field to a separate model.</p>
+
+<p>Similarly, for the convenience of documentation, we use ERD which implies the use of a relational database, but we
+should be able to use any type of datastores if we need to.</p>
+
+<p>With that, let’s get into the details of the models that we have identified for this app.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_2/running_track.png" /></p>
+  <p><small>Let’s get going with the design.</small></p>
+</div>
+
+<h2 id="transactions">Transactions</h2>
+
+<p>At the core of the app is all about <strong>Transactions</strong>. There are a few types of transactions:</p>
+
+<ul>
+  <li><strong>Income Transactions</strong>: These are transactions as a result of receiving payments for offering services or products.</li>
+  <li><strong>Expense Transactions</strong>: These are transactions as a result of making payments for another party’s services or products.</li>
+  <li><strong>Income Reversal Transactions</strong>: These are transactions as a result of reversing an income transaction.</li>
+  <li><strong>Expense Reversal Transactions</strong>: These are transactions as a result of reversing an expense transaction.</li>
+</ul>
+
+<p>By default, home currency amount will be automatically calculated based on the exchange rate between the home
+<strong>Currency</strong> and the transaction’s <strong>Currency</strong>. However, the user should also have the
+flexibility to overwrite the amount if there’s a specific amount determined by the service provider.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Transactions {
+        text id PK
+        text type "not null"
+        date transaction_date "not null"
+        text description "not null"
+        numeric amount "not null"
+        numeric home_currency_amount "not null"
+        json tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text currency_id FK "not null"
+        text associated_transaction_id FK
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Transaction models.</small></p>
+</div>
+
+<h2 id="tags">Tags</h2>
+
+<p>One of the critical features of this app is the use of <strong>Tags</strong>. <strong>Tags</strong> can be used to
+filter <strong>Work Logs</strong> to generate <strong>Invoices</strong>, or render charts, or use for tax computation.
+For this reason, we model <strong>Tag</strong> as an explicit entity.</p>
+
+<p>Each <strong>Tag</strong> can have a category and a name. The pair needs to be unique as it will form the composite
+primary key of each record. By default, the system will render the <strong>Tag</strong> with the format
+<code class="language-plaintext highlighter-rouge">category:name</code>. The user can customise the format under <strong>System Config</strong>.</p>
+
+<p>For display distinction, the user can customise the color scheme of each <strong>Tag</strong>. By default, the system
+will render all <strong>Tags</strong> with white text on grey background, like this
+<span style="color: white; background-color: grey; padding: 2px 4px; font-size: 0.8rem;">company:company-abc</span>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Tags {
+        text category "not null, default: ''"
+        text name "not null, composite PK and unique constraint: [category, name]"
+        text description
+        text text_color "default: 'white'"
+        text background_color "default: 'grey'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Tag model.</small></p>
+</div>
+
+<h2 id="work-logs">Work Logs</h2>
+
+<p>Another main feature of the app is the capability to track work done so that the time logs can be used to generate
+<strong>Invoices</strong> to another party.</p>
+
+<p>For invoicing purpose, the user can input a short description. If she wants to log the details of the work done, she
+can do so with the content field.</p>
+
+<p>The user can specify more than one <strong>Tag</strong> associated with the <strong>Work Log</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    WorkLogs {
+        text id PK
+        timestamp start_time "not null"
+        timestamp end_time "not null"
+        text description "not null"
+        text content
+        json tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Work Log model.</small></p>
+</div>
+
+<h2 id="invoice-configs-and-invoice-templates">Invoice Configs and Invoice Templates</h2>
+
+<p>In order to generate <strong>Invoices</strong>, the user can configure the properties of the <strong>Invoice</strong>
+to each individual party.</p>
+
+<p>The tags field tells the system to filter only specific <strong>Work Logs</strong> with those <strong>Tags</strong> to
+be included in the generated <strong>Invoice</strong>.</p>
+
+<p>The custom fields will be propagated to each instance of <strong>Invoices</strong> when it’s generated. This allows
+the user to configure fields that can be used in the <strong>Invoice Template</strong> to display additional
+information that is not directly related to the <strong>Work Logs</strong>.</p>
+
+<p>In order to render the <strong>Invoice</strong>, the user can choose from built-in templates or create custom template
+using some form of markup and styles languages (we do not make any assumption at this point regarding the actual
+languages to use).</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    InvoiceConfigs {
+        text id PK
+        text invoice_cycle_date "not null, default: 1"
+        text invoice_cycle_duration_value "not null, default: 1"
+        text invoice_cycle_duration_unit "not null, default: 'month'"
+        numeric due_date_cycle_value "not null, default: 30"
+        text due_date_cycle_unit "not null, default: 'day'"
+        text payment_terms
+        json tags "not null, default: '[]'"
+        json custom_fields "not null, default: '{}'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text invoice_number_sequence_id FK "not null"
+        text billable_contact_id FK "not null"
+        text invoice_template_id FK "not null"
+    }
+
+    InvoiceTemplates {
+        text id PK
+        text name "not null"
+        text content_markup "not null"
+        text content_styles "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Invoice Config and Invoice Template models.</small></p>
+</div>
+
+<h2 id="invoices-and-invoice-lines">Invoices and Invoice Lines</h2>
+
+<p>Then each instance of the <strong>Invoices</strong> generated will be tracked individually. Each
+<strong>Invoice</strong> can contain one or more lines for the calculation of the total sum.</p>
+
+<p>By default, the <strong>Invoice Lines</strong> are generated from the <strong>Work Logs</strong> using the predefined
+<strong>Billing Configs</strong> for the billing <strong>Contact</strong>. If the user needs to include additional
+costs, then she can create new <strong>Invoice Lines</strong> accordingly, and use the <strong>Invoice Template</strong>
+to customise the display of these custom <strong>Invoice Lines</strong>.</p>
+
+<p>There is also another possible scenario where the <strong>Invoice</strong> doesn’t involve any
+<strong>Work Log</strong>. In this case, the user can simply manually create an <strong>Invoice</strong> and custom
+<strong>Invoice Lines</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Invoices {
+        text id PK
+        text invoice_number "not null"
+        date invoice_date "not null"
+        date due_date "not null"
+        numeric total_amount "not null"
+        json custom_fields "not null, default: '{}'"
+        bool voided "not null, default: false"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text invoice_config_id FK "not null"
+        text currency_id FK "not null"
+    }
+
+    InvoiceLines {
+        text id PK
+        text description "not null"
+        text unit "not null"
+        numeric unit_cost "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text invoice_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Invoice and Invoice Line models.</small></p>
+</div>
+
+<h2 id="income-receipt-configs-and-income-receipt-templates">Income Receipt Configs and Income Receipt Templates</h2>
+
+<p>Alongside the <strong>Invoices</strong>, the user can also configure the properties of the
+<strong>Income Receipt</strong> as a result of payment based on the issued <strong>Invoice</strong>.</p>
+
+<p>The custom fields in <strong>Income Receipt Configs</strong> will be propagated to each instance of
+<strong>Income Receipt</strong> when it’s generated. This allows the user to configure fields that can be used in the
+<strong>Income Receipt Template</strong> to display additional information that is not directly related to the
+associated <strong>Invoice</strong>.</p>
+
+<p>In order to render the <strong>Income Receipt</strong>, the user can choose from built-in templates or create custom
+template using markup and styles languages.</p>
+
+<p>All fields from the associated <strong>Invoice</strong> can be used in the <strong>Income Receipt Template</strong> in
+addition to the <strong>Income Receipt Config</strong> fields.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    IncomeReceiptConfigs {
+        text id PK
+        json custom_fields "not null, default: '{}'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text receipt_number_sequence_id FK "not null"
+        text billable_contact_id FK "not null"
+        text income_receipt_template_id FK "not null"
+    }
+
+    IncomeReceiptTemplates {
+        text id PK
+        text name "not null"
+        text content_markup "not null"
+        text content_styles "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Income Receipt Config and Income Receipt Template models.</small></p>
+</div>
+
+<h2 id="income-receipts">Income Receipts</h2>
+
+<p>Then each instance of the <strong>Income Receipts</strong> generated will be tracked individually. It is possible that
+the <strong>Invoice</strong> is paid in multiple instalments, and there will be more than one
+<strong>Income Receipt</strong> associated with each <strong>Invoice</strong>.</p>
+
+<p>The system will automatically populate some of the amount fields as such:</p>
+
+<ul>
+  <li>billable_amount: Copied from the <strong>Invoice</strong>’s total amount.</li>
+  <li>paid_amount: Starts with 0, each subsequent entry will copy from the previous entry’s payment amount.</li>
+  <li>payment amount: Input by the user.</li>
+  <li>remaining amount: Calculated by billable amount - paid amount - payment amount.</li>
+</ul>
+
+<p>However, the user will have the flexibility to overwrite the amount fields where applicable, for example, if the
+payment is received through a third party service provider and the <strong>Income Receipt</strong> is automatically
+generated by that provider. In this case, there may not be an associated <strong>Income Receipt Config</strong> or
+<strong>Invoice</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    IncomeReceipts {
+        text id PK
+        text receipt_number "not null"
+        date receipt_date "not null"
+        numeric billable_amount "not null"
+        numeric paid_amount "not null"
+        numeric payment_amount "not null"
+        numeric remaining_amount "not null"
+        json custom_fields "not null, default: '{}'"
+        bool voided "not null, default: false"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text income_receipt_config_id FK
+        text invoice_id FK
+        text currency_id FK "not null"
+        text income_transaction_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Income Receipt model.</small></p>
+</div>
+
+<h2 id="expense-receipts">Expense Receipts</h2>
+
+<p>While <strong>Income Receipts</strong> are created when the user’s business receives payments from a client, and the
+payment proof is issued in the form of a <strong>Receipt</strong>, <strong>Expense Receipts</strong> are received when
+the user makes payment to external parties. Since the nature of these <strong>Receipts</strong> are different, we make
+a distinction in the modelling.</p>
+
+<p>The fields in the <strong>Expense Receipt</strong> are also simpler, as they only need to mirror the
+<strong>Expense Transaction</strong> fields for record keeping purpose.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    ExpenseReceipts {
+        text id PK
+        text receipt_number "not null"
+        date transaction_date "not null"
+        numeric amount "not null"
+        numeric home_currency_amount "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text currency_id FK "not null"
+        text expense_transaction_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Expense Receipt model.</small></p>
+</div>
+
+<h2 id="sequences">Sequences</h2>
+
+<p>The user may configure the number <strong>Sequences</strong> to use in the <strong>Invoice Templates</strong> and
+<strong>Receipt Templates</strong>. Prefix and suffix fields are available, so that the user can customise the
+<strong>Invoice</strong> number or <strong>Receipt</strong> number in the <strong>Template</strong> accordingly.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Sequences {
+        text id PK
+        text name "not null"
+        numeric starting_number "not null, default: 1"
+        numeric last_used_number "not null"
+        numeric increment_step "not null, default: 1"
+        text prefix
+        text suffix
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Sequence model.</small></p>
+</div>
+
+<h2 id="contacts-and-billing-configs">Contacts and Billing Configs</h2>
+
+<p>To simplify the configuration of <strong>Invoices</strong> and <strong>Receipts</strong>, the user can create
+<strong>Contacts</strong>, which contain important information such as name, address and account number, then use
+them in the <strong>Invoices</strong> or <strong>Receipts</strong> configuration.</p>
+
+<p>The user may configure a unique billing structure for each client, eg. charging by an hourly rate for work done, a
+fixed cost for a project of various complexities. When generating an <strong>Invoice</strong> from
+<strong>Work Logs</strong>, the <strong>Billing Configs</strong> will be used to generate the
+<strong>Invoice Lines</strong> accordingly and perform the calculation where applicable.</p>
+
+<p>For now, there will be 3 rate types:</p>
+
+<ul>
+  <li><strong>duration</strong>: calculate the sub-total using the <strong>Work Log</strong> duration.</li>
+  <li><strong>count</strong>: calculate the sub-total using the number of <strong>Work Log</strong> entries.</li>
+  <li><strong>fixed</strong>: a fixed value regardless of the number of <strong>Work Log</strong> entries.</li>
+</ul>
+
+<p>Note that the user can also create her company contact as an entry, and then use it in the
+<strong>System Config</strong>.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Contacts {
+        text id PK
+        text name "not null"
+        text account_number
+        text address_line_1
+        text address_line_2
+        text address_line_3
+        text city
+        text state
+        text country
+        text postcode
+        text contact_number_1
+        text contact_number_2
+        text contact_number_3
+        text contact_person_1
+        text contact_person_2
+        text contact_person_3
+        text contact_email_1
+        text contact_email_2
+        text contact_email_3
+        text url_1
+        text url_2
+        text url_3
+        blob logo
+        json custom_fields "not null, default: '{}'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+    BillingConfigs {
+        text id PK
+        date effective_start "not null"
+        date effective_end
+        text rate_type "not null, default: 'duration'"
+        text unit "not null, default: 'hour'"
+        numeric unit_cost "not null"
+        json include_tags "not null, default: '[]'"
+        json include_tags "not null, default: '[]'"
+        text contact_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Contact and Billing Config models.</small></p>
+</div>
+
+<h2 id="currencies">Currencies</h2>
+
+<p>The user may need to setup different <strong>Currency</strong> exchange rates for the purpose of calculating
+<strong>Income</strong> or <strong>Expense Transactions</strong> in another <strong>Currency</strong> back to her home
+<strong>Currency</strong> for tax computation.</p>
+
+<p>Note that the exchange rates are relative to USD for standardisation purpose, which means for the entry for USD, the
+exchange rate should be stored as <code class="language-plaintext highlighter-rouge">1</code> (this will be loaded automatically by default at the outset). If the user’s home
+<strong>Currency</strong> is not USD, then two step conversion will be applied. For example, if the user’s home
+<strong>Currency</strong> is GBP, and the client <strong>Currency</strong> is JPY, then the system will convert JPY to
+USD, then from USD to GBP.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Currencies {
+        text id PK
+        text code "not null"
+        text symbol "not null"
+        numeric exchange_rate "not null"
+        date effective_start "not null"
+        date effective_end
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Currency model.</small></p>
+</div>
+
+<h2 id="documents">Documents</h2>
+
+<p>The user may generate <strong>Invoices</strong> or upload <strong>Receipts</strong>, and tag them for categorisation
+purpose, and later compile them using the <strong>Tag</strong> filters as proof of documentation for tax filing
+purpose.</p>
+
+<p>Note that throughout the development of the app, it is possible to change this model to not store the file content
+directly, but to have a reference link to an external storage, eg. Amazon S3, local file system.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Documents {
+        text id PK
+        text filename "not null"
+        text mime_type "not null"
+        blob content "not null"
+        json tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Document model.</small></p>
+</div>
+
+<h2 id="invoice-documents--receipt-documents">Invoice Documents / Receipt Documents</h2>
+
+<p>For each <strong>Document</strong> uploaded, the user can associate it to a particular <strong>Invoice</strong> or
+<strong>Receipt</strong>. And each <strong>Invoice</strong> or <strong>Receipt</strong> can have zero or more
+<strong>Document</strong> associated.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    InvoiceDocuments {
+        text id PK
+        text description "not null"
+        json tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text document_id FK "not null"
+        text invoice_id FK "not null"
+    }
+
+    IncomeReceiptDocuments {
+        text id PK
+        text description "not null"
+        json tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text document_id FK "not null"
+        text income_receipt_id FK "not null"
+    }
+
+    ExpenseReceiptDocuments {
+        text id PK
+        text description "not null"
+        json tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text document_id FK "not null"
+        text expense_receipt_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Invoice Document and Receipt Document models.</small></p>
+</div>
+
+<h2 id="recurring-tasks-and-recurring-task-steps">Recurring Tasks and Recurring Task Steps</h2>
+
+<p>There’s a feature to allow the user to setup recurring <strong>Transactions</strong>, and this can be done by creating
+<strong>Recurring Tasks</strong> that detail the schedule (represented in cron format) of the task.</p>
+
+<p>There will be built-in task templates that the user can choose from to setup each <strong>Recurring Task</strong>.
+Each task can be composed of one or more step, and each step will be executed according to the defined rank. The
+smaller the rank number, the earlier they get executed, and in sequence. If there are steps with the same rank, they
+will be executed in parallel.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    RecurringTasks {
+        text id PK
+        text description "not null"
+        text cron_schedule "not null"
+        date effective_start "not null"
+        date effective_end
+        bool enabled "not null, default: true"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+    RecurringTaskSteps {
+        text id PK
+        text description "not null"
+        numeric rank "not null"
+        json params "not null, default: '{}'"
+        text task_step_template_id "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text recurring_task_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Recurring Task and Recurring Task Step models.</small></p>
+</div>
+
+<h2 id="recurring-task-and-step-runs">Recurring Task and Step Runs</h2>
+
+<p>For each time the <strong>Recurring Task</strong> is run, we will record the run for troubleshooting purpose.</p>
+
+<p>Each step also has its own run record, so that we can easily resume or retry particular steps as a recovery mechanism.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    RecurringTaskRuns {
+        text id PK
+        timestamp start_time "not null"
+        timestamp end_time
+        text status "not null, default: 'pending'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text recurring_task_id FK "not null"
+    }
+
+    RecurringTaskStepRuns {
+        text id PK
+        timestamp start_time "not null"
+        timestamp end_time
+        text status "not null, default: 'pending'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text recurring_task_run_id FK "not null"
+        text recurring_task_step_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Recurring Task Run and Recurring Task Step Run models.</small></p>
+</div>
+
+<h2 id="tax-tables-tax-tiers-and-tax-deductibles">Tax Tables, Tax Tiers and Tax Deductibles</h2>
+
+<p>In order to compute the tax payable, the user needs to setup the <strong>Tax Table</strong> accordingly. As tax rates
+may change over the years, the user can create multiple instances of <strong>Tax Tables</strong> for each applicable
+period.</p>
+
+<p>For each <strong>Tax Table</strong>, there will be a number of <strong>Tax Tiers</strong> that specify the income
+range and tax rate for each tier.</p>
+
+<p>There are also <strong>Tax Deductibles</strong> related to business expenses that can be added as part of the tax
+computation.</p>
+
+<p>The include tags and exclude tags allow the user to specify what types of <strong>Transactions</strong> should be
+included or excluded from the computation.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    TaxTables {
+        text id PK
+        text description "not null"
+        date effective_start "not null"
+        date effective_end
+        json include_tags "not null, default: '[]'"
+        json exclude_tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+    TaxTiers {
+        text id PK
+        numeric min_income "not null"
+        numeric max_income "not null"
+        numeric max_payable_amount "not null"
+        numeric rate "not null"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text tax_table_id FK "not null"
+    }
+
+    TaxDeductibles {
+        text id PK
+        text category "not null"
+        text description "not null"
+        text type "not null"
+        numeric rate
+        numeric max_deductible_amount
+        json include_tags "not null, default: '[]'"
+        json exclude_tags "not null, default: '[]'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text tax_table_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Tax Table, Tax Tier and Tax Deductible models.</small></p>
+</div>
+
+<h2 id="alerts">Alerts</h2>
+
+<p>There’s a feature that allows the user to setup a reminder for each <strong>Recurring Task</strong>. These will be
+<strong>Alerts</strong> that appear in the inbox, and the latest <strong>Alert</strong> will also be displayed as a
+banner in the app.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Alerts {
+        text id PK
+        text title "not null"
+        text content "not null"
+        bool is_read "not null, default: false"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Alert model.</small></p>
+</div>
+
+<h2 id="chart-configs">Chart Configs</h2>
+
+<p>The user can configure what charts to display in the analytics page. Each chart has a display order, the lower the
+number, the earlier it is rendered on the page. If there are multiple charts with the same display order, then they
+will be rendered on the same row where possible, or will wrap around to the next row if not.</p>
+
+<p>The user can select which data source to use for rendering the chart. There’ll be 2 options for now:</p>
+
+<ul>
+  <li><strong>Transactions</strong>: summation by amount</li>
+  <li><strong>Work Logs</strong>: summation by duration</li>
+</ul>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    ChartConfigs {
+        text id PK
+        text description "not null"
+        text chart_type "not null, default: 'bar'"
+        text data_source "not null"
+        text scale "not null, default: 'month'"
+        text group_by "not null"
+        json include_tags "not null, default: []"
+        json exclude_tags "not null, default: []"
+        date start_date "not null"
+        date end_date "not null"
+        numeric display_order "not null, default: 1"
+        bool active "not null, default: true"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Chart Config model.</small></p>
+</div>
+
+<h2 id="system-configs">System Configs</h2>
+
+<p>Finally, the user can setup <strong>System Config</strong> that applies to the entire app. There can be multiple
+instances of the <strong>System Config</strong>, so that the user can change the config at different period in time.</p>
+
+<p><strong>Tags</strong> can be formatted using category and name, and for convenience, we will use the <code class="language-plaintext highlighter-rouge">%{}</code> syntax to
+represent variables interpolation. However, we do not make assumption about the templating framework we will use at
+this stage, and in the end it may turn out that we will use a framework with a different syntax, eg. Liquid template
+language, and the syntax will change accordingly.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    SystemConfigs {
+        text id PK
+        date effective_start "not null"
+        date effective_end
+        text tag_format "default: '%{category}:%{name}'"
+        text timezone "default: 'UTC'"
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+        text base_currency_id FK "not null"
+        text base_contact_id FK "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>System Config model.</small></p>
+</div>
+
+<h2 id="users">Users</h2>
+
+<p>Finally, there’s the <strong>Users</strong> that we need to store to support multi-user login feature.</p>
+
+<p>At this stage of the design, we don’t want to make too much assumption about the authentication mechanism, so we will
+start with a password-based authentication. Note that we will encrypt the password before storing, but for simplicity
+we will just call the field “password” instead of “encryption_password”.</p>
+
+<p>For security reason, we may evolve to using more complex encryption, eg. salted encryption, and then we will need to
+add a field to store the salt, or we could be using other authentication mechanisms, eg. OAuth, and we can evolve this
+model accordingly.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+erDiagram
+    Users {
+        text id PK
+        text username "not null"
+        text password "not null"
+        text first_name
+        text last_name
+        timestamp created_at "not null"
+        timestamp updated_at "not null"
+    }
+
+</pre>
+
+<div class="table-caption">
+  <p><small>User model.</small></p>
+</div>
+
+<h2 class="no_toc">That’s All</h2>
+
+<p>If you have read this far, you would have noticed that there’s some business logic hidden in the description of the
+domain models. That resonates with the statement earlier at the start of this article, where I stated that fitting
+domain modelling can make implementing business logic more seamless.</p>
+
+<p>Data are the soul of a system, and by looking at the data models, one should be able to guess what sort of system
+they belong to, and even deduce what kind of logic is implemented in the system.</p>
+
+<p>Note that I used the word “fitting” here rather than “accurate”, because domain modelling is an art as much as it is a
+science, different engineers may imagine the domain in slightly different ways, and the resulting domain models may
+look slightly different, so there’s no one accurate answer to the design. However, we can say that there will be
+certain commonalities among various designs because these are obviously relevant to the domain, eg.
+<strong>Transactions</strong>.</p>
+
+<p>That’s about all the domain models that we have identified and designed in details for now. Let’s move on to designing
+the user journey of the app!</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/p7QxEgLBSOE" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> White wooden house on brown wooden table by Marsumilae
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/9HI8UJMSdZA" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Relay runner by Braden Collum
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://shopify.github.io/liquid/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Liquid template language
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-4.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 4)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Designing and Building An App From Scratch (Part 4)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Designing and Building An App From Scratch (Part 4)</h1>
+
+    <p>This is Part 4 of an article series that documents the process of designing and building an app from scratch.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Apr 26, 2023 | 
+
+<span>6 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_4/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#worklog">WorkLog</a></li>
+<li class="toc-entry toc-h2"><a href="#tag">Tag</a></li>
+<li class="toc-entry toc-h2"><a href="#contact">Contact</a></li>
+<li class="toc-entry toc-h2"><a href="#currency">Currency</a></li>
+<li class="toc-entry toc-h2"><a href="#transaction">Transaction</a></li>
+<li class="toc-entry toc-h2"><a href="#template">Template</a></li>
+<li class="toc-entry toc-h2"><a href="#sequence">Sequence</a></li>
+<li class="toc-entry toc-h2"><a href="#invoicing">Invoicing</a></li>
+<li class="toc-entry toc-h2"><a href="#billing">Billing</a></li>
+<li class="toc-entry toc-h2"><a href="#receipt">Receipt</a></li>
+<li class="toc-entry toc-h2"><a href="#document">Document</a></li>
+<li class="toc-entry toc-h2"><a href="#taxation">Taxation</a></li>
+<li class="toc-entry toc-h2"><a href="#chart">Chart</a></li>
+<li class="toc-entry toc-h2"><a href="#recurringtask">RecurringTask</a></li>
+<li class="toc-entry toc-h2"><a href="#systemconfig">SystemConfig</a></li>
+<li class="toc-entry toc-h2"><a href="#userprofile">UserProfile</a></li>
+</ul>
+    </div>
+
+    <div class="content">
+      <h2 class="no_toc">System Components Design</h2>
+
+<p>After we have designed the user journey, we can proceed to design the system processes.</p>
+
+<p>But before that, let’s take stock of the various components available in the system, because the sequence diagrams
+will not make sense if we don’t know what are the components that will interact with each other. We also want to list
+down what are the various actions available on each component, so that later on we will have the verbs to describe
+the interactions between components.</p>
+
+<p>For convenience, we will use Class Diagram syntax to illustrate the various components, but we need to be aware that
+not all components correspond exactly to a class each. For example, Invoicing is a relatively complex component that
+consists of multiple models, which loosely translate to a class each.</p>
+
+<h2 id="worklog">WorkLog</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class WorkLog
+    WorkLog: +list(filters)
+    WorkLog: +view(id)
+    WorkLog: +create()
+    WorkLog: +edit(id)
+    WorkLog: +delete(id)
+    WorkLog: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>WorkLog Component.</small></p>
+</div>
+
+<h2 id="tag">Tag</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Tag
+    Tag: +list()
+    Tag: +view(id)
+    Tag: +create()
+    Tag: +createIfNotExists()
+    Tag: +edit(id)
+    Tag: +delete(id)
+    Tag: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Tag Component.</small></p>
+</div>
+
+<h2 id="contact">Contact</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Contact
+    Contact: +list()
+    Contact: +view(id)
+    Contact: +create()
+    Contact: +edit(id)
+    Contact: +delete(id)
+    Contact: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Contact Component.</small></p>
+</div>
+
+<h2 id="currency">Currency</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Currency
+    Currency: +list()
+    Currency: +view(id)
+    Currency: +create()
+    Currency: +edit(id)
+    Currency: +delete(id)
+    Currency: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Currency Component.</small></p>
+</div>
+
+<h2 id="transaction">Transaction</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Transaction
+    Transaction: +list()
+    Transaction: +view(id)
+    Transaction: +create(type, associated_id)
+    Transaction: +edit(id)
+    Transaction: +delete(id)
+    Transaction: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Transaction Component.</small></p>
+</div>
+
+<h2 id="template">Template</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Template
+    Template: +list(types)
+    Template: +view(id)
+    Template: +create()
+    Template: +edit(id)
+    Template: +delete(id)
+    Template: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Template Component.</small></p>
+</div>
+
+<h2 id="sequence">Sequence</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Sequence
+    Sequence: +list()
+    Sequence: +view(id)
+    Sequence: +create()
+    Sequence: +delete(id)
+    Sequence: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Sequence Component.</small></p>
+</div>
+
+<h2 id="invoicing">Invoicing</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Invoicing
+    Invoicing: +listConfigs()
+    Invoicing: +viewConfig(configId)
+    Invoicing: +createConfig()
+    Invoicing: +editConfig(configId)
+    Invoicing: +deleteConfig(configId)
+    Invoicing: +configIsUsed(configId)
+
+    Invoicing: +listInvoices()
+    Invoicing: +viewInvoice(invoiceId)
+    Invoicing: +previewInvoice(options, workLogs, invoiceLines)
+    Invoicing: +generateInvoiceFromPreview(tempId)
+    Invoicing: +generateInvoice(options, workLogs, invoiceLines)
+    Invoicing: +editInvoice(invoiceId)
+    Invoicing: +voidInvoice(invoiceId)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Invoicing Component.</small></p>
+</div>
+
+<h2 id="billing">Billing</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Billing
+    Billing: +listConfigs()
+    Billing: +viewConfig(id)
+    Billing: +createConfig(id)
+    Billing: +editConfig(id)
+    Billing: +deleteConfig(id)
+    Billing: +isUsed(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Billing Component.</small></p>
+</div>
+
+<h2 id="receipt">Receipt</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Receipt
+    Receipt: +listConfigs()
+    Receipt: +viewConfig(configId)
+    Receipt: +createConfig()
+    Receipt: +editConfig(configId)
+    Receipt: +deleteConfig(configId)
+    Receipt: +configIsUsed(configId)
+
+    Receipt: +listIncomeReceipts()
+    Receipt: +viewIncomeReceipt(receiptId)
+    Receipt: +previewIncomeReceipt(invoiceId, options)
+    Receipt: +generateIncomeReceiptFromPreview(tempId)
+    Receipt: +generateIncomeReceipt(invoiceId, options)
+    Receipt: +editIncomeReceipt(receiptId)
+    Receipt: +voidIncomeReceipt(receiptId)
+    Receipt: +uploadIncomeReceipt()
+    Receipt: +deleteUploadedIncomeReceipt(id)
+
+    Receipt: +listExpenseReceipts()
+    Receipt: +viewExpenseReceipt(receiptId)
+    Receipt: +uploadExpenseReceipt()
+    Receipt: +deleteUploadedExpenseReceipt(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Receipt Component.</small></p>
+</div>
+
+<h2 id="document">Document</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Document
+    Document: +list()
+    Document: +view(id)
+    Document: +create()
+    Document: +tag(id, tags)
+    Document: +delete(id)
+    Document: +download(filters)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Document Component.</small></p>
+</div>
+
+<h2 id="taxation">Taxation</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Taxation
+    Taxation: +listTaxTables()
+    Taxation: +viewTaxTable(tableId)
+    Taxation: +createTaxTable()
+    Taxation: +editTaxTable(tableId)
+    Taxation: +deleteTaxTable(tableId)
+
+    Taxation: +listTaxTiers(tableId)
+    Taxation: +viewTaxTier(tierId)
+    Taxation: +createTaxTier()
+    Taxation: +editTaxTier(tierId)
+    Taxation: +deleteTaxTier(tierId)
+
+    Taxation: +listTaxDeductibles()
+    Taxation: +viewTaxDeductible(deductibleId)
+    Taxation: +createTaxDeductible()
+    Taxation: +editTaxDeductible(deductibleId)
+    Taxation: +deleteTaxDeductible(deductibleId)
+
+    Taxation: +estimateTaxes(tableId)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Taxation Component.</small></p>
+</div>
+
+<h2 id="chart">Chart</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class Chart
+    Chart: +list()
+    Chart: +view(id)
+    Chart: +create(options)
+    Chart: +edit(id)
+    Chart: +delete(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>Chart Component.</small></p>
+</div>
+
+<h2 id="recurringtask">RecurringTask</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class RecurringTask
+    RecurringTask: +listTasks()
+    RecurringTask: +viewTask(taskId)
+    RecurringTask: +createTask()
+    RecurringTask: +editTask(taskId)
+    RecurringTask: +deleteTask(taskId)
+    RecurringTask: +disableTask(taskId)
+    RecurringTask: +endTask(taskId)
+    RecurringTask: +runTask(taskId)
+    RecurringTask: +taskIsUsed(taskId)
+
+    RecurringTask: +listSteps()
+    RecurringTask: +viewStep(stepId)
+    RecurringTask: +createStep()
+    RecurringTask: +editStep(stepId)
+    RecurringTask: +deleteStep(stepId)
+    RecurringTask: +stepIsUsed(taskId)
+
+    RecurringTask: +listTaskRuns()
+    RecurringTask: +viewTaskRun(runId)
+    RecurringTask: +listStepRuns()
+    RecurringTask: +viewStepRun(stepRunId)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>RecurringTask Component.</small></p>
+</div>
+
+<h2 id="systemconfig">SystemConfig</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class SystemConfig
+    SystemConfig: +list()
+    SystemConfig: +view(id)
+    SystemConfig: +viewLatest()
+    SystemConfig: +create()
+    SystemConfig: +deactivate(id, effectiveEnd)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>SystemConfig Component.</small></p>
+</div>
+
+<h2 id="userprofile">UserProfile</h2>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+  });
+</script>
+
+<pre class="mermaid">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+  "primaryColor": "#f4e3d7",
+  "primaryTextColor": "#502d16",
+  "primaryBorderColor": "#784421",
+  "lineColor": "#784421",
+  "secondaryColor": "#a05a2c",
+  "tertiaryColor": "#c87137"
+}
+  }
+}%%
+
+classDiagram
+    class User
+    User: +view(id)
+    User: +create(credentials)
+    User: +authenticate(credentials)
+    User: +edit(id)
+
+</pre>
+
+<div class="table-caption">
+  <p><small>User Component.</small></p>
+</div>
+
+<h2 class="no_toc">We’re Ready</h2>
+
+<p>Now that we have the system components in order, we can move on to design the sequence diagrams using these components
+and their functions. Note that these component functions are what we have identified as the actions available based on
+the user journey, it is possible that more functions are required behind the scene that the user will not see. In such
+situations, we just simply revisit the components and add to their functionalities accordingly.</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/Bvr1TxrLGfs" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Black and grey electronic device kit by Alexander Andrews
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/04/21/app-design-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/24/app-design-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/25/app-design-3.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 3.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/26/app-design-5.5.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 5.5)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-6.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 6)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/27/app-design-7.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 7)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/04/28/app-design-8.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Designing and Building An App From Scratch (Part 8)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

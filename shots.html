@@ -52,6 +52,50 @@
 <p>Mid-day shots to boost your energy.</p>
 <div class="collapsible">
   
+    <div class="item" id="unsigned_electron_app_apple_silicon-section">
+      <div class="title">
+        <span>Cannot open unsigned Electron App on Apple Silicon Mac</span>
+        <small>May 01, 2023 <em>by gohkhoonhiang</em></small>
+      </div>
+      <div class="preview" id="unsigned_electron_app_apple_silicon-preview">
+        <p><p>I released the installer for MacOS (arm64) distribution for the SG SSB Tracker app on Github Releases, and downloaded
+it to install the app, MacOS told me it’s damaged and should move it to the bin.</p>
+</p>
+      </div>
+      <div class="full-content" id="unsigned_electron_app_apple_silicon-content" hidden>
+        <p>I released the installer for MacOS (arm64) distribution for the SG SSB Tracker app on Github Releases, and downloaded
+it to install the app, MacOS told me it’s damaged and should move it to the bin.</p>
+
+<p>I tried installing the app locally from the installer packaged by Electron Forge, the app can open just fine.</p>
+
+<p>After some search, I stumbled upon this
+<a href="https://github.com/marktext/marktext/issues/2983" target="_blank">thread</a> on MarkText Github Issues. It
+seems like the issue is due to the app not being code signed, and so Apple blocked it from being opened? The only
+workaround is to remove the app from “Quarantine”, by running this command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xattr -r -d com.apple.quarantine /Applications/SG\ SSB\ Tracker.app
+</code></pre></div></div>
+
+<p>A quick look at the <code class="language-plaintext highlighter-rouge">xattr</code> <a href="https://ss64.com/osx/xattr.html" target="_blank">man page</a> explains what the
+command is actually doing:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">xattr</code> is the command used to display or manipulate extended attributes of a file.</li>
+  <li><code class="language-plaintext highlighter-rouge">-r</code> applies the command recursively to the file.</li>
+  <li><code class="language-plaintext highlighter-rouge">-d</code> deletes a given attribute of the file.</li>
+  <li><code class="language-plaintext highlighter-rouge">com.apple.quarantine</code> is the attribute that puts the app in “Quarantine”.</li>
+</ul>
+
+<p>On the other hand, if I build the app for x64 distribution, I can open the app on a arm64 Mac, this time it will still
+try to block me, but at least it allows me to “Open Anyway”.</p>
+
+<p>Does that mean I have to pay USD99/year just to be able to sign a <em><strong>free</strong></em> app for distribution
+to Apple Silicon Mac users?</p>
+
+      </div>
+      <div class="btn"><a id="unsigned_electron_app_apple_silicon-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
+    </div>
+  
     <div class="item" id="centered-even-grid-layout-section">
       <div class="title">
         <span>How to create the same column width grid layout in the same page</span>

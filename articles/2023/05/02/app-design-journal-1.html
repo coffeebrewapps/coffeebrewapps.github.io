@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <title>Triple Tee App Dev Journal 1</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Triple Tee App Dev Journal 1</h1>
+
+    <p>This is Part 1 of an article series that documents the process of building the Triple Tee App.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">May 02, 2023 | 
+
+<span>5 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_journal_1/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2 id="lets-give-it-a-name">Let’s Give It A Name</h2>
+
+<p>I haven’t confirmed the name of the app that I was going to build, but I can’t do anything without a name for the code
+repo, so for now I’ll codename it “Triple Tee App”. Where do the 3 T’s come from? It’s “Tag”, “Transaction” and “Tax”.
+Not very creative, isn’t it?</p>
+
+<p>If I can’t think of a better name than this, I might just end up sticking to it, because thinking of a name is a very
+brain-damaging activity. (laugh)</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_1/my_name_is.png" /></p>
+  <p><small>Can’t leave the name blank forever, right?</small></p>
+</div>
+
+<h2 id="setting-up-the-app-structure">Setting Up The App Structure</h2>
+
+<p>It turns out that figuring out the app structure is not so simple, because JS.</p>
+
+<p>Spent about a day setting up the structure of the repo so that the server, client and Electron wrapper all work
+together properly.</p>
+
+<p>The first thing I learnt about from this exercise was that there’re currently 2 ways to modularise JS modules:</p>
+
+<ul>
+  <li>CommonJS: default of Node.js</li>
+  <li>ES Modules: standardised approach supported by major browsers</li>
+</ul>
+
+<p>I will spare you the details of the difference between the 2, because there are already a lot of articles out there
+for that purpose. But I want to talk a little more about how I dealt with the mix of use of both approaches in my app.</p>
+
+<p>First of all, although it was recommended that we use ES Modules for a new project, in the end I had to go with CommonJS
+because Electron has no ESM support. There’s a library called <code class="language-plaintext highlighter-rouge">build-electron</code> I stumbled upon which can help build the
+<code class="language-plaintext highlighter-rouge">main.js</code> and <code class="language-plaintext highlighter-rouge">preload.js</code> of Electron from ESM into CommonJS for Electron to run the app. But just by using this tool,
+I had to include 3 other dependencies and complicate my build pipeline. I decided to keep it simple and stick with
+CommonJS.</p>
+
+<p>Then there’s the server-side code, where I use Express.js as the framework. Before I learnt about CommonJS vs ESM, the
+tutorial I read about Express.js is in CommonJS, so I already started working on some scaffolding in CommonJS. Since
+Node.js supports CommonJS by default, I didn’t think of changing it to ESM because then I had to change all my existing
+code to use ESM syntax.</p>
+
+<p>Finally, I use Vue.js for my client-side code. Now, Vue.js uses ESM by default, and I had created a scaffold app and
+successfully run it together with my Express.js server code. It turns out that Vue.js uses Babel under the hood to
+compile ESM to CommonJS anyway.</p>
+
+<p>So in the end, I just decided to stick to CommonJS for my server code and Electron wrapper, and use the default ESM
+for client code. It’s a little confusing if it’s a single person coding both server and client, but if we think about
+it from the point of view of having a backend engineer code the server, and a frontend engineer code the client, then
+there’s actually no issue with it, I think.</p>
+
+<p>Of course I still wish to standardise the modularisation of this app to ESM, but if I had continued to dig deeper into
+figuring out how to make it work, I think I wouldn’t be able to finish the app within the timeline. Sometimes there’re
+just compromises to be made in order to actually achieve a goal, otherwise the idea will just remain an idea without
+something concrete to show for it, right?</p>
+
+<p>Here’s the end result of the folder structure after considering the modularisation approach.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">client</code>: This is where the Vue.js code sits.</li>
+  <li><code class="language-plaintext highlighter-rouge">out</code>: This is where Electron will build the app distributables into.</li>
+  <li><code class="language-plaintext highlighter-rouge">public</code>: This is where the Vue.js assets will be built into and served by Express.js.</li>
+  <li><code class="language-plaintext highlighter-rouge">server</code>: This is where the Express.js code sits.</li>
+  <li><code class="language-plaintext highlighter-rouge">common.js</code>: This is where I write some shared functions and constants to use across the app.</li>
+  <li><code class="language-plaintext highlighter-rouge">main.js</code>: This is the entry point for Electron to run the app.</li>
+  <li><code class="language-plaintext highlighter-rouge">preload.js</code>: This is where Electron run some code before rendering the app.</li>
+  <li><code class="language-plaintext highlighter-rouge">server.js</code>: This is the entry point for Node.js to run the server.</li>
+</ul>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_1/folder_structure.png" /></p>
+  <p><small>Monorepo with client, server and Electron wrapper.</small></p>
+</div>
+
+<h2 id="some-form-elements">Some Form Elements</h2>
+
+<p>Now that the most important part of setting up the folder structure is out of the way, it’s time to get down to writing
+the code for the app.</p>
+
+<p>To know that I’ve made some progress, I started working on the most obvious thing first: the UI elements, so that I can
+see it concretely materialise before my eyes.</p>
+
+<p>Spent about half a day building the input and button elements using Vue components. This time I decided to not use
+Vuetify as a challenge for myself to style my app without existing framework, and also I want to reduce the bloat of
+my app as much as possible by using as few dependencies as my skills can allow for.</p>
+
+<div class="image">
+  <div class="compare">
+    <p><img src="/assets/images/posts/app_design_journal_1/form_elements.png" /></p>
+
+    <p><img src="/assets/images/posts/app_design_journal_1/form_demo.png" /></p>
+  </div>
+  <p><small>Not too bad, it’s quite close to what I designed in the wireframes.</small></p>
+</div>
+
+<h2 id="thats-all-for-now">That’s All For Now</h2>
+
+<p>That’s the result after 2 days of work, I think I’ve made pretty good progress so far. Hopefully from now one I don’t
+have to deal with anymore framework related issues, and can focus on building the app itself.</p>
+
+<p>Stay tuned for more updates!</p>
+
+<style>
+.image .compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.image .compare img {
+  width: 80% !important;
+}
+
+@media screen and (max-width: 600px) {
+  .image .compare {
+    display: grid;
+    grid-template-columns: auto;
+  }
+}
+</style>
+
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/N0NLGH5YU90" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Silver laptop beside journal book by Jess Bailey
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/lFNucqUzPC4" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> My name is... by Tim Mossholder
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://blog.logrocket.com/commonjs-vs-es-modules-node-js/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> CommonJS vs. ES modules in Node.js
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://reactjsexample.com/use-es-modules-in-electron/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Use ES modules in Electron
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

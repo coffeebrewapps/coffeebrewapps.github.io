@@ -75,7 +75,7 @@ I improvised and tried to built one that is bi-directional and runs indefinitely
   <div id="reverse-bar" class="bar reverse-bar" style="width: 100%;"></div>
 </div>
 
-<p>(This progress bar is running in real-time)</p>
+<p>(This progress bar is running in real-time, <a href="#" onclick="stopBar()">click</a> to stop the bar)</p>
 
 <p>The idea I had was to use 2 <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s, 1 growing towards the right side, and the other growing towards the left side.
 Let’s call them the <code class="language-plaintext highlighter-rouge">forward-bar</code> and <code class="language-plaintext highlighter-rouge">reverse-bar</code> respectively.</p>
@@ -272,6 +272,10 @@ function animate() {
   } else if (direction === 'reverse') {
     stepBackward()
   }
+}
+
+function stopBar() {
+  clearInterval(intervalId)
 }
 </script>
 

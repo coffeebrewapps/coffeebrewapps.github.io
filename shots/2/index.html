@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="me" href="https://mastodon.social/@geekhoon">
+    <link rel="me" href="https://mastodon.hackerdrinks.social/@geekhoon">
+    <title>Shots</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" >
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <h1>Shots</h1>
+<p>Mid-day shots to boost your energy.</p>
+<div class="collapsible">
+  
+    <div class="item" id="rubocop_dep_not_found-section">
+      <div class="title">
+        <span>Rubocop dependency not found in Github Workflow</span>
+        <small>Apr 06, 2023 <em>by gohkhoonhiang</em></small>
+      </div>
+      <div class="preview" id="rubocop_dep_not_found-preview">
+        <p><p>Today, I was trying to setup the Github Workflow for
+<a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives" target="_blank">
+Coffeebrew Jekyll Archives plugin</a> to run test cases and lint the code.</p>
+</p>
+      </div>
+      <div class="full-content" id="rubocop_dep_not_found-content" hidden>
+        <p>Today, I was trying to setup the Github Workflow for
+<a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives" target="_blank">
+Coffeebrew Jekyll Archives plugin</a> to run test cases and lint the code.</p>
+
+<p>Here’s the initial setup (excerpts):</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">test</span><span class="pi">:</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Ruby</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">ruby/setup-ruby@v1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">ruby-version</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">bundler-cache</span><span class="pi">:</span> <span class="kc">true</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run tests</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">bash script/cibuild</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">script/cibuild</code> script basically just does 3 things (excerpts):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">install
+</span>bundle <span class="nb">exec </span>rubocop <span class="nt">-D</span> <span class="nt">-E</span> <span class="nv">$@</span>
+bundle <span class="nb">exec </span>rspec <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Then I kept running into the error:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RuboCop 1.45.1
+cannot load such file <span class="nt">--</span> rubocop-minitest
+/home/runner/work/coffeebrew_jekyll_archives/coffeebrew_jekyll_archives/vendor/bundle/ruby/3.2.0/gems/rubocop-1.45.1/lib/rubocop/feature_loader.rb:46:in <span class="sb">`</span>rescue <span class="k">in </span>rescue <span class="k">in </span>load<span class="s1">'
+</span></code></pre></div></div>
+
+<p>In my mind I was like: “Why on earth did <code class="language-plaintext highlighter-rouge">rubocop-minitest</code> get into my project?”. I tried a few Google searches, they
+mostly just mention something along the line of “remember to <code class="language-plaintext highlighter-rouge">require: rubocop-minitest</code> in your <code class="language-plaintext highlighter-rouge">.rubocop.yml</code>”.</p>
+
+<p>But why? I didn’t even use <code class="language-plaintext highlighter-rouge">minitest</code> in my project!</p>
+
+<p>Then with some luck, I stumbled upon this
+<a href="https://stackoverflow.com/questions/69415433/bundle-exec-rubocop-failling-on-github-actions-but-runs-successfully-locally" target="_blank">
+Stack Overflow question</a>. It’s not exactly the same problem, but the response seems promising. So I followed the
+advice and updated my <code class="language-plaintext highlighter-rouge">.rubocop.yml</code> to exclude <code class="language-plaintext highlighter-rouge">vendor/**/*</code>.</p>
+
+<p>Lo and behold, my workflow run finally succeeded.
+Here’s <a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives/commit/4e5e532025748a7eaeac5c9c7cf8560c6ab06f7a" target="_blank">
+the fix</a>.</p>
+
+<p>This will not be the end, I will need to figure out why did Rubocop also try to lint the dependencies when I already
+specified the <code class="language-plaintext highlighter-rouge">Include</code> option to:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">AllCops</span><span class="pi">:</span>
+  <span class="na">Include</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">lib/**/*.rb</span>
+    <span class="pi">-</span> <span class="s">spec/**/*.rb</span>
+</code></pre></div></div>
+
+<p>This will be another shot/article that I write when I figure it out. Hope this shot gives you a boost for the day.
+Stay tuned for more!</p>
+
+      </div>
+      <div class="btn"><a id="rubocop_dep_not_found-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
+    </div>
+  
+</div>
+
+
+<div class="pagination">
+  <ul class="pager">
+    
+    <li class="previous">
+      <a href="/shots.html"><i class="fa-solid fa-arrow-left"></i> Newer Shots</a>
+    </li>
+    
+    
+  </ul>
+</div>
+
+
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

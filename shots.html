@@ -54,6 +54,260 @@
 <p>Mid-day shots to boost your energy.</p>
 <div class="collapsible">
   
+    <div class="item" id="bidirection_progress_bar-section">
+      <div class="title">
+        <span>Building a bi-directional progress bar</span>
+        <small>May 04, 2023 <em>by gohkhoonhiang</em></small>
+      </div>
+      <div class="preview" id="bidirection_progress_bar-preview">
+        <p><p>I needed to build a bi-directional indefinite progress bar for the Triple Tee App.</p>
+</p>
+      </div>
+      <div class="full-content" id="bidirection_progress_bar-content" hidden>
+        <p>I needed to build a bi-directional indefinite progress bar for the Triple Tee App.</p>
+
+<p>I found some tutorial on how to build a static uni-directional one on
+<a href="https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_progressbar_js" target="_blank">W3 Scools</a>, so
+I improvised and tried to built one that is bi-directional and runs indefinitely like this:</p>
+
+<div id="progress-bar" class="progress-bar">
+  <div id="forward-bar" class="bar forward-bar" style="width: 0%;"></div>
+  <div id="reverse-bar" class="bar reverse-bar" style="width: 100%;"></div>
+</div>
+
+<p>(This progress bar is running in real-time)</p>
+
+<p>The idea I had was to use 2 <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s, 1 growing towards the right side, and the other growing towards the left side.
+Let’s call them the <code class="language-plaintext highlighter-rouge">forward-bar</code> and <code class="language-plaintext highlighter-rouge">reverse-bar</code> respectively.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div id="progress-bar" class="progress-bar"&gt;
+  &lt;div id="forward-bar" class="bar forward-bar" style="width: 0%;"&gt;
+  &lt;/div&gt;
+  &lt;div id="reverse-bar" class="bar reverse-bar" style="width: 100%;"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre></div></div>
+
+<p>At the initial state, the <code class="language-plaintext highlighter-rouge">forward-bar</code> will have 0% width and colored, while the <code class="language-plaintext highlighter-rouge">reverse-bar</code> will have 100% width
+but not colored:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.progress-bar</span> <span class="p">{</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
+  <span class="nl">width</span><span class="p">:</span> <span class="m">400px</span><span class="p">;</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#f4e3d7</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.bar</span> <span class="p">{</span>
+  <span class="nl">height</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.forward-bar</span> <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#502d16</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.reverse-bar</span> <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then, when the <code class="language-plaintext highlighter-rouge">forward-bar</code> grows to 100% width, I append the <code class="language-plaintext highlighter-rouge">.reverse</code> class to the <code class="language-plaintext highlighter-rouge">progress-bar</code> container, so
+that I can use it to style the <code class="language-plaintext highlighter-rouge">forward-bar</code> and <code class="language-plaintext highlighter-rouge">reverse-bar</code> in reverse colors:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.progress-bar.reverse</span> <span class="nc">.forward-bar</span>  <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.progress-bar.reverse</span> <span class="nc">.reverse-bar</span> <span class="p">{</span>
+  <span class="nl">background-color</span><span class="p">:</span> <span class="m">#502d16</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In order to determine the current direction, I created a variable named <code class="language-plaintext highlighter-rouge">direction</code> and initialised it to <code class="language-plaintext highlighter-rouge">forward</code>.
+We could also use a boolean <code class="language-plaintext highlighter-rouge">forward</code> and set to <code class="language-plaintext highlighter-rouge">true</code>, but I prefer to use string for clarity here.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span>
+</code></pre></div></div>
+
+<p>Then I need to know what’s the current width of the bars, so I created a function for that:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">bar</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nf">parseInt</span><span class="p">(</span><span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Once I know the width, I can grow or shrink the bar by adding steps to the width:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">step</span><span class="p">(</span><span class="nx">bar</span><span class="p">,</span> <span class="nx">direction</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="p">[(</span><span class="nx">current</span> <span class="o">+</span> <span class="mi">5</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span> <span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="p">[(</span><span class="nx">current</span> <span class="o">-</span> <span class="mi">5</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span> <span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>When I step forward, I grow the width of the <code class="language-plaintext highlighter-rouge">forward-bar</code> while shrinking the width of the <code class="language-plaintext highlighter-rouge">reverse-bar</code>. In the other
+direction, I reverse the action on the bars accordingly:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">forwardBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">forward-bar</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">reverseBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">reverse-bar</span><span class="dl">'</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nf">stepForward</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">forwardWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">)</span>
+  <span class="kd">const</span> <span class="nx">reverseWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">)</span>
+
+  <span class="nf">step</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">,</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">,</span> <span class="nx">forwardWidth</span><span class="p">)</span>
+  <span class="nf">step</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">,</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">,</span> <span class="nx">reverseWidth</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nf">stepBackward</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">forwardWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">)</span>
+  <span class="kd">const</span> <span class="nx">reverseWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">)</span>
+
+  <span class="nf">step</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">,</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">,</span> <span class="nx">forwardWidth</span><span class="p">)</span>
+  <span class="nf">step</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">,</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">,</span> <span class="nx">reverseWidth</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If the bar grows to the full 100% width, I will need to change the direction. This is also where I add the <code class="language-plaintext highlighter-rouge">.reverse</code>
+class to the <code class="language-plaintext highlighter-rouge">progress-bar</code> so that it will update the background color of individual bars:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">progressBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">progress-bar</span><span class="dl">'</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nf">changeDirection</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span>
+    <span class="nx">progressBar</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span>
+    <span class="nx">progressBar</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now we can put it all together in animation using the <code class="language-plaintext highlighter-rouge">setInterval</code> function, so that it will grow/shrink the bar
+every 10ms, creating the effect that it is moving:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">intervalId</span> <span class="o">=</span> <span class="nf">setInterval</span><span class="p">(</span><span class="nx">animate</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nf">animate</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">forwardWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">)</span>
+  <span class="kd">const</span> <span class="nx">reverseWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">)</span>
+
+  <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">forwardWidth</span> <span class="o">===</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">changeDirection</span><span class="p">()</span>
+    <span class="nf">stepForward</span><span class="p">()</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">reverseWidth</span> <span class="o">===</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">changeDirection</span><span class="p">()</span>
+    <span class="nf">stepBackward</span><span class="p">()</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">stepForward</span><span class="p">()</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">stepBackward</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>That’s it! Hope this has been useful.</p>
+
+<script>
+let direction = 'forward'
+
+const progressBar = document.getElementById('progress-bar')
+const forwardBar = document.getElementById('forward-bar')
+const reverseBar = document.getElementById('reverse-bar')
+
+const intervalId = setInterval(animate, 10)
+
+function getWidth(bar) {
+  return parseInt(bar.style.width.split('%')[0])
+}
+
+function step(bar, direction, current) {
+  if (direction === 'forward') {
+    bar.style.width = [(current + 5).toString(), '%'].join('')
+  } else {
+    bar.style.width = [(current - 5).toString(), '%'].join('')
+  }
+}
+
+function changeDirection() {
+  if (direction === 'forward') {
+    direction = 'reverse'
+    progressBar.classList.add('reverse')
+  } else {
+    direction = 'forward'
+    progressBar.classList.remove('reverse')
+  }
+}
+
+function stepForward() {
+  const forwardWidth = getWidth(forwardBar)
+  const reverseWidth = getWidth(reverseBar)
+
+  step(forwardBar, 'forward', forwardWidth)
+  step(reverseBar, 'reverse', reverseWidth)
+}
+
+function stepBackward() {
+  const forwardWidth = getWidth(forwardBar)
+  const reverseWidth = getWidth(reverseBar)
+
+  step(forwardBar, 'reverse', forwardWidth)
+  step(reverseBar, 'forward', reverseWidth)
+}
+
+function animate() {
+  const forwardWidth = getWidth(forwardBar)
+  const reverseWidth = getWidth(reverseBar)
+
+  if (direction === 'forward' && forwardWidth === 100) {
+    changeDirection()
+    stepForward()
+  } else if (direction === 'reverse' && reverseWidth === 100) {
+    changeDirection()
+    stepBackward()
+  } else if (direction === 'forward') {
+    stepForward()
+  } else if (direction === 'reverse') {
+    stepBackward()
+  }
+}
+</script>
+
+<style>
+.progress-bar {
+  display: flex;
+  width: 400px;
+  background-color: var(--secondary-background-color);
+}
+
+.bar {
+  height: 10px;
+}
+
+.forward-bar {
+  background-color: var(--main-text-color);
+}
+
+.progress-bar.reverse .forward-bar  {
+  background-color: var(--main-background-color);
+}
+
+.reverse-bar {
+  background-color: var(--main-background-color);
+}
+
+.progress-bar.reverse .reverse-bar {
+  background-color: var(--main-text-color);
+}
+</style>
+
+
+      </div>
+      <div class="btn"><a id="bidirection_progress_bar-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
+    </div>
+  
     <div class="item" id="unsigned_electron_app_apple_silicon-section">
       <div class="title">
         <span>Cannot open unsigned Electron App on Apple Silicon Mac</span>
@@ -478,83 +732,19 @@ for it.</p>
       <div class="btn"><a id="solving_rubocop_mystery-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
     </div>
   
-    <div class="item" id="rubocop_dep_not_found-section">
-      <div class="title">
-        <span>Rubocop dependency not found in Github Workflow</span>
-        <small>Apr 06, 2023 <em>by gohkhoonhiang</em></small>
-      </div>
-      <div class="preview" id="rubocop_dep_not_found-preview">
-        <p><p>Today, I was trying to setup the Github Workflow for
-<a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives" target="_blank">
-Coffeebrew Jekyll Archives plugin</a> to run test cases and lint the code.</p>
-</p>
-      </div>
-      <div class="full-content" id="rubocop_dep_not_found-content" hidden>
-        <p>Today, I was trying to setup the Github Workflow for
-<a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives" target="_blank">
-Coffeebrew Jekyll Archives plugin</a> to run test cases and lint the code.</p>
-
-<p>Here’s the initial setup (excerpts):</p>
-
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">jobs</span><span class="pi">:</span>
-  <span class="na">test</span><span class="pi">:</span>
-    <span class="na">steps</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
-      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Ruby</span>
-        <span class="na">uses</span><span class="pi">:</span> <span class="s">ruby/setup-ruby@v1</span>
-        <span class="na">with</span><span class="pi">:</span>
-          <span class="na">ruby-version</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">bundler-cache</span><span class="pi">:</span> <span class="kc">true</span>
-      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run tests</span>
-        <span class="na">run</span><span class="pi">:</span> <span class="s">bash script/cibuild</span>
-</code></pre></div></div>
-
-<p>The <code class="language-plaintext highlighter-rouge">script/cibuild</code> script basically just does 3 things (excerpts):</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">install
-</span>bundle <span class="nb">exec </span>rubocop <span class="nt">-D</span> <span class="nt">-E</span> <span class="nv">$@</span>
-bundle <span class="nb">exec </span>rspec <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
-</code></pre></div></div>
-
-<p>Then I kept running into the error:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RuboCop 1.45.1
-cannot load such file <span class="nt">--</span> rubocop-minitest
-/home/runner/work/coffeebrew_jekyll_archives/coffeebrew_jekyll_archives/vendor/bundle/ruby/3.2.0/gems/rubocop-1.45.1/lib/rubocop/feature_loader.rb:46:in <span class="sb">`</span>rescue <span class="k">in </span>rescue <span class="k">in </span>load<span class="s1">'
-</span></code></pre></div></div>
-
-<p>In my mind I was like: “Why on earth did <code class="language-plaintext highlighter-rouge">rubocop-minitest</code> get into my project?”. I tried a few Google searches, they
-mostly just mention something along the line of “remember to <code class="language-plaintext highlighter-rouge">require: rubocop-minitest</code> in your <code class="language-plaintext highlighter-rouge">.rubocop.yml</code>”.</p>
-
-<p>But why? I didn’t even use <code class="language-plaintext highlighter-rouge">minitest</code> in my project!</p>
-
-<p>Then with some luck, I stumbled upon this
-<a href="https://stackoverflow.com/questions/69415433/bundle-exec-rubocop-failling-on-github-actions-but-runs-successfully-locally" target="_blank">
-Stack Overflow question</a>. It’s not exactly the same problem, but the response seems promising. So I followed the
-advice and updated my <code class="language-plaintext highlighter-rouge">.rubocop.yml</code> to exclude <code class="language-plaintext highlighter-rouge">vendor/**/*</code>.</p>
-
-<p>Lo and behold, my workflow run finally succeeded.
-Here’s <a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives/commit/4e5e532025748a7eaeac5c9c7cf8560c6ab06f7a" target="_blank">
-the fix</a>.</p>
-
-<p>This will not be the end, I will need to figure out why did Rubocop also try to lint the dependencies when I already
-specified the <code class="language-plaintext highlighter-rouge">Include</code> option to:</p>
-
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">AllCops</span><span class="pi">:</span>
-  <span class="na">Include</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">lib/**/*.rb</span>
-    <span class="pi">-</span> <span class="s">spec/**/*.rb</span>
-</code></pre></div></div>
-
-<p>This will be another shot/article that I write when I figure it out. Hope this shot gives you a boost for the day.
-Stay tuned for more!</p>
-
-      </div>
-      <div class="btn"><a id="rubocop_dep_not_found-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
-    </div>
-  
 </div>
 
+
+<div class="pagination">
+  <ul class="pager">
+    
+    
+    <li class="next">
+      <a href="/shots/2/index.html">Older Shots <i class="fa-solid fa-arrow-right"></i></a>
+    </li>
+    
+  </ul>
+</div>
 
 
 

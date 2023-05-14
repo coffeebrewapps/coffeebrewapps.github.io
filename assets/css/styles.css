@@ -10822,11 +10822,12 @@ Article
 
 .article .heading .thumbnail {
   margin: 0 auto;
+  padding: 1rem 0;
   text-align: center;
 }
 
 .article .heading .thumbnail img {
-  width: 50%;
+  width: 100%;
 }
 
 .article .body a {
@@ -10959,6 +10960,12 @@ Article
   font-size: 0.8rem !important;
 }
 
+@media screen and (min-width: 960px) {
+  .article {
+    margin: 0 auto;
+    width: 50vw;
+  }
+}
 @media screen and (max-width: 600px) and (orientation: portrait) {
   .article .heading .thumbnail {
     margin: 0 auto;

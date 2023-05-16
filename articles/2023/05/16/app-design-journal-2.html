@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="me" href="https://mastodon.social/@geekhoon">
+    <link rel="me" href="https://mastodon.hackerdrinks.social/@geekhoon">
+    <title>Triple Tee App Dev Journal 2</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Triple Tee App Dev Journal 2</h1>
+
+    <p>This is Part 2 of an article series that documents the process of building the Triple Tee App.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">May 16, 2023 | 
+
+<span>9 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_journal_2/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2 id="ui-components">UI Components</h2>
+
+<p>These 2 weeks have been very fruitful. I’ve managed to implement most of the UI components and polish the UX a little.
+In the previous devlog, I’ve merely scratched the surface and built just the input and button elements. Then I spent
+quite a lot of time to build the datepicker and a select-from-datatable component, but it was fun and satisfying to
+see them come to live.</p>
+
+<p>For the datepicker, I decided to build something that kind of mimic the scrolling of year/month/day list on the mobile.
+The most notable thing I learnt from building it is using the <code class="language-plaintext highlighter-rouge">offset</code> and <code class="language-plaintext highlighter-rouge">scroll</code> attributes, which will scroll the
+currently selected year/month/date to the top so that the user is aware of these values being selected.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_2/demo_datepicker.gif" /></p>
+  <p><small>Using <code class="language-plaintext highlighter-rouge">offsetTop</code> of the selected value to set the <code class="language-plaintext highlighter-rouge">scrollTop</code> of the list.</small></p>
+</div>
+
+<p>Then for the select-from-datatable component, I built it as an extension of a simple select component, so that I can
+asynchronously load paginated data for selection. This is mostly used in the case of selecting association data, eg.
+when I need to choose a tag created in another data table to use in a transaction. What is interesting for this
+component is the idea of composition, where multiple simpler components are used to build a more complex component.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_2/demo_selecttable.gif" /></p>
+  <p><small>Composing table, checkbox and alert components to build the select-from-datatable component.</small></p>
+</div>
+
+<h2 id="plugins-system">Plugins System</h2>
+
+<p>During the early phase of building the app, I already had the idea of building a plugins system, such that each UI/APIs
+set can be self-contained in its own JS file/directory, and then easily added to the Electron app without rebuilding
+the entire app. This is something useful if I were to allow other people to build their own plugins and add features to
+the app without my involvement.</p>
+
+<p>But more importantly, I wanted to make it easy for myself when I’m building the app. It proved to be a very useful
+strategy once I started adding more UI and APIs. I have a simple script that creates the boilerplate code for a
+server-side module or a UI page. When I need to add a new model, I use the script to generate the boilerplate files,
+then add the model schemas and UI layout. Once I build them, I just copy the bundled JS files into the Electron app and
+run the app without having to repackage it.</p>
+
+<p>One notably interesting concept I applied in building this system is Dependency Injection. Initially, I just simply
+<code class="language-plaintext highlighter-rouge">require</code> the server dependencies within the “plugin”. This has worked fine when I run the app in development mode
+locally. However, when I run it as an Electron app, this didn’t work anymore.</p>
+
+<p>At first, I thought that dynamically reading the plugin index file failed, but I noticed that the API routes were
+registered, so file loading has no problem. Then I realised the real issue is with the plugin trying to require some
+server dependencies, like data access module. I think it’s because in the bundled Electron app, the directory structure
+no longer applies, so the plugin can’t <code class="language-plaintext highlighter-rouge">require</code> via relative paths. The solution is to inject the server dependencies
+when <code class="language-plaintext highlighter-rouge">require</code> the plugin module.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">// server.js</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nf">loadPlugins</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">await</span> <span class="nx">fsPromises</span><span class="p">.</span><span class="nf">readdir</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">server/modules</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nf">then</span><span class="p">((</span><span class="nx">files</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nf">for </span><span class="p">(</span><span class="kd">const</span> <span class="nx">file</span> <span class="k">of</span> <span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">pluginPath</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">server/modules</span><span class="dl">'</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="dl">'</span><span class="s1">index.js</span><span class="dl">'</span><span class="p">)</span>
+        <span class="kd">const</span> <span class="nx">plugin</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="nx">pluginPath</span><span class="p">)(</span><span class="nx">dataAccess</span><span class="p">,</span> <span class="nx">routes</span><span class="p">);</span>
+        <span class="kd">const</span> <span class="nx">pluginRouter</span> <span class="o">=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">router</span><span class="p">;</span>
+        <span class="nx">pluginRouter</span><span class="p">.</span><span class="nx">routes</span><span class="p">.</span><span class="nf">forEach</span><span class="p">((</span><span class="nx">route</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="nx">app</span><span class="p">[</span><span class="nx">route</span><span class="p">.</span><span class="nx">method</span><span class="p">](</span><span class="s2">`</span><span class="p">${</span><span class="nx">pluginRouter</span><span class="p">.</span><span class="nx">prefix</span><span class="p">}${</span><span class="nx">route</span><span class="p">.</span><span class="nx">path</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="nx">route</span><span class="p">.</span><span class="nx">handler</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`Loaded plugin: </span><span class="p">${</span><span class="nx">plugin</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nf">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="c1">// plugin index.js</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dataAccess</span><span class="p">,</span> <span class="nx">routes</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">stores</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./stores</span><span class="dl">'</span><span class="p">)(</span><span class="nx">dataAccess</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">router</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./routes</span><span class="dl">'</span><span class="p">)(</span><span class="nx">routes</span><span class="p">,</span> <span class="nx">stores</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="p">,</span>
+    <span class="nx">stores</span><span class="p">,</span>
+    <span class="nx">router</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_2/server_plugins.png" /></p>
+  <p><small>Each plugin consists of index, routes and stores APIs and is dynamically loaded.</small></p>
+</div>
+
+<h2 id="data-access">Data Access</h2>
+
+<p>During the design phase of the app, I mentioned that I’ve designed the models without a specific data store framework
+in mind. When I started implementation, I decided that I will use plain JSON files as data store and write my own
+data access APIs.</p>
+
+<p>There’re a few reasons for the decision.</p>
+
+<ol>
+  <li>
+    <p><strong>I want the app to be as lean as possible.</strong> If I were to use an existing data store solution, be it
+SQL-based or NoSQL, I would have to install additional packages and the database into the app. By using JSON files, I
+can omit any additional package installation, and no need to force install a database on the user’s machine.</p>
+  </li>
+  <li>
+    <p><strong>I can easily reflect the data schemas,</strong> by reading from a custom schemas structure, instead of
+reading the schemas from the database and interpret it accordingly. Maybe there’s a package that can do what
+ActiveRecord does, but that will mean yet another dependency. Instead, I just define my own schemas structure, and use
+it for building data validation etc.</p>
+  </li>
+  <li>
+    <p><strong>The data are comprehensible by the user.</strong> Since these are just JSON files, the user can easily
+manipulate them further to import to other apps when needed. Perhaps they started with using this app, and as their
+needs grow, they want to migrate to another app. No doubt the data won’t be 100% fit for the other app, but at least
+it is easy enough to manipulate even for a non-technical person using JSON editors.</p>
+  </li>
+  <li>
+    <p><strong>The app can then technically support cross-device access.</strong> I intend to allow the user to choose the
+location of the data files later down the road. For example, if the user puts the files on iCloud, and configures to
+load from there, then technically she can access the data across her MacBook and iMac.</p>
+  </li>
+</ol>
+
+<p>Of course this comes with its own disadvantages.</p>
+
+<ol>
+  <li>
+    <p><strong>I have to write my own data access APIs.</strong> There’s no <code class="language-plaintext highlighter-rouge">SELECT * FROM TABLE</code> query language to use, I
+have to write my own version. Luckily it’s just JSON data, so it’s not that hard to implement the query logic.</p>
+  </li>
+  <li>
+    <p><strong>I have to create my own indexes.</strong> Yes, like unique indexes and foreign indexes. I have to design my
+own index structure, which is also another JSON data file, so that I can enforce unique and foreign constraints.</p>
+  </li>
+  <li>
+    <p><strong>It might be slow.</strong> Commercial databases have been in existence for a very long time, with
+battle-tested performance. If the data grow too large, then JSON access is definitely going to be quite slow. But I
+think my app won’t get to that kind of scale for me to worry about optimisation at this point, when it happens, I will
+deal with it again.</p>
+  </li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enum"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"enums"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"income"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Income"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"expense"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Expense"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"incomeReversal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Income Reversal"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"expenseReversal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Expense Reversal"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"transactionDate"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"number"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"array"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"currencyId"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"associatedTransactionId"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"constraints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"foreign"</span><span class="p">:{</span><span class="w">
+        </span><span class="nl">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tags"</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"currencyId"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"currencies"</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"associatedTransactionId"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"transactions"</span><span class="w"> </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"unique"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="nl">"required"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">,</span><span class="w"> </span><span class="s2">"transactionDate"</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tags"</span><span class="p">,</span><span class="w"> </span><span class="s2">"currencyId"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="table-caption">
+  <p><small>Custom schemas structure to define field type and constraints for validation.</small></p>
+</div>
+
+<h2 id="thats-all-for-now">That’s All For Now</h2>
+
+<p>That’s the result after 2 weeks of work, I think I’ve made quite a significant progress in setting up the foundation
+of the app. Next, I will focus on building the business logic and hopefully not have to digress too much to polishing
+the UI components.</p>
+
+<p>There’s a demo page for the UI components I’ve built so far, you can have a look at it if interested.</p>
+
+<p>Stay tuned for more updates!</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/fVUl6kzIvLg" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Brown pencil on white book page by Jan Kahánek
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://www.coffeebrewapps.com/coffeebrew_vue_components/" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Coffeebrew Vue Components Demo Page (desktop-optimised)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/05/02/app-design-journal-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Triple Tee App Dev Journal (Part 1)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

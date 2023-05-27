@@ -331,6 +331,7 @@ languages to use).</p>
 erDiagram
     InvoiceConfigs {
         text id PK
+        text description "not null"
         text invoice_cycle_date "not null, default: 1"
         text invoice_cycle_duration_value "not null, default: 1"
         text invoice_cycle_duration_unit "not null, default: 'month'"
@@ -410,6 +411,7 @@ erDiagram
         timestamp updated_at "not null"
         text invoice_config_id FK "not null"
         text currency_id FK "not null"
+        text contact_id FK "not null"
     }
 
     InvoiceLines {
@@ -417,6 +419,8 @@ erDiagram
         text description "not null"
         text unit "not null"
         numeric unit_cost "not null"
+        numeric unit_value "not null"
+        numeric subtotal "not null"
         timestamp created_at "not null"
         timestamp updated_at "not null"
         text invoice_id FK "not null"
@@ -551,6 +555,7 @@ erDiagram
         text invoice_id FK
         text currency_id FK "not null"
         text income_transaction_id FK "not null"
+        text contact_id FK "not null"
     }
 
 </pre>
@@ -733,6 +738,7 @@ erDiagram
 
     BillingConfigs {
         text id PK
+        text description "not null"
         date effective_start "not null"
         date effective_end
         text rate_type "not null, default: 'duration'"

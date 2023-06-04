@@ -159,7 +159,8 @@ sequenceDiagram
 preload script to load and expose the default configs from file. Then, we expose the API for the configuration screen
 to call back when we receive user’s input, which internally sends the <code class="language-plaintext highlighter-rouge">set-app-config</code> message.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// preload.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// preload.js</span>
 <span class="kd">const</span> <span class="p">{</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">}</span> <span class="o">=</span> <span class="nf">readConfigFromFile</span><span class="p">(</span><span class="nx">configFile</span><span class="p">);</span>
 <span class="nx">contextBridge</span><span class="p">.</span><span class="nf">exposeInMainWorld</span><span class="p">(</span><span class="dl">'</span><span class="s1">initAppConfigs</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">});</span>
 
@@ -167,43 +168,46 @@ to call back when we receive user’s input, which internally sends the <code cl
   <span class="na">setAppConfig</span><span class="p">:</span> <span class="p">({</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">ipcRenderer</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">set-app-config</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">});</span>
   <span class="p">},</span>
-<span class="p">});</span>
-</code></pre></div></div>
+<span class="p">});</span></code></pre>
+</figure>
 
 <p>In the configuration screen, we will setup the usual form inputs, and the user will click a button the confirm the
 configuration. On button click, we then call the API setup earlier in the preload script to send the input values to
 the main process.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// renderer.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// renderer.js</span>
 <span class="nx">launchButton</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">portInput</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">dataDir</span> <span class="o">=</span> <span class="nx">dataDirInput</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
   <span class="nb">window</span><span class="p">.</span><span class="nx">electronAPI</span><span class="p">.</span><span class="nf">setAppConfig</span><span class="p">({</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">});</span>
-<span class="p">});</span>
-</code></pre></div></div>
+<span class="p">});</span></code></pre>
+</figure>
 
 <p>In the Electron main process, we will listen for the <code class="language-plaintext highlighter-rouge">set-app-config</code> message, and on receiving it, write the configs
 to file, load the server app and request for the client app at the chosen port.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// main.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// main.js</span>
 <span class="nx">ipcMain</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">set-app-config</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="p">{</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nf">writeToFile</span><span class="p">(</span><span class="nx">configFile</span><span class="p">,</span> <span class="p">{</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dataDir</span> <span class="p">});</span>
 
   <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">server.js</span><span class="dl">'</span><span class="p">);</span>
 
   <span class="nx">win</span><span class="p">.</span><span class="nf">loadURL</span><span class="p">(</span><span class="s2">`http://localhost:</span><span class="p">${</span><span class="nx">port</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div></div>
+<span class="p">});</span></code></pre>
+</figure>
 
 <p>Finally, we allow the server app to read the port from the config file when it is loaded by the Electron main process.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// server.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// server.js</span>
 <span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nf">express</span><span class="p">();</span>
 <span class="kd">const</span> <span class="p">{</span> <span class="nx">port</span> <span class="p">}</span> <span class="o">=</span> <span class="nf">readConfigFromFile</span><span class="p">(</span><span class="nx">configFile</span><span class="p">);</span>
 <span class="c1">// this will load the client app index.html at root path</span>
 <span class="nx">app</span><span class="p">.</span><span class="nf">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nf">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">public</span><span class="dl">'</span><span class="p">)));</span>
-<span class="nx">app</span><span class="p">.</span><span class="nf">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span>
-</code></pre></div></div>
+<span class="nx">app</span><span class="p">.</span><span class="nf">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span></code></pre>
+</figure>
 
 <div class="image">
   <p><img src="/assets/images/posts/app_design_journal_3/demo_config_screen.png" /></p>
@@ -233,7 +237,8 @@ logic and data via APIs or through client-side stores at build time.</p>
 time. I assign the web demo as <code class="language-plaintext highlighter-rouge">staging</code> environment, so when I build for <code class="language-plaintext highlighter-rouge">staging</code>, it will use client-side data
 access.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/dataAccess.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/dataAccess.js</span>
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">useDataStore</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">client/store</span><span class="dl">'</span><span class="p">;</span>
 
@@ -244,12 +249,13 @@ access.</p>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nf">useApiAccess</span><span class="p">();</span>
   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Then, my client-side data access will implement the CRUD APIs as per the server-side data access layer.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/web.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/web.js</span>
 
 <span class="k">export</span> <span class="kd">function</span> <span class="nf">useWebAccess</span><span class="p">(</span><span class="nx">dataStore</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="p">{</span>
@@ -257,14 +263,15 @@ access.</p>
     <span class="na">create</span><span class="p">:</span> <span class="nx">dataStore</span><span class="p">.</span><span class="nx">create</span><span class="p">,</span>
     <span class="c1">// omitted for simplicity</span>
   <span class="p">};</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>But instead of reading from data files, the client-side data store will read from the browser’s <code class="language-plaintext highlighter-rouge">localStorage</code>. It will
 also implement data cache as per server-side implementation, so that the behaviour is more consistent between the
 actual Electron app and the web demo.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/store.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/store.js</span>
 
 <span class="k">export</span> <span class="kd">const</span> <span class="nx">useDataStore</span> <span class="o">=</span> <span class="nf">defineStore</span><span class="p">(</span><span class="dl">'</span><span class="s1">data</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">dataCache</span> <span class="o">=</span> <span class="nf">ref</span><span class="p">({});</span>
@@ -285,8 +292,8 @@ actual Electron app and the web demo.</p>
     <span class="nx">create</span><span class="p">,</span>
     <span class="c1">// omitted for simplicity</span>
   <span class="p">};</span>
-<span class="p">});</span>
-</code></pre></div></div>
+<span class="p">});</span></code></pre>
+</figure>
 
 <h3 id="custom-business-logic">Custom Business Logic</h3>
 
@@ -296,7 +303,8 @@ too.</p>
 <p>First, I have a store of custom functions, and allow for registering new functions and retrieving functions for a given
 model class. This is kind of similar to how we have routes registration in the Express.js app.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/store.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/store.js</span>
 
 <span class="kd">const</span> <span class="nx">customFunctions</span> <span class="o">=</span> <span class="nf">ref</span><span class="p">({});</span>
 
@@ -306,13 +314,14 @@ model class. This is kind of similar to how we have routes registration in the E
 
 <span class="kd">function</span> <span class="nf">customFunctionsForModel</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">fnType</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nx">customFunctions</span><span class="p">[</span><span class="nx">modelClass</span><span class="p">][</span><span class="nx">fnType</span><span class="p">];</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Then, the web data access will act like the route handler, where it will receive the data access request, and try to
 lookup the corresponding function and invoke accordingly.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/web.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/web.js</span>
 
 <span class="kd">function</span> <span class="nf">lookupFunction</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">fnType</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">functions</span> <span class="o">=</span> <span class="nx">dataStore</span><span class="p">.</span><span class="nf">customFunctionsForModel</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">fnType</span><span class="p">)</span> <span class="o">||</span> <span class="p">{};</span>
@@ -326,13 +335,14 @@ lookup the corresponding function and invoke accordingly.</p>
 <span class="k">return</span> <span class="p">{</span>
   <span class="na">registerFunction</span><span class="p">:</span> <span class="nx">dataStore</span><span class="p">.</span><span class="nx">registerFunction</span><span class="p">,</span>
   <span class="nx">lookupFunction</span><span class="p">,</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>For example, I have a custom logic in the Invoices module that allows the user to preview an invoice. This is done by
 aggregating data from various models, so it’s not a simple Read API.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/plugins/invoics/store.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/plugins/invoics/store.js</span>
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">useWebAccess</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">client/web</span><span class="dl">'</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">dataAccess</span> <span class="o">=</span> <span class="nf">useWebAccess</span><span class="p">();</span>
@@ -341,13 +351,14 @@ aggregating data from various models, so it’s not a simple Read API.</p>
   <span class="c1">// implement accordingly</span>
 <span class="p">}</span>
 
-<span class="nx">dataAccess</span><span class="p">.</span><span class="nf">registerFunction</span><span class="p">(</span><span class="dl">'</span><span class="s1">invoices</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">view</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">preview_invoice</span><span class="dl">'</span><span class="p">,</span> <span class="nx">previewInvoice</span><span class="p">);</span>
-</code></pre></div></div>
+<span class="nx">dataAccess</span><span class="p">.</span><span class="nf">registerFunction</span><span class="p">(</span><span class="dl">'</span><span class="s1">invoices</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">view</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">preview_invoice</span><span class="dl">'</span><span class="p">,</span> <span class="nx">previewInvoice</span><span class="p">);</span></code></pre>
+</figure>
 
 <p>Now, in my ViewInvoice component, I can call the data access layer to preview invoice, and underlying it will lookup
 the correct custom function if this is a web demo.</p>
 
-<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// client/plugins/invoices/ViewInvoice.vue
+<figure class="highlight">
+  <pre><code class="language-vue" data-lang="vue">// client/plugins/invoices/ViewInvoice.vue
 
 <span class="nt">&lt;</span><span class="k">script</span> <span class="na">setup</span><span class="nt">&gt;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">useDataAccess</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">client/dataAccess</span><span class="dl">'</span><span class="p">;</span>
@@ -363,8 +374,8 @@ the correct custom function if this is a web demo.</p>
       <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
     <span class="p">});</span>
 <span class="p">});</span>
-<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span>
-</code></pre></div></div>
+<span class="nt">&lt;/</span><span class="k">script</span><span class="nt">&gt;</span></code></pre>
+</figure>
 
 <p>In this case, if I’m building for the web demo, it will go through the web data access layer to lookup the custom function
 and invoke the logic. If this is the Electron app, then it will go through the API data access layer and send a request
@@ -393,7 +404,8 @@ transitive dependency <code class="language-plaintext highlighter-rouge">puppete
 to generate the PDF. In the end, I’ve decided to instead install <code class="language-plaintext highlighter-rouge">puppeteer</code> as a direct dependency, and borrow some
 of the original library’s code and customise to suit my use case.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// server/shared/routes.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// server/shared/routes.js</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nf">downloadPdf</span><span class="p">(</span><span class="nx">templateType</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
@@ -415,17 +427,18 @@ of the original library’s code and customise to suit my use case.</p>
 
     <span class="k">await</span> <span class="nf">createResponse</span><span class="p">(</span><span class="nx">res</span><span class="p">,</span> <span class="nx">htmlString</span><span class="p">,</span> <span class="nx">filename</span><span class="p">);</span>
   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Then, whenever my API requires PDF generation, I will register the route to use the <code class="language-plaintext highlighter-rouge">downloadPdf</code> handler.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// server/modules/invoice_templates/routes.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// server/modules/invoice_templates/routes.js</span>
 
 <span class="kd">const</span> <span class="nx">routes</span> <span class="o">=</span> <span class="p">[</span>
   <span class="p">{</span> <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">post</span><span class="dl">'</span><span class="p">,</span> <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/:id/pdf</span><span class="dl">'</span><span class="p">,</span> <span class="na">handler</span><span class="p">:</span> <span class="nx">routes</span><span class="p">.</span><span class="nf">downloadPdf</span><span class="p">(</span><span class="dl">'</span><span class="s1">invoice_templates</span><span class="dl">'</span><span class="p">,</span> <span class="nx">id</span><span class="p">)</span> <span class="p">},</span>
-<span class="p">];</span>
-</code></pre></div></div>
+<span class="p">];</span></code></pre>
+</figure>
 
 <h3 id="client-side-generation">Client-side Generation</h3>
 
@@ -434,7 +447,8 @@ to render the markup first before printing the page as a PDF. In this case, I si
 to do the job. It works slightly differently from the <code class="language-plaintext highlighter-rouge">node-html2pdf</code> library. Instead of printing the page to PDF,
 the client-side library generates a screenshot of the page and save it to PDF format.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/pdf.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/pdf.js</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nf">downloadPdf</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">template</span> <span class="o">=</span> <span class="nx">dataStore</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="p">{}).</span><span class="nx">record</span><span class="p">;</span>
@@ -455,12 +469,13 @@ the client-side library generates a screenshot of the page and save it to PDF fo
 
 <span class="k">export</span> <span class="k">default</span> <span class="p">{</span>
   <span class="nx">downloadPdf</span><span class="p">,</span>
-<span class="p">};</span>
-</code></pre></div></div>
+<span class="p">};</span></code></pre>
+</figure>
 
 <p>Then, I implement the web data access version accordingly.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// client/plugins/invoice_templates/store.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// client/plugins/invoice_templates/store.js</span>
 
 <span class="k">import</span> <span class="nx">pdf</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">client/pdf</span><span class="dl">'</span><span class="p">;</span>
 
@@ -468,8 +483,8 @@ the client-side library generates a screenshot of the page and save it to PDF fo
   <span class="k">return</span> <span class="nx">pdf</span><span class="p">.</span><span class="nf">downloadPdf</span><span class="p">(</span><span class="nx">templateType</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="nx">dataAccess</span><span class="p">.</span><span class="nf">registerFunction</span><span class="p">(</span><span class="dl">'</span><span class="s1">invoice_templates</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">view</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">pdf</span><span class="dl">'</span><span class="p">,</span> <span class="nx">downloadPdf</span><span class="p">);</span>
-</code></pre></div></div>
+<span class="nx">dataAccess</span><span class="p">.</span><span class="nf">registerFunction</span><span class="p">(</span><span class="dl">'</span><span class="s1">invoice_templates</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">view</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">pdf</span><span class="dl">'</span><span class="p">,</span> <span class="nx">downloadPdf</span><span class="p">);</span></code></pre>
+</figure>
 
 <div class="image">
   <p><img src="/assets/images/posts/app_design_journal_3/demo_pdf.png" /></p>

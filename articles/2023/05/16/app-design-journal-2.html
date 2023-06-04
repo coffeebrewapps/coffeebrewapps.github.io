@@ -130,8 +130,8 @@ server dependencies, like data access module. I think it’s because in the bund
 no longer applies, so the plugin can’t <code class="language-plaintext highlighter-rouge">require</code> via relative paths. The solution is to inject the server dependencies
 when <code class="language-plaintext highlighter-rouge">require</code> the plugin module.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="c1">// server.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// server.js</span>
 <span class="k">async</span> <span class="kd">function</span> <span class="nf">loadPlugins</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">await</span> <span class="nx">fsPromises</span><span class="p">.</span><span class="nf">readdir</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">server/modules</span><span class="dl">'</span><span class="p">))</span>
     <span class="p">.</span><span class="nf">then</span><span class="p">((</span><span class="nx">files</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -148,9 +148,11 @@ when <code class="language-plaintext highlighter-rouge">require</code> the plugi
     <span class="p">.</span><span class="nf">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
     <span class="p">})</span>
-<span class="p">}</span>
+<span class="p">}</span></code></pre>
+</figure>
 
-<span class="c1">// plugin index.js</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// plugin index.js</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dataAccess</span><span class="p">,</span> <span class="nx">routes</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">stores</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./stores</span><span class="dl">'</span><span class="p">)(</span><span class="nx">dataAccess</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">router</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">./routes</span><span class="dl">'</span><span class="p">)(</span><span class="nx">routes</span><span class="p">,</span> <span class="nx">stores</span><span class="p">);</span>
@@ -160,9 +162,8 @@ when <code class="language-plaintext highlighter-rouge">require</code> the plugi
     <span class="nx">stores</span><span class="p">,</span>
     <span class="nx">router</span>
   <span class="p">}</span>
-<span class="p">}</span>
-
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <div class="image">
   <p><img src="/assets/images/posts/app_design_journal_2/server_plugins.png" style="width: 50%;" /></p>
@@ -221,7 +222,8 @@ deal with it again.</p>
   </li>
 </ol>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+<figure class="highlight">
+  <pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
   </span><span class="nl">"transactions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
       </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w"> </span><span class="p">},</span><span class="w">
@@ -254,8 +256,8 @@ deal with it again.</p>
       </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
+</span><span class="p">}</span></code></pre>
+</figure>
 
 <div class="table-caption">
   <p><small>Custom schemas structure to define field type and constraints for validation.</small></p>

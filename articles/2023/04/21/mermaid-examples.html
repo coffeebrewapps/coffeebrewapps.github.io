@@ -93,31 +93,34 @@ render the diagrams. I tried it but it didn’t work, because the plugin uses <c
 <p>So, again, I had to think of an alternative solution. At first I just created a <code class="language-plaintext highlighter-rouge">_includes/mermaid.html</code> file that just
 imports the <code class="language-plaintext highlighter-rouge">mermaid.js</code> source like this:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span><span class="nt">&gt;</span>
+<figure class="highlight">
+  <pre><code class="language-html" data-lang="html"><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span><span class="nt">&gt;</span>
   <span class="k">import</span> <span class="nx">mermaid</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs</span><span class="dl">'</span><span class="p">;</span>
   <span class="nx">mermaid</span><span class="p">.</span><span class="nf">initialize</span><span class="p">({</span>
     <span class="na">startOnLoad</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
   <span class="p">});</span>
-<span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
+<span class="nt">&lt;/script&gt;</span></code></pre>
+</figure>
 
 <p>After that, I can include it in the <code class="language-plaintext highlighter-rouge">_layouts/default.html</code>:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+<figure class="highlight">
+  <pre><code class="language-html" data-lang="html"><span class="nt">&lt;body&gt;</span>
   {% include mermaid.html %}
-<span class="nt">&lt;/body&gt;</span>
-</code></pre></div></div>
+<span class="nt">&lt;/body&gt;</span></code></pre>
+</figure>
 
 <p>And when I need to render Mermaid diagrams, I just write the code:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;pre</span> <span class="na">class=</span><span class="s">"mermaid"</span><span class="nt">&gt;</span>
+<figure class="highlight">
+  <pre><code class="language-html" data-lang="html"><span class="nt">&lt;pre</span> <span class="na">class=</span><span class="s">"mermaid"</span><span class="nt">&gt;</span>
 graph TD;
     A--&gt;B;
     A--&gt;C;
     B--&gt;D;
     C--&gt;D;
-<span class="nt">&lt;/pre&gt;</span>
-</code></pre></div></div>
+<span class="nt">&lt;/pre&gt;</span></code></pre>
+</figure>
 
 <p>It’s all good. But what if, I can reuse this piece of code in other Jekyll sites? So I turned it into a plugin, it’s
 a deviation from original goal, again. (laughs)</p>
@@ -149,14 +152,15 @@ not the color scheme).</p>
 
 <h3 id="flowchart">Flowchart</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid %}
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid %}
 graph TD;
     A--&gt;B;
     A--&gt;C;
     B--&gt;D;
     C--&gt;D;
-{% endmermaid %}
-</code></pre></div></div>
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -193,7 +197,8 @@ graph TD;
 
 <h3 id="sequence-diagram">Sequence Diagram</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid %}
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid %}
 sequenceDiagram
     participant Alice
     participant Bob
@@ -201,12 +206,12 @@ sequenceDiagram
     loop Healthcheck
         John-&gt;&gt;John: Fight against hypochondria
     end
-    Note right of John: Rational thoughts &lt;br/&gt;prevail!
+    Note right of John: Rational thoughts <span class="nt">&lt;br/&gt;</span>prevail!
     John--&gt;&gt;Alice: Great!
     John-&gt;&gt;Bob: How about you?
     Bob--&gt;&gt;John: Jolly good!
-{% endmermaid %}
-</code></pre></div></div>
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -249,7 +254,8 @@ sequenceDiagram
 
 <h3 id="gantt-diagram">Gantt Diagram</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid %}
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid %}
 gantt
 dateFormat  YYYY-MM-DD
 title Adding GANTT diagram to mermaid
@@ -260,8 +266,8 @@ Completed task            :done,    des1, 2014-01-06,2014-01-08
 Active task               :active,  des2, 2014-01-09, 3d
 Future task               :         des3, after des2, 5d
 Future task2               :         des4, after des3, 5d
-{% endmermaid %}
-</code></pre></div></div>
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -303,23 +309,24 @@ Future task2               :         des4, after des3, 5d
 
 <h3 id="class-diagram">Class Diagram</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid %}
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid %}
 classDiagram
 Class01 &lt;|-- AveryLongClass : Cool
-Class03 *-- Class04
+Class03 <span class="err">*</span>-- Class04
 Class05 o-- Class06
 Class07 .. Class08
 Class09 --&gt; C2 : Where am i?
-Class09 --* C3
+Class09 --<span class="err">*</span> C3
 Class09 --|&gt; Class07
 Class07 : equals()
 Class07 : Object[] elementData
 Class01 : size()
 Class01 : int chimp
 Class01 : int gorilla
-Class08 &lt;--&gt; C2: Cool label
-{% endmermaid %}
-</code></pre></div></div>
+Class08 <span class="nt">&lt;--&gt;</span> C2: Cool label
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -365,7 +372,8 @@ Class08 &lt;--&gt; C2: Cool label
 
 <h3 id="git-graph">Git Graph</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid {
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid {
   "theme": {
     "variables": {
       "primaryTextColor": "#fff",
@@ -383,8 +391,8 @@ Class08 &lt;--&gt; C2: Cool label
        checkout main
        commit
        commit
-{% endmermaid %}
-</code></pre></div></div>
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -427,7 +435,8 @@ Class08 &lt;--&gt; C2: Cool label
 
 <h3 id="erd">ERD</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid {
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid {
   "theme": {
     "variables": {
       "tertiaryColor": "#deaa87"
@@ -438,8 +447,8 @@ erDiagram
     CUSTOMER ||--o{ ORDER : places
     ORDER ||--|{ LINE-ITEM : contains
     CUSTOMER }|..|{ DELIVERY-ADDRESS : uses
-{% endmermaid %}
-</code></pre></div></div>
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -475,7 +484,8 @@ erDiagram
 
 <h3 id="user-journey-diagram">User Journey Diagram</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% mermaid {
+<figure class="highlight">
+  <pre><code class="language-markdown" data-lang="markdown">{% mermaid {
   "theme": {
     "variables": {
       "secondaryColor": "#deaa87"
@@ -491,8 +501,8 @@ journey
     section Go home
       Go downstairs: 5: Me
       Sit down: 5: Me
-{% endmermaid %}
-</code></pre></div></div>
+{% endmermaid %}</code></pre>
+</figure>
 
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';

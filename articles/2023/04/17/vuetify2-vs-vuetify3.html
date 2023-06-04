@@ -189,8 +189,8 @@ component that serves as an interim solution before Vuetify releases the version
 Here’s the snippet of the component code (some details omitted):
 </p>
 
-<div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
+<figure class="highlight">
+  <pre><code class="language-vue" data-lang="vue"><span class="nt">&lt;</span><span class="k">template</span><span class="nt">&gt;</span>
   <span class="nt">&lt;v-sheet</span>
     <span class="na">class=</span><span class="s">"d-none d-sm-flex"</span>
   <span class="nt">&gt;</span>
@@ -214,20 +214,19 @@ Here’s the snippet of the component code (some details omitted):
         <span class="na">:key=</span><span class="s">"h"</span>
       <span class="nt">&gt;</span>
         <span class="nt">&lt;v-list-item-title&gt;</span>
-          <span class="si">{{</span> <span class="nx">header</span><span class="p">.</span><span class="nx">title</span> <span class="si">}}</span>
+          
         <span class="nt">&lt;/v-list-item-title&gt;</span>
 
         <span class="nt">&lt;v-list-item-subtitle&gt;</span>
-          <span class="si">{{</span> <span class="nx">item</span><span class="p">[</span><span class="nx">header</span><span class="p">.</span><span class="nx">key</span><span class="p">]</span> <span class="si">}}</span>
+          
         <span class="nt">&lt;/v-list-item-subtitle&gt;</span>
       <span class="nt">&lt;/v-list-item&gt;</span>
 
       <span class="nt">&lt;v-divider&gt;&lt;/v-divider&gt;</span>
     <span class="nt">&lt;/v-list&gt;</span>
   <span class="nt">&lt;/v-sheet&gt;</span>
-<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span>
-
-</code></pre></div></div>
+<span class="nt">&lt;/</span><span class="k">template</span><span class="nt">&gt;</span></code></pre>
+</figure>
 
 <p>
 And this is the rendered table on mobile vs on desktop.
@@ -260,7 +259,9 @@ curve for the component APIs.
 <div class="flex-row">
   <div class="flex-col">
     <p><small>Tabs in v2.</small></p>
-    <div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;v-tabs</span>
+
+    <figure class="highlight">
+      <pre><code class="language-vue" data-lang="vue"><span class="nt">&lt;v-tabs</span>
   <span class="na">v-model=</span><span class="s">"tab"</span>
 <span class="nt">&gt;</span>
   <span class="nt">&lt;v-tab</span>
@@ -285,13 +286,16 @@ curve for the component APIs.
   <span class="nt">&gt;</span>
     This is the About tab.
   <span class="nt">&lt;/v-tab-item&gt;</span>
-<span class="nt">&lt;/v-tabs&gt;</span>
-</code></pre></div>    </div>
+<span class="nt">&lt;/v-tabs&gt;</span></code></pre>
+    </figure>
+
   </div>
 
   <div class="flex-col">
     <p><small>Tabs in v3.</small></p>
-    <div class="language-vue highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;v-tabs</span>
+
+    <figure class="highlight">
+      <pre><code class="language-vue" data-lang="vue"><span class="nt">&lt;v-tabs</span>
   <span class="na">v-model=</span><span class="s">"tab"</span>
 <span class="nt">&gt;</span>
   <span class="nt">&lt;v-tab</span>
@@ -324,8 +328,9 @@ curve for the component APIs.
   <span class="nt">&gt;</span>
     This is the About window.
   <span class="nt">&lt;/v-window-item&gt;</span>
-<span class="nt">&lt;/v-window&gt;</span>
-</code></pre></div>    </div>
+<span class="nt">&lt;/v-window&gt;</span></code></pre>
+    </figure>
+
   </div>
 </div>
 

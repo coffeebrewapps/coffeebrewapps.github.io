@@ -72,7 +72,8 @@ Coffeebrew Jekyll Archives plugin</a> to run test cases and lint the code.</p>
 
 <p>Here’s the initial setup (excerpts):</p>
 
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">jobs</span><span class="pi">:</span>
+<figure class="highlight">
+  <pre><code class="language-yaml" data-lang="yaml"><span class="na">jobs</span><span class="pi">:</span>
   <span class="na">test</span><span class="pi">:</span>
     <span class="na">steps</span><span class="pi">:</span>
       <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
@@ -82,22 +83,24 @@ Coffeebrew Jekyll Archives plugin</a> to run test cases and lint the code.</p>
           <span class="na">ruby-version</span><span class="pi">:</span> <span class="s">$</span>
           <span class="na">bundler-cache</span><span class="pi">:</span> <span class="kc">true</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run tests</span>
-        <span class="na">run</span><span class="pi">:</span> <span class="s">bash script/cibuild</span>
-</code></pre></div></div>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">bash script/cibuild</span></code></pre>
+</figure>
 
 <p>The <code class="language-plaintext highlighter-rouge">script/cibuild</code> script basically just does 3 things (excerpts):</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle <span class="nb">install
-</span>bundle <span class="nb">exec </span>rubocop <span class="nt">-D</span> <span class="nt">-E</span> <span class="nv">$@</span>
-bundle <span class="nb">exec </span>rspec <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
-</code></pre></div></div>
+<figure class="highlight">
+  <pre><code class="language-console" data-lang="console"><span class="go">bundle install
+</span><span class="gp">bundle exec rubocop -D -E $</span>@
+<span class="gp">bundle exec rspec "$</span>@<span class="s2">"</span></code></pre>
+</figure>
 
 <p>Then I kept running into the error:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RuboCop 1.45.1
-cannot load such file <span class="nt">--</span> rubocop-minitest
-/home/runner/work/coffeebrew_jekyll_archives/coffeebrew_jekyll_archives/vendor/bundle/ruby/3.2.0/gems/rubocop-1.45.1/lib/rubocop/feature_loader.rb:46:in <span class="sb">`</span>rescue <span class="k">in </span>rescue <span class="k">in </span>load<span class="s1">'
-</span></code></pre></div></div>
+<figure class="highlight">
+  <pre><code class="language-console" data-lang="console"><span class="go">RuboCop 1.45.1
+cannot load such file -- rubocop-minitest
+/home/runner/work/coffeebrew_jekyll_archives/coffeebrew_jekyll_archives/vendor/bundle/ruby/3.2.0/gems/rubocop-1.45.1/lib/rubocop/feature_loader.rb:46:in `rescue in rescue in load'</span></code></pre>
+</figure>
 
 <p>In my mind I was like: “Why on earth did <code class="language-plaintext highlighter-rouge">rubocop-minitest</code> get into my project?”. I tried a few Google searches, they
 mostly just mention something along the line of “remember to <code class="language-plaintext highlighter-rouge">require: rubocop-minitest</code> in your <code class="language-plaintext highlighter-rouge">.rubocop.yml</code>”.</p>
@@ -116,11 +119,12 @@ the fix</a>.</p>
 <p>This will not be the end, I will need to figure out why did Rubocop also try to lint the dependencies when I already
 specified the <code class="language-plaintext highlighter-rouge">Include</code> option to:</p>
 
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">AllCops</span><span class="pi">:</span>
+<figure class="highlight">
+  <pre><code class="language-yaml" data-lang="yaml"><span class="na">AllCops</span><span class="pi">:</span>
   <span class="na">Include</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">lib/**/*.rb</span>
-    <span class="pi">-</span> <span class="s">spec/**/*.rb</span>
-</code></pre></div></div>
+    <span class="pi">-</span> <span class="s">spec/**/*.rb</span></code></pre>
+</figure>
 
 <p>This will be another shot/article that I write when I figure it out. Hope this shot gives you a boost for the day.
 Stay tuned for more!</p>

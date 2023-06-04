@@ -10285,6 +10285,274 @@ readers do not read off random characters that represent icons */
   src: url("/assets/webfonts/Quicksand-Bold.ttf") format("truetype"), url("/assets/webfonts/Quicksand-Bold.woff2") format("woff2");
   font-weight: bold;
 }
+figure.highlight {
+  padding: 1rem;
+  overflow: auto;
+}
+
+figure.highlight table td {
+  padding: 5px;
+}
+
+figure.highlight table pre {
+  margin: 0;
+}
+
+figure.highlight .gh {
+  color: #999999;
+}
+
+figure.highlight .sr {
+  color: #f6aa11;
+}
+
+figure.highlight .go {
+  color: #888888;
+}
+
+figure.highlight .gp {
+  color: #555555;
+}
+
+figure.highlight .gu {
+  color: #aaaaaa;
+}
+
+figure.highlight .nb {
+  color: #f6aa11;
+}
+
+figure.highlight .cm {
+  color: #75715e;
+}
+
+figure.highlight .cp {
+  color: #75715e;
+}
+
+figure.highlight .c1 {
+  color: #75715e;
+}
+
+figure.highlight .cs {
+  color: #75715e;
+}
+
+figure.highlight .c, figure.highlight .ch, figure.highlight .cd, figure.highlight .cpf {
+  color: #75715e;
+}
+
+figure.highlight .err {
+  color: #960050;
+}
+
+figure.highlight .gr {
+  color: #960050;
+}
+
+figure.highlight .gt {
+  color: #960050;
+}
+
+figure.highlight .gd {
+  color: #49483e;
+}
+
+figure.highlight .gi {
+  color: #49483e;
+}
+
+figure.highlight .ge {
+  color: #49483e;
+}
+
+figure.highlight .kc {
+  color: #66d9ef;
+}
+
+figure.highlight .kd {
+  color: #66d9ef;
+}
+
+figure.highlight .kr {
+  color: #66d9ef;
+}
+
+figure.highlight .no {
+  color: #66d9ef;
+}
+
+figure.highlight .kt {
+  color: #66d9ef;
+}
+
+figure.highlight .mf {
+  color: #ae81ff;
+}
+
+figure.highlight .mh {
+  color: #ae81ff;
+}
+
+figure.highlight .il {
+  color: #ae81ff;
+}
+
+figure.highlight .mi {
+  color: #ae81ff;
+}
+
+figure.highlight .mo {
+  color: #ae81ff;
+}
+
+figure.highlight .m, figure.highlight .mb, figure.highlight .mx {
+  color: #ae81ff;
+}
+
+figure.highlight .sc {
+  color: #ae81ff;
+}
+
+figure.highlight .se {
+  color: #ae81ff;
+}
+
+figure.highlight .ss {
+  color: #ae81ff;
+}
+
+figure.highlight .sd {
+  color: #e6db74;
+}
+
+figure.highlight .s2 {
+  color: #e6db74;
+}
+
+figure.highlight .sb {
+  color: #e6db74;
+}
+
+figure.highlight .sh {
+  color: #e6db74;
+}
+
+figure.highlight .si {
+  color: #e6db74;
+}
+
+figure.highlight .sx {
+  color: #e6db74;
+}
+
+figure.highlight .s1 {
+  color: #e6db74;
+}
+
+figure.highlight .s, figure.highlight .sa, figure.highlight .dl {
+  color: #e6db74;
+}
+
+figure.highlight .na {
+  color: #a6e22e;
+}
+
+figure.highlight .nc {
+  color: #a6e22e;
+}
+
+figure.highlight .nd {
+  color: #a6e22e;
+}
+
+figure.highlight .ne {
+  color: #a6e22e;
+}
+
+figure.highlight .nf, figure.highlight .fm {
+  color: #a6e22e;
+}
+
+figure.highlight .vc {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .nn {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .nl {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .ni {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .bp {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .vg {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .vi {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .nv, figure.highlight .vm {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .w {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .n, figure.highlight .py, figure.highlight .nx {
+  color: #ffffff;
+  background-color: #272822;
+}
+
+figure.highlight .ow {
+  color: #f92672;
+}
+
+figure.highlight .nt {
+  color: #f92672;
+}
+
+figure.highlight .k, figure.highlight .kv {
+  color: #f92672;
+}
+
+figure.highlight .kn {
+  color: #f92672;
+}
+
+figure.highlight .kp {
+  color: #f92672;
+}
+
+figure.highlight .o {
+  color: #f92672;
+}
+
 html {
   --main-background-color: #ffffff;
   --secondary-background-color: #f4e3d7;

@@ -80,18 +80,20 @@ I improvised and tried to built one that is bi-directional and runs indefinitely
 <p>The idea I had was to use 2 <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code>s, 1 growing towards the right side, and the other growing towards the left side.
 Let’s call them the <code class="language-plaintext highlighter-rouge">forward-bar</code> and <code class="language-plaintext highlighter-rouge">reverse-bar</code> respectively.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div id="progress-bar" class="progress-bar"&gt;
-  &lt;div id="forward-bar" class="bar forward-bar" style="width: 0%;"&gt;
-  &lt;/div&gt;
-  &lt;div id="reverse-bar" class="bar reverse-bar" style="width: 100%;"&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre></div></div>
+<figure class="highlight">
+  <pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"progress-bar"</span> <span class="na">class=</span><span class="s">"progress-bar"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"forward-bar"</span> <span class="na">class=</span><span class="s">"bar forward-bar"</span> <span class="na">style=</span><span class="s">"width: 0%;"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"reverse-bar"</span> <span class="na">class=</span><span class="s">"bar reverse-bar"</span> <span class="na">style=</span><span class="s">"width: 100%;"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre>
+</figure>
 
 <p>At the initial state, the <code class="language-plaintext highlighter-rouge">forward-bar</code> will have 0% width and colored, while the <code class="language-plaintext highlighter-rouge">reverse-bar</code> will have 100% width
 but not colored:</p>
 
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.progress-bar</span> <span class="p">{</span>
+<figure class="highlight">
+  <pre><code class="language-css" data-lang="css"><span class="nc">.progress-bar</span> <span class="p">{</span>
   <span class="nl">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
   <span class="nl">width</span><span class="p">:</span> <span class="m">400px</span><span class="p">;</span>
   <span class="nl">background-color</span><span class="p">:</span> <span class="m">#f4e3d7</span><span class="p">;</span>
@@ -107,49 +109,54 @@ but not colored:</p>
 
 <span class="nc">.reverse-bar</span> <span class="p">{</span>
   <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Then, when the <code class="language-plaintext highlighter-rouge">forward-bar</code> grows to 100% width, I append the <code class="language-plaintext highlighter-rouge">.reverse</code> class to the <code class="language-plaintext highlighter-rouge">progress-bar</code> container, so
 that I can use it to style the <code class="language-plaintext highlighter-rouge">forward-bar</code> and <code class="language-plaintext highlighter-rouge">reverse-bar</code> in reverse colors:</p>
 
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.progress-bar.reverse</span> <span class="nc">.forward-bar</span>  <span class="p">{</span>
+<figure class="highlight">
+  <pre><code class="language-css" data-lang="css"><span class="nc">.progress-bar.reverse</span> <span class="nc">.forward-bar</span>  <span class="p">{</span>
   <span class="nl">background-color</span><span class="p">:</span> <span class="m">#ffffff</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="nc">.progress-bar.reverse</span> <span class="nc">.reverse-bar</span> <span class="p">{</span>
   <span class="nl">background-color</span><span class="p">:</span> <span class="m">#502d16</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>In order to determine the current direction, I created a variable named <code class="language-plaintext highlighter-rouge">direction</code> and initialised it to <code class="language-plaintext highlighter-rouge">forward</code>.
 We could also use a boolean <code class="language-plaintext highlighter-rouge">forward</code> and set to <code class="language-plaintext highlighter-rouge">true</code>, but I prefer to use string for clarity here.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span>
-</code></pre></div></div>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">let</span> <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span></code></pre>
+</figure>
 
 <p>Then I need to know what’s the current width of the bars, so I created a function for that:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">bar</span><span class="p">)</span> <span class="p">{</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">bar</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nf">parseInt</span><span class="p">(</span><span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Once I know the width, I can grow or shrink the bar by adding steps to the width:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">step</span><span class="p">(</span><span class="nx">bar</span><span class="p">,</span> <span class="nx">direction</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="p">{</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nf">step</span><span class="p">(</span><span class="nx">bar</span><span class="p">,</span> <span class="nx">direction</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="p">{</span>
   <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="p">[(</span><span class="nx">current</span> <span class="o">+</span> <span class="mi">5</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span> <span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="p">[(</span><span class="nx">current</span> <span class="o">-</span> <span class="mi">5</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span> <span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span>
   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>When I step forward, I grow the width of the <code class="language-plaintext highlighter-rouge">forward-bar</code> while shrinking the width of the <code class="language-plaintext highlighter-rouge">reverse-bar</code>. In the other
 direction, I reverse the action on the bars accordingly:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">forwardBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">forward-bar</span><span class="dl">'</span><span class="p">)</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">const</span> <span class="nx">forwardBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">forward-bar</span><span class="dl">'</span><span class="p">)</span>
 <span class="kd">const</span> <span class="nx">reverseBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">reverse-bar</span><span class="dl">'</span><span class="p">)</span>
 
 <span class="kd">function</span> <span class="nf">stepForward</span><span class="p">()</span> <span class="p">{</span>
@@ -166,13 +173,14 @@ direction, I reverse the action on the bars accordingly:</p>
 
   <span class="nf">step</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">,</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">,</span> <span class="nx">forwardWidth</span><span class="p">)</span>
   <span class="nf">step</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">,</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">,</span> <span class="nx">reverseWidth</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>If the bar grows to the full 100% width, I will need to change the direction. This is also where I add the <code class="language-plaintext highlighter-rouge">.reverse</code>
 class to the <code class="language-plaintext highlighter-rouge">progress-bar</code> so that it will update the background color of individual bars:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">progressBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">progress-bar</span><span class="dl">'</span><span class="p">)</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">const</span> <span class="nx">progressBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">progress-bar</span><span class="dl">'</span><span class="p">)</span>
 
 <span class="kd">function</span> <span class="nf">changeDirection</span><span class="p">()</span> <span class="p">{</span>
   <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
@@ -182,13 +190,14 @@ class to the <code class="language-plaintext highlighter-rouge">progress-bar</co
     <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span>
     <span class="nx">progressBar</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span>
   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Now we can put it all together in animation using the <code class="language-plaintext highlighter-rouge">setInterval</code> function, so that it will grow/shrink the bar
 every 10ms, creating the effect that it is moving:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">intervalId</span> <span class="o">=</span> <span class="nf">setInterval</span><span class="p">(</span><span class="nx">animate</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">const</span> <span class="nx">intervalId</span> <span class="o">=</span> <span class="nf">setInterval</span><span class="p">(</span><span class="nx">animate</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 
 <span class="kd">function</span> <span class="nf">animate</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">forwardWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">)</span>
@@ -205,8 +214,8 @@ every 10ms, creating the effect that it is moving:</p>
   <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">stepBackward</span><span class="p">()</span>
   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>That’s it! Hope this has been useful.</p>
 
@@ -333,8 +342,9 @@ it to install the app, MacOS told me it’s damaged and should move it to the bi
 seems like the issue is due to the app not being code signed, and so Apple blocked it from being opened? The only
 workaround is to remove the app from “Quarantine”, by running this command:</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xattr -r -d com.apple.quarantine /Applications/SG\ SSB\ Tracker.app
-</code></pre></div></div>
+<figure class="highlight">
+  <pre><code class="language-console" data-lang="console"><span class="go">xattr -r -d com.apple.quarantine /Applications/SG\ SSB\ Tracker.app</span></code></pre>
+</figure>
 
 <p>A quick look at the <code class="language-plaintext highlighter-rouge">xattr</code> <a href="https://ss64.com/osx/xattr.html" target="_blank">man page</a> explains what the
 command is actually doing:</p>
@@ -372,13 +382,14 @@ variable number of items. I want to display the items in a 3-column grid layout.
 
 <p>My first solution was taken from the web, and it’s something along this line.</p>
 
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.container</span> <span class="p">{</span>
+<figure class="highlight">
+  <pre><code class="language-css" data-lang="css"><span class="nc">.container</span> <span class="p">{</span>
   <span class="nl">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
   <span class="py">grid-template-columns</span><span class="p">:</span> <span class="nb">auto</span> <span class="nb">auto</span> <span class="nb">auto</span><span class="p">;</span>
   <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
   <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>But it turned out like this when I have 2 items in the second section:</p>
 
@@ -416,14 +427,15 @@ the container.</p>
 <p>So I thought I had to use math to calculate the width of each grid column, in order for the 2-item grid to only take
 up exactly 2 column-width.</p>
 
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">//</span> <span class="err">8</span><span class="nt">rem</span> <span class="o">=</span> <span class="err">1</span><span class="nt">rem</span> <span class="nt">on</span> <span class="nt">each</span> <span class="nt">side</span> <span class="nt">of</span> <span class="nt">the</span> <span class="nt">grid</span> <span class="nt">for</span> <span class="err">3</span> <span class="nt">grids</span> <span class="o">+</span> <span class="nt">container</span> <span class="nt">padding</span> <span class="nt">of</span> <span class="err">1</span><span class="nt">rem</span> <span class="nt">on</span> <span class="nt">each</span> <span class="nt">side</span>
+<figure class="highlight">
+  <pre><code class="language-css" data-lang="css"><span class="o">//</span> <span class="err">8</span><span class="nt">rem</span> <span class="o">=</span> <span class="err">1</span><span class="nt">rem</span> <span class="nt">on</span> <span class="nt">each</span> <span class="nt">side</span> <span class="nt">of</span> <span class="nt">the</span> <span class="nt">grid</span> <span class="nt">for</span> <span class="err">3</span> <span class="nt">grids</span> <span class="o">+</span> <span class="nt">container</span> <span class="nt">padding</span> <span class="nt">of</span> <span class="err">1</span><span class="nt">rem</span> <span class="nt">on</span> <span class="nt">each</span> <span class="nt">side</span>
 <span class="nc">.container</span> <span class="p">{</span>
   <span class="nl">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
   <span class="py">grid-template-columns</span><span class="p">:</span> <span class="n">calc</span><span class="p">((</span><span class="m">100vw</span> <span class="n">-</span> <span class="m">8rem</span><span class="p">)</span> <span class="p">/</span> <span class="m">3</span><span class="p">)</span> <span class="n">calc</span><span class="p">((</span><span class="m">100vw</span> <span class="n">-</span> <span class="m">8rem</span><span class="p">)</span> <span class="p">/</span> <span class="m">3</span><span class="p">)</span> <span class="n">calc</span><span class="p">((</span><span class="m">100vw</span> <span class="n">-</span> <span class="m">8rem</span><span class="p">)</span> <span class="p">/</span> <span class="m">3</span><span class="p">);</span>
   <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
   <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>It’s what I wanted, but there’s too much math going on.</p>
 
@@ -459,13 +471,14 @@ up exactly 2 column-width.</p>
 <a href="https://css-tricks.com/snippets/css/complete-guide-grid/#aa-special-units-functions" target="_blank">fractional units (fr)</a>,
 so I thought what about I change to this:</p>
 
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.container</span> <span class="p">{</span>
+<figure class="highlight">
+  <pre><code class="language-css" data-lang="css"><span class="nc">.container</span> <span class="p">{</span>
   <span class="nl">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
   <span class="py">grid-template-columns</span><span class="p">:</span> <span class="m">1</span><span class="n">fr</span> <span class="m">1</span><span class="n">fr</span> <span class="m">1</span><span class="n">fr</span><span class="p">;</span>
   <span class="nl">justify-content</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
   <span class="nl">align-items</span><span class="p">:</span> <span class="nb">center</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<span class="p">}</span></code></pre>
+</figure>
 
 <p>Now this looks exactly like the previous one, without the complex calculation.</p>
 
@@ -605,7 +618,8 @@ Here’s how I executed it for my app.</p>
 
 <p>Note: Omitted some files for clarity.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>src
+<figure class="highlight">
+  <pre><code class="language-console" data-lang="console"><span class="go">src
 ├── App.vue
 ├── components
 │   └── CalculatorForm.vue
@@ -614,8 +628,8 @@ Here’s how I executed it for my app.</p>
 │   └── uob_one.json
 ├── main.js
 └── scripts
-    └── calculator.js
-</code></pre></div></div>
+    └── calculator.js</span></code></pre>
+</figure>
 
 <p>Then in the <code class="language-plaintext highlighter-rouge">sg_bank_int_compare</code> repo, I further separate it into 2 branches:</p>
 
@@ -637,15 +651,16 @@ different, then it will replace it with the new commit hash.</p>
 <code class="language-plaintext highlighter-rouge">https://raw.githubusercontent.com/coffeebrewapps/sg_bank_int_compare/${LATEST_VERSION}/data/</code>. And then I push the
 <code class="language-plaintext highlighter-rouge">main</code> branch to Github, and it will be able to request for the JSON data from the same URL.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// source will be something like:</span>
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="c1">// source will be something like:</span>
 <span class="c1">// https://raw.githubusercontent.com/coffeebrewapps/sg_bank_int_compare/366b5c954e2c5155b9c9f9c728a9b428956917e2/data/cimb_fast_saver.json</span>
 <span class="nx">axios</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span>
   <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// parse the response and use the data for interest calculation</span>
   <span class="p">})</span>
   <span class="p">.</span><span class="nf">catch</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-  <span class="p">});</span>
-</code></pre></div></div>
+  <span class="p">});</span></code></pre>
+</figure>
 
 <p>So, after reading so far, you might be thinking: “Why not just hardcode the data in a variable in JS and read directly?”</p>
 
@@ -693,12 +708,13 @@ Rubocop still attempted to look outside of these folders.</p>
 <p>So let’s look at the <code class="language-plaintext highlighter-rouge">Exclude</code> option in my own <code class="language-plaintext highlighter-rouge">.rubocop.yml</code>. Here, I explicitly only specified files under
 <code class="language-plaintext highlighter-rouge">spec/**/*.rb</code> that I wanted to exclude. I guess here’s where things went wrong.</p>
 
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">AllCops</span><span class="pi">:</span>
+<figure class="highlight">
+  <pre><code class="language-yaml" data-lang="yaml"><span class="na">AllCops</span><span class="pi">:</span>
   <span class="na">Exclude</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">spec/fixtures/**/*</span>
     <span class="pi">-</span> <span class="s">spec/scenarios/**/*</span>
-    <span class="pi">-</span> <span class="s">spec/spec_helper.rb</span>
-</code></pre></div></div>
+    <span class="pi">-</span> <span class="s">spec/spec_helper.rb</span></code></pre>
+</figure>
 
 <p>By default, Rubocop already excludes <code class="language-plaintext highlighter-rouge">vendor/**/*</code>, but as per the documentation above, when the user defines the
 <code class="language-plaintext highlighter-rouge">Exclude</code> option, it will completely override all defaults from Rubocop. In a way, it will “undo” the default
@@ -715,7 +731,8 @@ And here’s
 <a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives/pull/11/commits/8152f3535e483ce4d952234d4341772d34b9d819" target="_blank">the fix</a>
 for it.</p>
 
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">inherit_from</span><span class="pi">:</span>
+<figure class="highlight">
+  <pre><code class="language-yaml" data-lang="yaml"><span class="na">inherit_from</span><span class="pi">:</span>
   <span class="pi">-</span> <span class="s">https://raw.githubusercontent.com/rubocop/rubocop/v1.45.1/config/default.yml</span>
 
 <span class="na">inherit_mode</span><span class="pi">:</span>
@@ -727,8 +744,8 @@ for it.</p>
   <span class="na">Exclude</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">spec/fixtures/**/*</span>
     <span class="pi">-</span> <span class="s">spec/scenarios/**/*</span>
-    <span class="pi">-</span> <span class="s">spec/spec_helper.rb</span>
-</code></pre></div></div>
+    <span class="pi">-</span> <span class="s">spec/spec_helper.rb</span></code></pre>
+</figure>
 
 <p>Now the build passes on Github Workflow, and I can go sit back and relax and enjoy another shot of expresso.</p>
 

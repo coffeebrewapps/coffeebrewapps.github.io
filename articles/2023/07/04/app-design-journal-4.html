@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="me" href="https://mastodon.social/@geekhoon">
+    <link rel="me" href="https://mastodon.hackerdrinks.social/@geekhoon">
+    <title>Triple Tee App Dev Journal 4</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Triple Tee App Dev Journal 4</h1>
+
+    <p>This is Part 4 of an article series that documents the process of building the Triple Tee App.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Jul 04, 2023 | 
+
+<span>4 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/app_design_journal_4/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2 id="time-flies">Time Flies</h2>
+
+<p>It’s been another month since I last wrote about wrapping the app in Electron and how to build it for client-side demo.
+The building of the app actually took just about 1 month, but the bulk of the work is really in polishing the app. I’m
+eager to share what has been done in the last 20% of the development to push through the remaining 80% of the app.</p>
+
+<h2 id="looks-good-feels-good">Looks Good, Feels Good</h2>
+
+<p>I was not quite satisifed with the UI components, in particular, the noisy overlay buttons for clearing the input
+fields, and the date picker which I thought was cool, but after 1 month of looking at it, I find it rather unappealing.</p>
+
+<p>I’m also not very satisfied with the color scheme, because as much as I love dark mode as an engineer, I know it’s not
+appealing to the wider users base, who would want something a little more vibrant and lively.</p>
+
+<p>So, I decided to spend some time to overhaul the look-and-feel of the entire app. First, I went to search for existing
+color palettes that can be used for dark mode. I found a site called Color Hunt which lists quite a few interesting
+color schemes, and I adapted from one of those schemes and use for both the light and dark modes.</p>
+
+<p>Next, I re-implemented my custom Vue components, moving all the overlay buttons within the bounds of each input field.
+This makes the overall site cleaner as every input looks “contained”, and it’s much easier to align fields if there’s
+no additional “divs” sticking out.</p>
+
+<p>This is a mundane process, but the outcome is very satisfying, and have visible benefits, so I’m glad to have invested
+the time to doing it.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_4/light_dark_compare.png" /></p>
+  <p><small>Both light and dark schemes look more “modern” now.</small></p>
+</div>
+
+<h2 id="dont-repeat-yourself">Don’t Repeat Yourself</h2>
+
+<p>I shared in the previous post that I have both a desktop build and a web build for the app, so that users can first
+try it out on the browser without any installation. Both builds are meant to behave exactly the same, but at first,
+the business logic layer was implemented independently in the client-side and server-side. Some logic were
+copy-paste-able, but some must be re-implemented.</p>
+
+<p>As conventional wisdom goes, Don’t Repeat Yourself if you can help it. But there was just one issue with sharing code
+between my client and server: one is written in ESModule syntax, the other is in CommonJS syntax. Fortunately, the only
+tricky part is module exports, the logic implementation itself is just plain o’ Javascript.</p>
+
+<p>After some research online, I found out how to use <code class="language-plaintext highlighter-rouge">esbuild</code> to build CommonJS exports into ESModule files. So now the
+server-side code using CommonJS can import the shared libraries as-is, while the client-side code will import the
+compiled ESModule libraries.</p>
+
+<p>I had to spend some time rewriting my common logic in sharable libraries, and then fixing the client-side code to use
+the new compiled imports. Again, it’s really time well spent because now I don’t have to test the logic twice when I
+make a change.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_4/shared_libraries.png" /></p>
+  <p><small>Shared libraries eg. data access will be built into ESModules for client-side use.</small></p>
+</div>
+
+<h2 id="test-test-test">Test, Test, Test</h2>
+
+<p>It’s so important so I have to repeat myself 3 times. I can’t count the number of times how the test cases have saved
+me from some very fatal bugs, and I’m always glad to have spent the time to write the tests. At the point of this
+writing, I’ve written over 150 tests for the shared libraries and server-side logic, over 450 tests for the client-side
+logic and components, and still counting.</p>
+
+<p>It may sound like a lot of effort and a waste of time to some, but being the only engineer of the project, there’s no
+second pair of eyes to review my code, and no way I could have manually tested every single case through clicking the
+app, so my only choice is to write automated tests, and give me the peace of mind that I will know it when I break
+some thing when changing code.</p>
+
+<p>And because there’re client-side and server-side JS frameworks, there’re 2 test frameworks involved too: JestJS for the
+backend, and Vitest for the frontend. Fortunately, Vitest is pretty much an identical port from JestJS, so I didn’t
+have to re-learn the tests functions and utils.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/app_design_journal_4/test_cases.png" /></p>
+  <p><small>Time invested in writing tests is time saved from pulling hairs over a buggy app.</small></p>
+</div>
+
+<h2 id="thats-all-for-now">That’s All For Now</h2>
+
+<p>This is a short piece, even though the time spent on building what is shared is almost half of the entire development
+journey. I would say that only 50% of the remaining 20% of work is done now, there’re still more tests to be written,
+and I still have to put the landing page and demo on a standalone domain.</p>
+
+<p>So do stay tuned for more updates in the coming weeks (or months)!</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/BXOXnQ26B7o" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Brown and blue hourglass on stones by Aron Visuals
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://colorhunt.co" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Color Hunt
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://jestjs.io" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> JestJS
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://vitest.dev" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Vitest
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>Related Articles:</h2>
+        <ul>
+          
+            <li>
+              <a href="/articles/2023/05/02/app-design-journal-1.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Triple Tee App Dev Journal (Part 1)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/05/16/app-design-journal-2.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Triple Tee App Dev Journal (Part 2)
+              </a>
+            </li>
+          
+            <li>
+              <a href="/articles/2023/06/04/app-design-journal-3.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Triple Tee App Dev Journal (Part 3)
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -10590,6 +10590,11 @@ h1, h2, h3 {
   font-weight: bold;
 }
 
+a {
+  text-decoration: none;
+  color: var(--main-text-color) !important;
+}
+
 .back-to-top {
   position: fixed;
   display: flex;
@@ -10959,7 +10964,8 @@ Projects
 }
 
 .gallery .item .caption .btn a:hover {
-  color: var(--lighten-text-1-color);
+  cursor: pointer;
+  background-color: var(--lighten-text-4-color);
 }
 
 @media screen and (max-width: 600px) {
@@ -11019,10 +11025,11 @@ Project Info
 
 .project-info .body .intro .tag {
   display: inline-block;
-  background-color: var(--secondary-background-color);
+  color: var(--secondary-text-color);
+  background-color: var(--lighten-text-4-color);
   border-radius: 5px;
-  padding: 0.5rem;
-  font-size: 0.8rem;
+  padding: 0 0.3rem;
+  font-size: 0.7rem;
 }
 
 .project-info .body .intro .tag span {
@@ -11035,6 +11042,11 @@ Project Info
   margin-top: 1rem;
   padding: 0.8rem;
   border-radius: 5px;
+}
+
+.project-info .body .intro .btn:hover {
+  cursor: pointer;
+  background-color: var(--lighten-text-4-color);
 }
 
 .project-info .body .intro .btn a {
@@ -11226,6 +11238,11 @@ Article
 .article .body .mermaid .edgeLabel .edgeLabel {
   background-color: var(--lighten-text-2-color) !important;
   font-size: 0.8rem !important;
+}
+
+.article .body .divider {
+  display: block !important;
+  border-bottom: 2px var(--secondary-background-color) solid;
 }
 
 @media screen and (min-width: 960px) {

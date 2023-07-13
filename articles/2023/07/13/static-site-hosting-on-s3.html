@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="me" href="https://mastodon.social/@geekhoon">
+    <link rel="me" href="https://mastodon.hackerdrinks.social/@geekhoon">
+    <title>Static Site Hosting On S3 (2023 Edition)</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>Static Site Hosting On S3 (2023 Edition)</h1>
+
+    <p>Find out how to setup static site hosting on AWS S3 with custom domain from Namecheap.</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Jul 13, 2023 | 
+
+<span>7 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/static_site_hosting_on_s3/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2>Getting Started on Static Web Hosting</h2>
+
+<p>There are many options to host a static website nowadays, one way is to do so on AWS S3. This guide will walk through
+the steps required to setup static assets hosting on S3, configure CDN on CloudFront, request SSL certificate through
+Certificate Manager, and finally routing to custom domain names using Route 53.</p>
+
+<p>There’s quite an extensive list of resources on AWS official documentation and also other blogs that talk about the
+step-by-step configuration of each service used for the hosting. The purpose of this article is to fill in the gaps
+that were not explicitly mentioned in those resources, specifically for the context of using a custom domain that is
+registered on Namecheap.com, but everything else lives on AWS.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/static_site_hosting_on_s3/aws_services_bookmark.png" style="width:70%;" /></p>
+  <p><small>Bookmark these services in AWS Console.</small></p>
+</div>
+
+<h2>SSL Certificate by Certificate Manager</h2>
+
+<p>You want to allow HTTPS access to your site, and you will need a SSL certificate. You can request for a free certificate
+via Certificate Manager. Take note that you must choose the <strong>N. Virginia (us-east-1)</strong> region to request
+for the cert, otherwise, you will not be able to use it later when setting up CloudFront.</p>
+
+<p>Another thing to note is that, your apex domain (eg. <code class="language-plaintext highlighter-rouge">tripletee.app</code>) must be added as an individual record, and if
+you plan to have multiple subdomains for your site, then it is better to add those specific subdomains when creating
+the certificate.</p>
+
+<p>For example, <code class="language-plaintext highlighter-rouge">tripletee.app</code>, <code class="language-plaintext highlighter-rouge">www.tripletee.app</code> and <code class="language-plaintext highlighter-rouge">demo.tripletee.app</code> are all domains that will be needed to serve
+the Triple Tee App home page and demo site. For convenience, I also added a wildcard domain <code class="language-plaintext highlighter-rouge">*.tripletee.app</code> in case
+I have to add more subdomains.</p>
+
+<p>Also note that if you have more than 1 level of domain nesting, you must specify each explicitly. For example, I might
+need <code class="language-plaintext highlighter-rouge">mac.downloads.tripletee.app</code> and <code class="language-plaintext highlighter-rouge">windows.downloads.tripletee.app</code> to serve 2 different desktop user groups,
+and each subdomain has to be added explicitly to the certificate.</p>
+
+<p>Once you have created the certificate, you will need to add them to Route 53. There’s an action to create records in
+Route 53, and if you click that button, you will see the list of domains you’ve just added, and their respective
+CNAME values. Normally you would add these to your domain registrar like Namecheap.com, but here we will use Route 53
+instead so that we can leverage the free SSL certificate provided by AWS.</p>
+
+<p>Before these records can be added to Route 53, remember to first create a hosted zone with your apex domain name,
+eg. <code class="language-plaintext highlighter-rouge">tripletee.app</code>.</p>
+
+<p><em>For this step, it is best if you have already thought out clearly what are the subdomains you need for your site,
+because once the certificate is created, you will no longer be able to add subdomains to it, and have to create a new
+certificate, re-configure everything and remove the old certificate.</em></p>
+
+<div class="flex-row">
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/certificate_routes_records.png" style="width:70%;" /></p>
+      <p><small>Explicit domain names for the certificate.</small></p>
+    </div>
+  </div>
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/route_53_cnames.png" /></p>
+      <p><small>CNAMEs added to Route 53.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<h2>Assets Hosting on S3</h2>
+
+<p>You need to store your site assets somewhere to be served to the users on the Internet, and this is done on S3 buckets.
+To host your website, create a new bucket that is named after your intended domain, eg. <code class="language-plaintext highlighter-rouge">tripletee.app</code> is the bucket
+that contains the assets to serve at https://tripletee.app later.</p>
+
+<p>There is no restriction to the region used for the bucket, but what’s important is that you have to uncheck “Block
+Public Access” option for the bucket, so that the public can access the content.</p>
+
+<p>Another important point is to setup the bucket policy to allow public “GET” access on the bucket.</p>
+
+<figure class="highlight">
+  <pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PublicReadGetObject"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:s3:::&lt;your_bucket_name&gt;/*"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</figure>
+
+<p>Create as many buckets as needed for each subdomain that has its own assets to serve. For example, the Triple Tee App
+have different assets for the home page and the demo site, so there are 2 buckets created: <code class="language-plaintext highlighter-rouge">tripletee.app</code> and
+<code class="language-plaintext highlighter-rouge">demo.tripletee.app</code>.</p>
+
+<div class="flex-row">
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/bucket_block_public_access.png" /></p>
+      <p><small>You must uncheck “Block Public Access” option for the bucket.</small></p>
+    </div>
+  </div>
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/bucket_policy.png" /></p>
+      <p><small>Bucket policy to allow public “GET” access.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<h2>Content Delivery via CloudFront</h2>
+
+<p>To allow quicker access to your site, you can setup a CDN for global distribution. By now, you should have already
+created a S3 bucket to host the site assets, and the SSL certificate for HTTPS requests. When creating a new CloudFront
+distribution, you will be asked to choose from the S3 buckets and SSL certificates you’ve created. This step should be
+quite straightforward if you have done the previous steps correctly.</p>
+
+<p>If you have multiple S3 buckets to serve, then you will need to create 1 distribution for each bucket, still using
+the same SSL certificate if you have setup multiple subdomains for the certificate.</p>
+
+<p>Hopefully you have taken notice in the previous step to request the SSL certificate at the N. Virginia region, or else
+you will not be able to continue with this step.</p>
+
+<div class="flex-row">
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/cloudfront_s3_origin.png" /></p>
+      <p><small>Use the bucket’s web endpoint as origin.</small></p>
+    </div>
+  </div>
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/cloudfront_cname_cert.png" /></p>
+      <p><small>Configure alternative CNAME and SSL certificate.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<h2>Adding Alias Records to Route 53</h2>
+
+<p>Once you have setup your CDN, you can add Alias (A) records to Route 53 to route incoming requests for your domain to
+fetch from the CloudFront distribution.</p>
+
+<p>You will at least want to setup the apex domain and the <code class="language-plaintext highlighter-rouge">www.</code> variant so that your users can visit both
+https://tripletee.app and https://www.tripletee.app. You can reuse the CloudFront distribution for these domains as
+they are both supposed to serve the same assets.</p>
+
+<p>If you have created other buckets to serve different assets at a different subdomain, then you will need to add a new
+A record for each CloudFront distribution.</p>
+
+<p>Again, hopefully by now you have created the CDN distribution in the N. Virginia region, otherwise you will not be able
+to proceed with this step.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/static_site_hosting_on_s3/route_53_create_arecord.png" style="width:70%;" /></p>
+  <p><small>A record for each subdomain.</small></p>
+</div>
+
+<h2>Custom Domain Nameservers on Namecheap</h2>
+
+<p>At the final step, you will need to tell Namecheap.com that you are using a custom nameserver for the DNS lookup
+instead of using Namecheap’s. Once you have setup all the domains in Route 53, you can now add the custom nameservers
+from AWS in Namecheap.</p>
+
+<p>There should be a Nameserver (NS) record type with a list of 4 nameservers for your apex domain. Add these exactly to
+the custom nameservers in Namecheap. Notice that once you do that, you will no longer be able to add any DNS record to
+your domain within Namecheap.</p>
+
+<div class="flex-row">
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/route_53_ns.png" /></p>
+      <p><small>List of nameservers for your domain in Route 53.</small></p>
+    </div>
+  </div>
+  <div class="flex-col">
+    <div class="image">
+      <p><img src="/assets/images/posts/static_site_hosting_on_s3/namecheap_custom_dns.png" /></p>
+      <p><small>Configure custom nameservers in Namecheap.</small></p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<h2>DNS Propagation</h2>
+
+<p>It takes some time for the DNS changes to propagate across the Internet, so you might not see your site served at your
+domain right away. But if things go right, eventually you should be able to access your site and see that you have a
+secure connection with a valid certificate.</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/static_site_hosting_on_s3/secure_connection.png" style="width:70%;" /></p>
+  <p><small>Good sign that you have done everything right.</small></p>
+</div>
+
+<h2>That’s All</h2>
+
+<p>The entire process of configuration should not take more than 30 minutes if you have a simple static site without any
+subdomain. Hopefully this guide has highlighted some pitfalls and filled in the gaps that are absent from other
+existing guides.</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/Ylk5n_nd9dA" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Computer screen displaying website home page by Pankaj Patel
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+      <div class="list">
+        <h2>References:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Hosting a static website using Amazon S3
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-custom-domain-walkthrough.html" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Tutorial: Configuring a static website using a custom domain registered with Route 53
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://dev.to/cindyledev/configure-third-party-domain-name-and-https-for-cloudfront-distribution-cloud-resume-challenge-part-3n-2nhp" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Configure third-party domain name and HTTPS for CloudFront distribution
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:coffeebrewapps+hi@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted by <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="me" href="https://mastodon.social/@geekhoon">
+    <link rel="me" href="https://mastodon.hackerdrinks.social/@geekhoon">
+    <title>How To Learn A New Tech Stack As A Non-Beginner</title>
+  </head>
+  <body>
+    <script src="/assets/js/main.js"></script>
+    <nav id="top-nav" class="top-nav">
+  
+    <a href="/" >
+      Home
+    </a>
+  
+    <a href="/about.html" >
+      About
+    </a>
+  
+    <a href="/articles.html" class="current">
+      Articles
+    </a>
+  
+    <a href="/series.html" >
+      Series
+    </a>
+  
+    <a href="/projects.html" >
+      Projects
+    </a>
+  
+    <a href="/shots.html" >
+      Shots
+    </a>
+  
+    <a href="/archives.html" >
+      Archives
+    </a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </a>
+</nav>
+
+    <div class="container">
+      <div class="article">
+  <div class="heading">
+    <h1>How To Learn A New Tech Stack As A Non-Beginner</h1>
+
+    <p>There're endless articles about starting out as a total beginner, what about if you're already an experienced engineer?</p>
+
+    <div class="profile">
+      <div class="avatar">
+        <img src="/assets/images/avatars/gohkhoonhiang.png"/>
+      </div>
+      <div class="author">
+        <div class="name">gohkhoonhiang</div>
+        <div class="date">Aug 02, 2023 | 
+
+<span>5 mins read</span>
+</div>
+      </div>
+    </div>
+
+    <div class="thumbnail">
+      <img src="/assets/images/posts/how_to_learn_new_stack/thumbnail.png"
+           onerror="this.src='/assets/images/posts/placeholder.png'"/>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="toc">
+      
+    </div>
+
+    <div class="content">
+      <h2>Learning As An Experienced Engineer</h2>
+
+<p>
+During these few months of sabbatical, I’ve taken the time to explore new things and learn new tech stack. I found
+myself face a difficult situation: most of the articles or guides I found online are targetted at beginners of the
+framework/library.
+</p>
+
+<p>This has served me well at the beginning, because I was still trying to learn the basics of the
+tool. And it definitely will serve all other people who are trying something new and unfamiliar. But soon, I found
+these resources insufficient if I wanted to go deeper into things.
+</p>
+
+<p>
+This is when I have to figure out, as a more experienced engineer, how do I find the resources to learn how to achieve
+something more complex beyond the “Hello World”s and “Todo List”s?
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/how_to_learn_new_stack/hello_world.png" style="width:50%;" /></p>
+  <p><small>You probably don’t learn much with a Hello World app.</small></p>
+</div>
+
+<h2>Just Work On A Project</h2>
+
+<p>
+There’s a conventional wisdom of “learning by doing”, and I can’t agree more. Beyond just reading the tutorials, the
+concepts will stick better if we actually implement something using those concepts.
+</p>
+
+<p>
+In my personal experience so far, doing a more complex project has worked for me. For example, when I was learning
+VueJS 3, I decided to implement my own UI components instead of using existing solutions like Vuetify. One reason is
+that VueJS official documentation doesn’t have an example app to demonstrate the various concepts and features, so it
+was hard to really grasp the ideas concretely.
+</p>
+
+<p>From a business point-of-view, it makes no economical sense to reinvent the wheel, but if I wanted to learn how
+things really work, it makes more sense to actually implement things from scratch. Through the process, I managed to
+apply most of the essential concepts of VueJS: reactivity, event handling, slots, routing, state management and more.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/how_to_learn_new_stack/new_project.png" /></p>
+  <p><small>Reinvent the wheel if you need to learn something, it’s worth it.</small></p>
+</div>
+
+<h2>Or Recycle An Old Project</h2>
+
+<p>
+I understand that not all of us are ideas machines, and I’m definitely not one with a lot of ideas. What I did instead
+was to recycle an existing project, and use the new tech stack to implement the same features. Sounds stupid? Maybe,
+but we could also think of it from the perspective of giving the app a new life with newer tech.
+</p>
+
+<p>
+When I started learning Go and ReactJS, I’ve been thinking of what I could build with these tools, but I just had no
+idea for a new project. I looked through my old projects, and found a candidate app that was built using
+Rails 6 and VueJS 2, which was due for a version upgrade.
+</p>
+
+<p>
+Instead of upgrading the app’s libraries to later versions, I decided to use this opportunity to rewrite the app using
+Go and ReactJS. Indeed, the app is sufficiently complex that I was able to apply concepts such as working with a
+reducer and context in ReactJS to a greater extend.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/how_to_learn_new_stack/recycle_project.png" /></p>
+  <p><small>Give a new life to an old project.</small></p>
+</div>
+
+<h2>Go Beyond the Documentation</h2>
+
+<p>
+As we gain more experience using a tool, we will realise some day that the official documentation is no longer
+sufficient in providing guides on how to do something.
+</p>
+
+<p>For example, when I was learning how to use JestJS and Vitest
+for testing the Triple Tee App, the part about mocking was not very clear and the examples were insufficient. What I
+did instead, was to search for open-source projects that use these test frameworks, and then try to read their test
+cases to see how mocking is implemented.
+</p>
+
+<p>
+There were also instances, where I tried to look through the tool’s Github Issues, and search the keywords about how
+certain things are implemented. My belief is that I will likely not be the first and only one faced with an issue, so
+someone might have already asked for help.
+</p>
+
+<p>
+The final resort is reading the source code itself. Sometimes the intricate implementation details are not explained
+clearly in the documentation, so it’s hard to know what will be the behaviour of certain APIs. I also had instances
+where I looked through the source code and read the API implementation to understand how to use it.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/how_to_learn_new_stack/github_issues.png" style="width:50%;" /></p>
+  <p><small>Sometimes you can find answers beyond the documentation.</small></p>
+</div>
+
+<h2>Use Your Experience To Your Advantage</h2>
+
+<p>
+There’s an advantage to an experienced engineer learning new tech: there’s already certain mental model about how
+things work, and this can be applied to most other tools in the same space.
+</p>
+
+<p>
+For example, web frameworks of different programming languages mostly do the same basic tasks: request routing, serving
+JSON data or assets, data access etc. When we need to learn a new framework, it’s mostly about learning the specific
+APIs that do the things that web frameworks should do.
+</p>
+
+<p>
+Because of the existing vocabulary we already picked up in our previous work, we would likely know how to ask the right
+questions to get the answers we need when we face a problem in using the new tool. If we had to dig deeper into the
+source code, we would also have an idea where to search the piece of code based on the domain of the tool.
+</p>
+
+<div class="image">
+  <p><img src="/assets/images/posts/how_to_learn_new_stack/climbing.png" style="width:70%;" /></p>
+  <p><small>The more you climb, the higher you can climb.</small></p>
+</div>
+
+<h2>Keep Exploring</h2>
+
+<p>
+There are certainly more ways to learn something for different experience levels, what I’m sharing here is my personal
+experience that has worked for me. Hopefully this gives some headstart for those who are slightly at a loss, and that
+you will be able to leap forward to the next step by exploring these ideas.
+</p>
+
+    </div>
+
+    
+      <div class="list">
+        <h2>Credits:</h2>
+        <ul>
+          
+            <li>
+              <a href="https://unsplash.com/photos/hgFY1mZY-Y0" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Woman covering her face with white book by Siora Photography
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://unsplash.com/photos/VnmbcgAfL3Q" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Man in black shorts climbing brown rock formation during day time by Sean Benesh
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    
+
+    
+
+    
+  </div>
+</div>
+
+    </div>
+    <a class="back-to-top" href="#">
+        <i class="fa-solid fa-angle-up"></i>
+    </a>
+    <footer class="site-footer">
+      <div class="copyright">
+        <span>Coffee Brew Apps © 2023</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/company/coffeebrewapps/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:hi@coffeebrewapps.com"><i class="fa-solid fa-envelope"></i></a>
+      </div>
+      <div class="powered-by">
+        <div class="link">Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a></div>
+        <div class="divider">|</div>
+        <div class="link">Theme by <a href="#">Coffee Brew Apps</a></div>
+        <div class="divider">|</div>
+        <div class="link">Hosted on <a href="https://github.com" target="_blank">Github Pages</a></div>
+      </div>
+    </footer>
+  </body>
+</html>

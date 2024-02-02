@@ -244,7 +244,7 @@ access.</p>
 
 <span class="k">export</span> <span class="kd">function</span> <span class="nf">useDataAccess</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">dataStore</span> <span class="o">=</span> <span class="nf">useDataStore</span><span class="p">();</span>
-  <span class="nf">if </span><span class="p">(</span><span class="nx">env</span><span class="p">.</span><span class="nx">MODE</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">staging</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">env</span><span class="p">.</span><span class="nx">MODE</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">staging</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nf">useWebAccess</span><span class="p">(</span><span class="nx">dataStore</span><span class="p">);</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nf">useApiAccess</span><span class="p">();</span>
@@ -325,7 +325,7 @@ lookup the corresponding function and invoke accordingly.</p>
 
 <span class="kd">function</span> <span class="nf">lookupFunction</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">fnType</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">functions</span> <span class="o">=</span> <span class="nx">dataStore</span><span class="p">.</span><span class="nf">customFunctionsForModel</span><span class="p">(</span><span class="nx">modelClass</span><span class="p">,</span> <span class="nx">fnType</span><span class="p">)</span> <span class="o">||</span> <span class="p">{};</span>
-  <span class="nf">if </span><span class="p">(</span><span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">functions</span><span class="p">[</span><span class="nx">suffix</span><span class="p">.</span><span class="nx">path</span><span class="p">]</span> <span class="o">||</span> <span class="nx">dataStore</span><span class="p">[</span><span class="nx">fnType</span><span class="p">];</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">functions</span><span class="p">[</span><span class="nx">fnType</span><span class="p">]</span> <span class="o">||</span> <span class="nx">dataStore</span><span class="p">[</span><span class="nx">fnType</span><span class="p">];</span>
@@ -365,12 +365,12 @@ the correct custom function if this is a web demo.</p>
 
 <span class="kd">const</span> <span class="nx">dataAccess</span> <span class="o">=</span> <span class="nf">useDataAccess</span><span class="p">();</span>
 
-<span class="nf">onMounted</span><span class="p">(</span><span class="nf">async </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nf">onMounted</span><span class="p">(</span><span class="k">async </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">await</span> <span class="nx">dataAccess</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="dl">'</span><span class="s1">invoices</span><span class="dl">'</span><span class="p">,</span> <span class="nx">props</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span> <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">preview_invoice</span><span class="dl">'</span> <span class="p">});</span>
     <span class="p">.</span><span class="nf">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="nx">currentInvoice</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">result</span><span class="p">;</span>
     <span class="p">})</span>
-    <span class="p">.</span><span class="nf">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
       <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
     <span class="p">});</span>
 <span class="p">});</span>
@@ -420,7 +420,7 @@ of the original library’s code and customise to suit my use case.</p>
         <span class="nx">logger</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`Parsing complete!`</span><span class="p">);</span>
         <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
       <span class="p">})</span>
-      <span class="p">.</span><span class="nf">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nx">logger</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="s2">`Error parsing template!`</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
         <span class="k">return</span> <span class="s2">``</span><span class="p">;</span>
       <span class="p">});</span>
@@ -455,13 +455,13 @@ the client-side library generates a screenshot of the page and save it to PDF fo
   <span class="kd">const</span> <span class="nx">htmlString</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">createHtmlString</span><span class="p">(</span><span class="nx">template</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 
   <span class="k">return</span> <span class="k">new</span> <span class="nc">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nf">html2pdf</span><span class="p">().</span><span class="nf">from</span><span class="p">(</span><span class="nx">htmlString</span><span class="p">).</span><span class="nf">outputPdf</span><span class="p">(</span><span class="dl">'</span><span class="s1">arraybuffer</span><span class="dl">'</span><span class="p">)</span>
+    <span class="nf">html2pdf</span><span class="p">().</span><span class="k">from</span><span class="p">(</span><span class="nx">htmlString</span><span class="p">).</span><span class="nf">outputPdf</span><span class="p">(</span><span class="dl">'</span><span class="s1">arraybuffer</span><span class="dl">'</span><span class="p">)</span>
       <span class="p">.</span><span class="nf">then</span><span class="p">((</span><span class="nx">result</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nf">resolve</span><span class="p">({</span>
           <span class="na">data</span><span class="p">:</span> <span class="nx">result</span><span class="p">,</span>
         <span class="p">});</span>
       <span class="p">})</span>
-      <span class="p">.</span><span class="nf">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="nf">reject</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
       <span class="p">});</span>
   <span class="p">});</span>
@@ -586,7 +586,7 @@ what you think! UI/UX feedback is very much welcome as I’m in the stage of pol
     </a>
     <footer class="site-footer">
       <div class="copyright">
-        <span>Coffee Brew Apps © 2023</span>
+        <span>Coffee Brew Apps © 2024</span>
       </div>
       <div class="socials">
         <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>

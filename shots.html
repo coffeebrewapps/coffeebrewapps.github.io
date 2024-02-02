@@ -54,6 +54,170 @@
 <p>Mid-day shots to boost your energy.</p>
 <div class="collapsible">
   
+    <div class="item" id="ruby3-rails7-upgrade-section">
+      <div class="title">
+        <span>Ruby3 + Rails7 Upgrade</span>
+        <small>Feb 02, 2024 <em>by gohkhoonhiang</em></small>
+      </div>
+      <div class="preview" id="ruby3-rails7-upgrade-preview">
+        <p><p>Recently I just completed Ruby2-&gt;Ruby3 + Rails6-&gt;Rails7 upgrade for my private project. Initially I thought it would
+take a lot of fixing to make it work, but was surprised it only impacted 17 out of the 88 Ruby files out of the <code class="language-plaintext highlighter-rouge">app/</code>
+directory. Since it was a relatively simple fix, I decided to just write a shot instead of a long article to document
+my changes.</p>
+</p>
+      </div>
+      <div class="full-content" id="ruby3-rails7-upgrade-content" hidden>
+        <p>Recently I just completed Ruby2-&gt;Ruby3 + Rails6-&gt;Rails7 upgrade for my private project. Initially I thought it would
+take a lot of fixing to make it work, but was surprised it only impacted 17 out of the 88 Ruby files out of the <code class="language-plaintext highlighter-rouge">app/</code>
+directory. Since it was a relatively simple fix, I decided to just write a shot instead of a long article to document
+my changes.</p>
+
+<p>I have 27 gems before the upgrade. In order to use Rails7, I had to deprecate <code class="language-plaintext highlighter-rouge">webpacker</code> and add the replacement gems:</p>
+
+<figure class="highlight">
+  <pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s1">'sassc-rails'</span><span class="p">,</span> <span class="s1">'~&gt; 2.0'</span>
+<span class="n">gem</span> <span class="s1">'jsbundling-rails'</span><span class="p">,</span> <span class="s1">'~&gt; 1.0'</span>
+<span class="n">gem</span> <span class="s1">'cssbundling-rails'</span>
+<span class="n">gem</span> <span class="s1">'sass-embedded'</span>
+<span class="n">gem</span> <span class="s1">'sprockets'</span><span class="p">,</span> <span class="s1">'~&gt; 4.0'</span></code></pre>
+</figure>
+
+<p>This also removed a few JS packages related to webpacker:</p>
+
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="dl">"</span><span class="s2">@rails/webpacker</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">5.4.3</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">webpack-dev-server</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^4.9.2</span><span class="dl">"</span></code></pre>
+</figure>
+
+<p>While adding new ones to replace the missing webpacker package:</p>
+
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="dl">"</span><span class="s2">@babel/core</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.22.10</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/plugin-proposal-class-properties</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.18.6</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/plugin-proposal-object-rest-spread</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.20.7</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/plugin-syntax-dynamic-import</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.8.3</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/plugin-transform-destructuring</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.22.10</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/plugin-transform-regenerator</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.22.10</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/plugin-transform-runtime</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.22.10</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">@babel/preset-env</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^7.22.10</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">babel-loader</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^9.1.3</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">babel-plugin-macros</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^3.1.0</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">css-loader</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^6.8.1</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">vue-style-loader</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^4.1.3</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">webpack</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^5.88.2</span><span class="dl">"</span><span class="p">,</span>
+<span class="dl">"</span><span class="s2">webpack-cli</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">^5.1.4</span><span class="dl">"</span></code></pre>
+</figure>
+
+<p>Then, I added a new webpack config file in order to compile my Vue2 assets:</p>
+
+<figure class="highlight">
+  <pre><code class="language-js" data-lang="js"><span class="kd">const</span> <span class="nx">path</span>    <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">webpack</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">webpack</span><span class="dl">"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">VueLoaderPlugin</span> <span class="p">}</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">vue-loader</span><span class="dl">"</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">mode</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">production</span><span class="dl">'</span>
+
+<span class="c1">// Reference: https://vue-loader.vuejs.org/guide/#vue-cli</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">mode</span><span class="p">,</span>
+  <span class="na">module</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">rules</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">vue$/</span><span class="p">,</span>
+        <span class="na">loader</span><span class="p">:</span> <span class="dl">"</span><span class="s2">vue-loader</span><span class="dl">"</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">js$/</span><span class="p">,</span>
+        <span class="na">exclude</span><span class="p">:</span> <span class="sr">/node_modules/</span><span class="p">,</span>
+        <span class="na">loader</span><span class="p">:</span> <span class="dl">'</span><span class="s1">babel-loader</span><span class="dl">'</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">test</span><span class="p">:</span> <span class="sr">/</span><span class="se">\.</span><span class="sr">css$/</span><span class="p">,</span>
+        <span class="na">use</span><span class="p">:</span> <span class="p">[</span>
+          <span class="dl">'</span><span class="s1">vue-style-loader</span><span class="dl">'</span><span class="p">,</span>
+          <span class="dl">'</span><span class="s1">css-loader</span><span class="dl">'</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="na">entry</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">application</span><span class="p">:</span> <span class="dl">"</span><span class="s2">./app/javascript/application.js</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">index</span><span class="p">:</span> <span class="dl">"</span><span class="s2">./app/javascript/packs/dashboard/index.js</span><span class="dl">"</span>
+  <span class="p">},</span>
+  <span class="na">output</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">filename</span><span class="p">:</span> <span class="dl">"</span><span class="s2">[name].js</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">sourceMapFilename</span><span class="p">:</span> <span class="dl">"</span><span class="s2">[file].map</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">path</span><span class="p">:</span> <span class="nx">path</span><span class="p">.</span><span class="nf">resolve</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">..</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">..</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">app/assets/builds</span><span class="dl">"</span><span class="p">),</span>
+  <span class="p">},</span>
+  <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+    <span class="k">new</span> <span class="nx">webpack</span><span class="p">.</span><span class="nx">optimize</span><span class="p">.</span><span class="nc">LimitChunkCountPlugin</span><span class="p">({</span>
+      <span class="na">maxChunks</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}),</span>
+    <span class="k">new</span> <span class="nc">VueLoaderPlugin</span><span class="p">()</span>
+  <span class="p">],</span>
+  <span class="na">optimization</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">moduleIds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">deterministic</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+ </code></pre>
+</figure>
+
+<p>Finally, I added new scripts in <code class="language-plaintext highlighter-rouge">package.json</code> to allow me to build my assets:</p>
+
+<figure class="highlight">
+  <pre><code class="language-json" data-lang="json"><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"webpack --config config/webpack/webpack.config.js"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"build:css"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"</span><span class="w">
+</span><span class="p">}</span></code></pre>
+</figure>
+
+<p>That’s about all the configuration changes for the Rails7 upgrade.</p>
+
+<p>Next there’re some syntax and API changes due to Ruby3 and Rails7. The list is non-exhaustive, because I might not
+have used many features that are impacted by the upgrade. I also omitted the ones where there’s deprecation warning
+and documented fix for it.</p>
+
+<h4 id="serializable-hash">Serializable hash</h4>
+
+<p>Previously, I could use <code class="language-plaintext highlighter-rouge">ActiveRecord#serializable_hash</code> without any arguments and it will serialize additional
+instance methods in the AR. For example, I have a <code class="language-plaintext highlighter-rouge">User</code> with a <code class="language-plaintext highlighter-rouge">#avatar</code> method:</p>
+
+<figure class="highlight">
+  <pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+  <span class="k">def</span> <span class="nf">avatar</span>
+    <span class="s2">"http://www.gravatar.com/avatar/</span><span class="si">#{</span><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="si">}</span><span class="s2">?s=30"</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+</figure>
+
+<p>I used to be able to serialize by invoking <code class="language-plaintext highlighter-rouge">user.serializable_hash</code>. In Rails7, I had to explicitly pass in the
+<code class="language-plaintext highlighter-rouge">methods</code> argument: <code class="language-plaintext highlighter-rouge">user.serializable_hash(methods: %i(avatar))</code>.</p>
+
+<h4 id="csrf-token-verification">CSRF token verification</h4>
+
+<p>Previously, these lines of code worked.</p>
+
+<figure class="highlight">
+  <pre><code class="language-ruby" data-lang="ruby"><span class="n">protect_from_forgery</span> <span class="ss">with: :exception</span><span class="p">,</span> <span class="ss">unless: </span><span class="o">-&gt;</span> <span class="p">{</span> <span class="n">request</span><span class="p">.</span><span class="nf">format</span><span class="p">.</span><span class="nf">json?</span> <span class="p">}</span>
+
+<span class="n">before_action</span> <span class="ss">:authenticate_user!</span></code></pre>
+</figure>
+
+<p>In Rails7, I have to add the <code class="language-plaintext highlighter-rouge">prepend: true</code> argument to <code class="language-plaintext highlighter-rouge">protect_from_forgery</code>, so that it will prepend this method
+to the <code class="language-plaintext highlighter-rouge">before_action</code> chain.</p>
+
+<p>The thing I haven’t figured out is why it didn’t work without <code class="language-plaintext highlighter-rouge">prepend: true</code>, even though I have declared
+<code class="language-plaintext highlighter-rouge">protect_from_forgery</code> before <code class="language-plaintext highlighter-rouge">authenticate_user!</code>.</p>
+
+<p><a href="https://github.com/heartcombo/devise#controller-filters-and-helpers" target="_blank" style="text-decoration: underline;">This is the Github README of the devise gem</a>
+explaining the problem above.</p>
+
+<p>That’s about all the changes I had to make. I’m still observing if anything else is broken, if there’s something new,
+I will update this post again. Happy upgrading!</p>
+
+      </div>
+      <div class="btn"><a id="ruby3-rails7-upgrade-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
+    </div>
+  
     <div class="item" id="bidirection_progress_bar-section">
       <div class="title">
         <span>Building a bi-directional progress bar</span>
@@ -144,7 +308,7 @@ We could also use a boolean <code class="language-plaintext highlighter-rouge">f
 
 <figure class="highlight">
   <pre><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nf">step</span><span class="p">(</span><span class="nx">bar</span><span class="p">,</span> <span class="nx">direction</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="p">[(</span><span class="nx">current</span> <span class="o">+</span> <span class="mi">5</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span> <span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="nx">bar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="p">[(</span><span class="nx">current</span> <span class="o">-</span> <span class="mi">5</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span> <span class="dl">'</span><span class="s1">%</span><span class="dl">'</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">)</span>
@@ -183,7 +347,7 @@ class to the <code class="language-plaintext highlighter-rouge">progress-bar</co
   <pre><code class="language-js" data-lang="js"><span class="kd">const</span> <span class="nx">progressBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">progress-bar</span><span class="dl">'</span><span class="p">)</span>
 
 <span class="kd">function</span> <span class="nf">changeDirection</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">direction</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span>
     <span class="nx">progressBar</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -203,15 +367,15 @@ every 10ms, creating the effect that it is moving:</p>
   <span class="kd">const</span> <span class="nx">forwardWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">forwardBar</span><span class="p">)</span>
   <span class="kd">const</span> <span class="nx">reverseWidth</span> <span class="o">=</span> <span class="nf">getWidth</span><span class="p">(</span><span class="nx">reverseBar</span><span class="p">)</span>
 
-  <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">forwardWidth</span> <span class="o">===</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">forwardWidth</span> <span class="o">===</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">changeDirection</span><span class="p">()</span>
     <span class="nf">stepForward</span><span class="p">()</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">reverseWidth</span> <span class="o">===</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span> <span class="o">&amp;&amp;</span> <span class="nx">reverseWidth</span> <span class="o">===</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">changeDirection</span><span class="p">()</span>
     <span class="nf">stepBackward</span><span class="p">()</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">forward</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">stepForward</span><span class="p">()</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="nf">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">direction</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">reverse</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">stepBackward</span><span class="p">()</span>
   <span class="p">}</span>
 <span class="p">}</span></code></pre>
@@ -658,7 +822,7 @@ different, then it will replace it with the new commit hash.</p>
   <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// parse the response and use the data for interest calculation</span>
   <span class="p">})</span>
-  <span class="p">.</span><span class="nf">catch</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nf">function </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">});</span></code></pre>
 </figure>
 
@@ -673,84 +837,6 @@ data API but don’t have an actual server to serve it.</p>
 
       </div>
       <div class="btn"><a id="gh_as_data_server-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
-    </div>
-  
-    <div class="item" id="solving_rubocop_mystery-section">
-      <div class="title">
-        <span>Solving the Rubocop mystery</span>
-        <small>Apr 07, 2023 <em>by gohkhoonhiang</em></small>
-      </div>
-      <div class="preview" id="solving_rubocop_mystery-preview">
-        <p><p>So I <a href="/shots.html#rubocop_dep_not_found-section" target="_blank">wrote about</a>
-the error I got from running Rubocop in Github Workflow, and I was determined to find out the root of the problem.</p>
-</p>
-      </div>
-      <div class="full-content" id="solving_rubocop_mystery-content" hidden>
-        <p>So I <a href="/shots.html#rubocop_dep_not_found-section" target="_blank">wrote about</a>
-the error I got from running Rubocop in Github Workflow, and I was determined to find out the root of the problem.</p>
-
-<p>With some digging around the
-<a href="https://docs.rubocop.org/rubocop/configuration.html#includingexcluding-files" target="_blank">documentation</a>
-and following a <a href="https://github.com/rubocop/rubocop/pull/5882" target="_blank">thread of discussions</a>, I
-figured some what the root of the problem and solved it. So a few things happened.</p>
-
-<p>I quote from the documentation:</p>
-
-<blockquote class="quote">
-  <p>Remember that your configuration files override RuboCops’s defaults. <em>…omitted…</em> This behavior of Include
-(overriding default.yml) was introduced in 0.56.0 via #5882. This change allows people to include/exclude precisely
-what they need to, without the defaults getting in the way.</p>
-</blockquote>
-
-<p>It is odd, that even though I had explicitly defined <code class="language-plaintext highlighter-rouge">Include</code> option for only <code class="language-plaintext highlighter-rouge">lib/**/*.rb</code> and <code class="language-plaintext highlighter-rouge">spec/**/*.rb</code>,
-Rubocop still attempted to look outside of these folders.</p>
-
-<p>So let’s look at the <code class="language-plaintext highlighter-rouge">Exclude</code> option in my own <code class="language-plaintext highlighter-rouge">.rubocop.yml</code>. Here, I explicitly only specified files under
-<code class="language-plaintext highlighter-rouge">spec/**/*.rb</code> that I wanted to exclude. I guess here’s where things went wrong.</p>
-
-<figure class="highlight">
-  <pre><code class="language-yaml" data-lang="yaml"><span class="na">AllCops</span><span class="pi">:</span>
-  <span class="na">Exclude</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">spec/fixtures/**/*</span>
-    <span class="pi">-</span> <span class="s">spec/scenarios/**/*</span>
-    <span class="pi">-</span> <span class="s">spec/spec_helper.rb</span></code></pre>
-</figure>
-
-<p>By default, Rubocop already excludes <code class="language-plaintext highlighter-rouge">vendor/**/*</code>, but as per the documentation above, when the user defines the
-<code class="language-plaintext highlighter-rouge">Exclude</code> option, it will completely override all defaults from Rubocop. In a way, it will “undo” the default
-exclusion of <code class="language-plaintext highlighter-rouge">vendor/**/*</code>, so even though my <code class="language-plaintext highlighter-rouge">Include</code> option did not specify <code class="language-plaintext highlighter-rouge">vendor/**/*</code>, it will still attempt to
-search inside the directory.</p>
-
-<p>In order to still use Rubocop’s defaults, we can go the brute-force way of copying all the <code class="language-plaintext highlighter-rouge">Include</code>/<code class="language-plaintext highlighter-rouge">Exclude</code> options
-from Rubocop’s <code class="language-plaintext highlighter-rouge">config/default.yml</code>. But that’s not very friendly, so the other way is to inherit from the defaults
-and add additional <code class="language-plaintext highlighter-rouge">Include</code>/<code class="language-plaintext highlighter-rouge">Exclude</code> options.</p>
-
-<p>Luckily I was not the first to encounter such an issue, so I just referenced what other people
-<a href="https://github.com/pixta-dev/pixta-rubocop/pull/16/files" target="_blank">did</a> and modified accordingly.
-And here’s
-<a href="https://github.com/coffeebrewapps/coffeebrew_jekyll_archives/pull/11/commits/8152f3535e483ce4d952234d4341772d34b9d819" target="_blank">the fix</a>
-for it.</p>
-
-<figure class="highlight">
-  <pre><code class="language-yaml" data-lang="yaml"><span class="na">inherit_from</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">https://raw.githubusercontent.com/rubocop/rubocop/v1.45.1/config/default.yml</span>
-
-<span class="na">inherit_mode</span><span class="pi">:</span>
-  <span class="na">merge</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">Include</span>
-    <span class="pi">-</span> <span class="s">Exclude</span>
-
-<span class="na">AllCops</span><span class="pi">:</span>
-  <span class="na">Exclude</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">spec/fixtures/**/*</span>
-    <span class="pi">-</span> <span class="s">spec/scenarios/**/*</span>
-    <span class="pi">-</span> <span class="s">spec/spec_helper.rb</span></code></pre>
-</figure>
-
-<p>Now the build passes on Github Workflow, and I can go sit back and relax and enjoy another shot of expresso.</p>
-
-      </div>
-      <div class="btn"><a id="solving_rubocop_mystery-btn" href="#" onclick="toggleCollapse(this)">Expand</a></div>
     </div>
   
 </div>
@@ -775,7 +861,7 @@ for it.</p>
     </a>
     <footer class="site-footer">
       <div class="copyright">
-        <span>Coffee Brew Apps © 2023</span>
+        <span>Coffee Brew Apps © 2024</span>
       </div>
       <div class="socials">
         <a href="https://github.com/coffeebrewapps" target="_blank"><i class="fa-brands fa-github"></i></a>
